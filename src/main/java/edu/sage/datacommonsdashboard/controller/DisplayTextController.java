@@ -1,6 +1,6 @@
 package edu.sage.datacommonsdashboard.controller;
 
-import edu.sage.datacommonsdashboard.QueueDataService;
+import edu.sage.datacommonsdashboard.service.QueueDataService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

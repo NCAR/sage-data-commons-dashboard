@@ -1,9 +1,10 @@
-package edu.sage.datacommonsdashboard;
+package edu.sage.datacommonsdashboard.service;
 
+import edu.sage.datacommonsdashboard.model.QueueData;
 import org.springframework.stereotype.Service;
 
 @Service
-public class QueueDataServiceImpl implements QueueDataService{
+public class QueueDataServiceImpl implements QueueDataService {
 
     public QueueDataServiceImpl() {
     }
@@ -165,5 +166,21 @@ public class QueueDataServiceImpl implements QueueDataService{
                 """;
 
         return textBlock;
+    }
+
+    @Override
+    public QueueData createQueueRow() {
+
+        QueueData queueData = new QueueData();
+
+        // 2945490.casper-p* cr-login-stable  lucaso            04:10:45 R jhublogin
+        queueData.setJobId("2945490.casper-p*");
+        queueData.setName("cr-login-stable");
+        queueData.setUser("lucaso");
+        queueData.setTimeUse("04:10:45");
+        queueData.setStatus("R");
+        queueData.setQueue("jhublogin");
+
+        return queueData;
     }
 }

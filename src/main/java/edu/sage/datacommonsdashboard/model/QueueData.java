@@ -1,4 +1,4 @@
-package edu.sage.datacommonsdashboard;
+package edu.sage.datacommonsdashboard.model;
 
 public class QueueData {
 
