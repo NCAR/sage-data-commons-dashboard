@@ -5,6 +5,8 @@ import edu.sage.datacommonsdashboard.service.QueueDataService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 
 // For returning JSON directly (bypass view)
 @RestController
@@ -16,12 +18,18 @@ public class DisplayJsonController {
         this.queueDataService = queueDataService;
     }
 
-    @GetMapping(value = "/jsondata")
-    public QueueData showData() {
+    @GetMapping(value = "/jsonrow")
+    public QueueData showJsonRow() {
 
         QueueData queueData = queueDataService.createQueueRow();
 
         return queueData;
+    }
+
+    @GetMapping(value = "/jsondata")
+    public List<String> showJsonFile() {
+
+       return queueDataService.convertTextToJson();
     }
 
 }

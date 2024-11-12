@@ -1,7 +1,18 @@
 package edu.sage.datacommonsdashboard.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import edu.sage.datacommonsdashboard.model.QueueData;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class QueueDataServiceImpl implements QueueDataService {
@@ -183,4 +194,60 @@ public class QueueDataServiceImpl implements QueueDataService {
 
         return queueData;
     }
+
+    @Override
+    public List<String> convertTextToJson() {
+
+        // TODO: hardcoded file
+        String textFilePath = "/Users/cgrant/derecho_trim.txt";
+
+        try {
+            List<String> lines = readLinesFromTextFile(textFilePath);
+            return lines;
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private static List<String> readLinesFromTextFile(String filePath) throws IOException {
+
+        List<String> lines = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                lines.add(line);
+            }
+        }
+        return lines;
+    }
+
+    private static ArrayNode convertLinesToJson(List<String> lines) throws JSONException, JsonProcessingException {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        ArrayNode jsonArray = objectMapper.createArrayNode();
+
+        for (String line : lines) {
+            // Assuming each line represents a simple JSON object
+            //ObjectNode jsonNode = objectMapper.readValue(line, ObjectNode.class);
+            JSONObject jsonObject = convertToJson(line);
+            jsonArray.add(String.valueOf(jsonObject));
+        }
+
+        return jsonArray;
+    }
+
+    private static JSONObject convertToJson(String spaceSeparatedString) throws JSONException {
+
+        JSONObject jsonObject = new JSONObject();
+
+        // String[] elements = spaceSeparatedString.split(" ");
+
+        // Temporary
+        jsonObject.put("key", spaceSeparatedString);
+
+        return jsonObject;
+    }
+
 }
