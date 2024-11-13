@@ -28,11 +28,35 @@ public class DisplayTextController {
     @GetMapping(value = "/hpc/dashboard/derecho")
     public String showDerechoPage(Model model) {
 
-        String textDerechoOutput = queueDataService.getDerechoQstatData();
+        String textDerechoOutput = queueDataService.getDerechoQstatDataText();
 
         model.addAttribute("pageTitle", "Derecho Qstat Text Output");
 
         model.addAttribute("textOutput", textDerechoOutput);
         return "displayStatusText";  // The thymeleaf file
     }
+
+    @GetMapping(value = "/hpc/dashboard/casper/json")
+    public String showCasperPageJson(Model model) {
+
+        String textCasperOutput = queueDataService.getCasperQstatDataJson();
+
+        model.addAttribute("pageTitle", "Casper Qstat Json Output");
+
+        model.addAttribute("textOutput", textCasperOutput);
+        return "displayStatusText";  // The thymeleaf file
+    }
+
+    @GetMapping(value = "/hpc/dashboard/derecho/json")
+    public String showDerechoPageJson(Model model) {
+
+        String textDerechoOutput = queueDataService.getDerechoQstatDataJson();
+
+        model.addAttribute("pageTitle", "Derecho Qstat Json Output");
+
+        model.addAttribute("textOutput", textDerechoOutput);
+        return "displayStatusText";  // The thymeleaf file
+    }
+
+
 }

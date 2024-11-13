@@ -8,7 +8,11 @@ public interface QueueDataService {
 
     String getCasperQstatDataText();
 
-    String getDerechoQstatData();
+    String getDerechoQstatDataText();
+
+    String getCasperQstatDataJson();
+
+    String getDerechoQstatDataJson();
 
     QueueData createQueueRow();
 
