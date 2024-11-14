@@ -4,7 +4,7 @@ import edu.sage.datacommonsdashboard.model.QueueData;
 
 import java.util.List;
 
-public interface QueueDataService {
+public interface QueueDataRepository {
 
     String getCasperQstatDataText();
 

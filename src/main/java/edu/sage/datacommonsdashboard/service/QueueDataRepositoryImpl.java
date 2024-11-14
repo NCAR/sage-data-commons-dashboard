@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class QueueDataServiceImpl implements QueueDataService {
+public class QueueDataRepositoryImpl implements QueueDataRepository {
 
-    public QueueDataServiceImpl() {
+    public QueueDataRepositoryImpl() {
     }
 
     @Override

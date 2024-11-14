@@ -2,7 +2,7 @@ package edu.sage.datacommonsdashboard.controller;
 
 import edu.sage.datacommonsdashboard.model.QueueData;
 import edu.sage.datacommonsdashboard.service.FileRepository;
-import edu.sage.datacommonsdashboard.service.QueueDataService;
+import edu.sage.datacommonsdashboard.service.QueueDataRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,19 +14,19 @@ import java.util.List;
 @RestController
 public class DisplayFileController {
 
-    private QueueDataService queueDataService;
+    private QueueDataRepository queueDataRepository;
     private FileRepository fileRepository;
 
-    public DisplayFileController(QueueDataService queueDataService, FileRepository fileRepository) {
+    public DisplayFileController(QueueDataRepository queueDataRepository, FileRepository fileRepository) {
 
-        this.queueDataService = queueDataService;
+        this.queueDataRepository = queueDataRepository;
         this.fileRepository = fileRepository;
     }
 
     @GetMapping(value = "/jsonrow")
     public QueueData showJsonRow() {
 
-        QueueData queueData = queueDataService.createQueueRow();
+        QueueData queueData = queueDataRepository.createQueueRow();
 
         return queueData;
     }
@@ -34,7 +34,7 @@ public class DisplayFileController {
     @GetMapping(value = "/jsondata")
     public List<String> showJsonFile() {
 
-       return queueDataService.convertTextToJson();
+       return queueDataRepository.convertTextToJson();
     }
 
     // Change mapping to /hpc/dashboard/casper/file/{filename}

@@ -1,6 +1,6 @@
 package edu.sage.datacommonsdashboard.controller;
 
-import edu.sage.datacommonsdashboard.service.QueueDataService;
+import edu.sage.datacommonsdashboard.service.QueueDataRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,16 +8,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class DisplayTextController {
 
-    private QueueDataService queueDataService;
+    private QueueDataRepository queueDataRepository;
 
-    public DisplayTextController(QueueDataService queueDataService) {
-        this.queueDataService = queueDataService;
+    public DisplayTextController(QueueDataRepository queueDataRepository) {
+        this.queueDataRepository = queueDataRepository;
     }
 
     @GetMapping(value = "/hpc/dashboard/casper")
     public String showCasperPage(Model model) {
 
-        String textCasperOutput = queueDataService.getCasperQstatDataText();
+        String textCasperOutput = queueDataRepository.getCasperQstatDataText();
 
         model.addAttribute("pageTitle", "Casper Qstat Text Output");
 
@@ -28,7 +28,7 @@ public class DisplayTextController {
     @GetMapping(value = "/hpc/dashboard/derecho")
     public String showDerechoPage(Model model) {
 
-        String textDerechoOutput = queueDataService.getDerechoQstatDataText();
+        String textDerechoOutput = queueDataRepository.getDerechoQstatDataText();
 
         model.addAttribute("pageTitle", "Derecho Qstat Text Output");
 
@@ -39,7 +39,7 @@ public class DisplayTextController {
     @GetMapping(value = "/hpc/dashboard/casper/json")
     public String showCasperPageJson(Model model) {
 
-        String textCasperOutput = queueDataService.getCasperQstatDataJson();
+        String textCasperOutput = queueDataRepository.getCasperQstatDataJson();
 
         model.addAttribute("pageTitle", "Casper Qstat Json Output");
 
@@ -50,7 +50,7 @@ public class DisplayTextController {
     @GetMapping(value = "/hpc/dashboard/derecho/json")
     public String showDerechoPageJson(Model model) {
 
-        String textDerechoOutput = queueDataService.getDerechoQstatDataJson();
+        String textDerechoOutput = queueDataRepository.getDerechoQstatDataJson();
 
         model.addAttribute("pageTitle", "Derecho Qstat Json Output");
 
