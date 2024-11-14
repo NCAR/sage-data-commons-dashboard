@@ -1,4 +1,4 @@
-package edu.sage.datacommonsdashboard.service;
+package edu.sage.datacommonsdashboard.repository;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -10,17 +10,18 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 @Repository
-public class FileRepository {
+public class FileRepositoryImpl implements FileRepository {
 
     private final ResourceLoader resourceLoader;
 
-    public FileRepository(ResourceLoader resourceLoader) {
+    public FileRepositoryImpl(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
     }
 
     @Value("${file.path.casper.json}")
     private String filePath;
 
+    @Override
     public String readFileFromResources(String fileName) throws IOException {
 
         Resource resource = resourceLoader.getResource("classpath:" + fileName);
@@ -32,10 +33,7 @@ public class FileRepository {
         }
     }
 
-    public String readFileContent() throws IOException {
-        return new String(Files.readAllBytes(Paths.get(filePath)));
-    }
-
+    @Override
     public String readFileWithPath(String filePath) throws IOException {
 
         Resource resource = resourceLoader.getResource("file:" + filePath);
@@ -45,5 +43,9 @@ public class FileRepository {
         } else {
             throw new IOException("File not found: " + filePath);
         }
+    }
+
+    private String readFileContent() throws IOException {
+        return new String(Files.readAllBytes(Paths.get(filePath)));
     }
 }

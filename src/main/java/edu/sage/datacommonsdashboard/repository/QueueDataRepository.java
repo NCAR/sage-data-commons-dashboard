@@ -1,4 +1,4 @@
-package edu.sage.datacommonsdashboard.service;
+package edu.sage.datacommonsdashboard.repository;
 
 import edu.sage.datacommonsdashboard.model.QueueData;
 

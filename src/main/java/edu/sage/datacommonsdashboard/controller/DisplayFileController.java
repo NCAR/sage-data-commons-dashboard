@@ -1,8 +1,8 @@
 package edu.sage.datacommonsdashboard.controller;
 
 import edu.sage.datacommonsdashboard.model.QueueData;
-import edu.sage.datacommonsdashboard.service.FileRepository;
-import edu.sage.datacommonsdashboard.service.QueueDataRepository;
+import edu.sage.datacommonsdashboard.repository.FileRepositoryImpl;
+import edu.sage.datacommonsdashboard.repository.QueueDataRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,12 +15,12 @@ import java.util.List;
 public class DisplayFileController {
 
     private QueueDataRepository queueDataRepository;
-    private FileRepository fileRepository;
+    private FileRepositoryImpl fileRepositoryImpl;
 
-    public DisplayFileController(QueueDataRepository queueDataRepository, FileRepository fileRepository) {
+    public DisplayFileController(QueueDataRepository queueDataRepository, FileRepositoryImpl fileRepositoryImpl) {
 
         this.queueDataRepository = queueDataRepository;
-        this.fileRepository = fileRepository;
+        this.fileRepositoryImpl = fileRepositoryImpl;
     }
 
     @GetMapping(value = "/jsonrow")
@@ -42,7 +42,7 @@ public class DisplayFileController {
     @GetMapping("/readfile.json")
     public String readFile() {
         try {
-            return fileRepository.readFileFromResources("qstat_casper_queue.json");
+            return fileRepositoryImpl.readFileFromResources("qstat_casper_queue.json");
         } catch (IOException e) {
 
             e.printStackTrace();
