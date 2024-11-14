@@ -22,7 +22,7 @@ public class DisplayTextController {
         model.addAttribute("pageTitle", "Casper Qstat Text Output");
 
         model.addAttribute("textOutput", textCasperOutput);
-        return "displayStatusText";  // The thymeleaf file
+        return "display-queue-data";  // The thymeleaf file
     }
 
     @GetMapping(value = "/hpc/dashboard/derecho")
@@ -33,7 +33,7 @@ public class DisplayTextController {
         model.addAttribute("pageTitle", "Derecho Qstat Text Output");
 
         model.addAttribute("textOutput", textDerechoOutput);
-        return "displayStatusText";  // The thymeleaf file
+        return "display-queue-data";  // The thymeleaf file
     }
 
     @GetMapping(value = "/hpc/dashboard/casper/json")
@@ -44,7 +44,7 @@ public class DisplayTextController {
         model.addAttribute("pageTitle", "Casper Qstat Json Output");
 
         model.addAttribute("textOutput", textCasperOutput);
-        return "displayStatusText";  // The thymeleaf file
+        return "display-queue-data";  // The thymeleaf file
     }
 
     @GetMapping(value = "/hpc/dashboard/derecho/json")
@@ -55,7 +55,7 @@ public class DisplayTextController {
         model.addAttribute("pageTitle", "Derecho Qstat Json Output");
 
         model.addAttribute("textOutput", textDerechoOutput);
-        return "displayStatusText";  // The thymeleaf file
+        return "display-queue-data";  // The thymeleaf file
     }
 
 
