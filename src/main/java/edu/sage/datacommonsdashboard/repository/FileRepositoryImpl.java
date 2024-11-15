@@ -18,7 +18,7 @@ public class FileRepositoryImpl implements FileRepository {
         this.resourceLoader = resourceLoader;
     }
 
-    @Value("${file.path}")
+    @Value("${dashboard.queue.file.path}")
     private String filePath;
 
     @Override
