@@ -4,6 +4,7 @@ import edu.sage.datacommonsdashboard.model.QueueData;
 import edu.sage.datacommonsdashboard.repository.FileRepositoryImpl;
 import edu.sage.datacommonsdashboard.repository.QueueDataRepository;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -37,12 +38,26 @@ public class DisplayFileController {
        return queueDataRepository.convertTextToJson();
     }
 
-    // Change mapping to /hpc/dashboard/casper/file/{filename}
     // to get file name from url when it lives in resources
-    @GetMapping("/readfile.json")
-    public String readFile() {
+   // http://localhost:8080/hpc/dashboard?filename=qstat_casper_queue.json
+    @GetMapping("/hpc/dashboard")
+    public String readResourceFile(@RequestParam String filename) {
         try {
-            return fileRepositoryImpl.readFileFromResources("qstat_casper_queue.json");
+            return fileRepositoryImpl.readFileFromResources(filename);
+        } catch (IOException e) {
+
+            e.printStackTrace();
+            return "Error occurred while reading file.";
+        }
+    }
+
+    // to get file name from url when it lives on the file system
+    // in a place designated by a property
+    // http://localhost:8080/hpc/dashboard/file?filename=qstat_casper_queue.json
+    @GetMapping("/hpc/dashboard/file")
+    public String readSystemFile(@RequestParam String filename) {
+        try {
+            return fileRepositoryImpl.readFileWithPath(filename);
         } catch (IOException e) {
 
             e.printStackTrace();

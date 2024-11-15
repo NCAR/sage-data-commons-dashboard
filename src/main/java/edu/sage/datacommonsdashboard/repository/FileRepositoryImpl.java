@@ -18,7 +18,7 @@ public class FileRepositoryImpl implements FileRepository {
         this.resourceLoader = resourceLoader;
     }
 
-    @Value("${file.path.casper.json}")
+    @Value("${file.path}")
     private String filePath;
 
     @Override
@@ -34,14 +34,14 @@ public class FileRepositoryImpl implements FileRepository {
     }
 
     @Override
-    public String readFileWithPath(String filePath) throws IOException {
+    public String readFileWithPath(String fileName) throws IOException {
 
-        Resource resource = resourceLoader.getResource("file:" + filePath);
+        Resource resource = resourceLoader.getResource("file:" + filePath + fileName);
 
         if (resource.exists()) {
             return new String(Files.readAllBytes(Paths.get(resource.getURI())));
         } else {
-            throw new IOException("File not found: " + filePath);
+            throw new IOException("File not found: " + fileName);
         }
     }
 
