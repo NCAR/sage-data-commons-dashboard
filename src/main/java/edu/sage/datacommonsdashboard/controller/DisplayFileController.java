@@ -1,41 +1,25 @@
 package edu.sage.datacommonsdashboard.controller;
 
-import edu.sage.datacommonsdashboard.model.QueueData;
 import edu.sage.datacommonsdashboard.repository.FileRepositoryImpl;
-import edu.sage.datacommonsdashboard.repository.QueueDataRepository;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.List;
 
 
 // For returning JSON directly (bypass view)
 @RestController
 public class DisplayFileController {
 
-    private QueueDataRepository queueDataRepository;
     private FileRepositoryImpl fileRepositoryImpl;
 
-    public DisplayFileController(QueueDataRepository queueDataRepository, FileRepositoryImpl fileRepositoryImpl) {
+    public DisplayFileController(FileRepositoryImpl fileRepositoryImpl) {
 
-        this.queueDataRepository = queueDataRepository;
         this.fileRepositoryImpl = fileRepositoryImpl;
-    }
-
-    @GetMapping(value = "/jsonrow")
-    public QueueData showJsonRow() {
-
-        QueueData queueData = queueDataRepository.createQueueRow();
-
-        return queueData;
-    }
-
-    @GetMapping(value = "/jsondata")
-    public List<String> showJsonFile() {
-
-       return queueDataRepository.convertTextToJson();
     }
 
     // to get file name from url when it lives in resources
@@ -55,13 +39,20 @@ public class DisplayFileController {
     // in a place designated by a property
     // http://localhost:8080/hpc/dashboard/file?filename=qstat_casper_queue.json
     @GetMapping("/hpc/dashboard/file")
-    public String readSystemFile(@RequestParam String filename) {
+    public ResponseEntity<String> readSystemFile(@RequestParam String filename) {
         try {
-            return fileRepositoryImpl.readFileWithPath(filename);
+            String jsonData = fileRepositoryImpl.readFileWithPath(filename);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+
+            return ResponseEntity.ok().headers(headers).body(jsonData);
+
         } catch (IOException e) {
 
             e.printStackTrace();
-            return "Error occurred while reading file.";
+            return new ResponseEntity<>("An error occurred while processing the request",
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

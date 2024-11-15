@@ -1,9 +1,12 @@
 package edu.sage.datacommonsdashboard.controller;
 
+import edu.sage.datacommonsdashboard.model.QueueData;
 import edu.sage.datacommonsdashboard.repository.QueueDataRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.List;
 
 @Controller
 public class DisplayTextController {
@@ -58,5 +61,18 @@ public class DisplayTextController {
         return "display-queue-data";  // The thymeleaf file
     }
 
+    @GetMapping(value = "/jsonrow")
+    public QueueData showJsonRow() {
+
+        QueueData queueData = queueDataRepository.createQueueRow();
+
+        return queueData;
+    }
+
+    @GetMapping(value = "/jsondata")
+    public List<String> showJsonFile() {
+
+        return queueDataRepository.convertTextToJson();
+    }
 
 }
