@@ -99,6 +99,42 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <plugin>
+                <groupId>nu.validator</groupId>
+                <artifactId>vnu-maven-plugin</artifactId>
+                <version>1.0.0</version>
+
+                <!-- The plugin should hook into the validate goal -->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>validate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>src/main/resources/templates</directory>
+                            <glob>**.html</glob>
+                        </fileset>
+                    </filesets>
+                    <validator>
+                        <warnings>ERROR</warnings>
+                        <filters>
+                            <filter>
+                                <regex>xmlns:th</regex>
+                                <type>ERROR</type>
+                            </filter>
+                            <filter>
+                                <regex>th:text</regex>
+                                <type>ERROR</type>
+                            </filter>
+                        </filters>
+                    </validator>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
