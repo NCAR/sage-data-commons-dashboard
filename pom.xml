@@ -4,8 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>edu.ucar.cisl</groupId>
-    <artifactId>sage-data-commons-gateway</artifactId>
+    <artifactId>sage-data-commons-dashboard</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
     <url/>
     <licenses>
@@ -39,7 +40,7 @@
         <tag/>
         <url/>
     </scm>
-    
+
     <properties>
         <java.version>17</java.version>
     </properties>

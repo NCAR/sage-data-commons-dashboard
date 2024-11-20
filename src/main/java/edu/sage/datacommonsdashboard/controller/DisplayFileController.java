@@ -37,10 +37,14 @@ public class DisplayFileController {
 
     // to get file name from url when it lives on the file system
     // in a place designated by a property
-    // http://localhost:8080/hpc/dashboard/file?filename=qstat_casper_queue.json
+    // http://localhost:8080/hpc/dashboard/file?filename=casper_qstat_queue.json
+    // http://localhost:8080/hpc/dashboard/file?filename=casper_qstat_jobs.json
     @GetMapping("/hpc/dashboard/file")
     public ResponseEntity<String> readSystemFile(@RequestParam String filename) {
         try {
+
+            System.out.println("===Request filename: " + filename);
+
             String jsonData = fileRepositoryImpl.readFileWithPath(filename);
 
             HttpHeaders headers = new HttpHeaders();

@@ -36,11 +36,15 @@ public class FileRepositoryImpl implements FileRepository {
     @Override
     public String readFileWithPath(String fileName) throws IOException {
 
+        System.out.println("===FileRepositoryImpl data fileName: " + fileName + ", filePath: " + filePath);
+
         Resource resource = resourceLoader.getResource("file:" + filePath + fileName);
 
         if (resource.exists()) {
             return new String(Files.readAllBytes(Paths.get(resource.getURI())));
         } else {
+
+            System.out.println("===FileRepositoryImpl file path: " + filePath);
             throw new IOException("File not found: " + fileName);
         }
     }
