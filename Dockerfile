@@ -9,7 +9,7 @@ COPY ${JAR_FILE} app.jar
 
 # Copy the local file to the container
 COPY ./src/main/resources/casper_qstat_queue.json /tmp/casper_qstat_queue.json
-COPY ./src/main/resources/casper_qstat_queue.json /usr/local/dashboard/casper_qstat_queue.json
+COPY ./src/main/resources/casper_qstat_jobs.json /tmp/casper_qstat_jobs.json
 
 # Set environment variable for Spring configuration location
 ENV SPRING_CONFIG_LOCATION=file:/usr/local/dashboard/queueapp.properties
@@ -19,4 +19,4 @@ ENTRYPOINT ["java","-Dspring.config.location=${SPRING_CONFIG_LOCATION}","-jar","
 
 # docker build -t sage-data-commons-dashboard .
 # docker run --detach -p 9090:8080 -v /Users/cgrant/dashboard/queueapp.properties:/usr/local/dashboard/queueapp.properties sage-data-commons-dashboard
-# docker run --detach --name sage-data-commons-dashboard -p 8080:8080 -v /Users/cgrant/dashboard/queueapp.properties:/usr/local/dashboard/queueapp.properties sage-data-commons-dashboard
+# docker run --detach --name sage-data-commons-dashboard -p 9080:8080 -v /Users/cgrant/dashboard/queueapp.properties:/usr/local/dashboard/queueapp.properties sage-data-commons-dashboard

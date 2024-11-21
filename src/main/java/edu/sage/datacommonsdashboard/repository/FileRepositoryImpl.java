@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Repository
@@ -29,27 +30,46 @@ public class FileRepositoryImpl implements FileRepository {
         if (resource.exists()) {
             return new String(Files.readAllBytes(Paths.get(resource.getURI())));
         } else {
-            throw new IOException("File not found: " + fileName);
+            throw new IOException("File not found: " + filePath + fileName);
         }
     }
 
     @Override
     public String readFileWithPath(String fileName) throws IOException {
 
-        System.out.println("===FileRepositoryImpl data fileName: " + fileName + ", filePath: " + filePath);
+//        System.out.println("===FileRepositoryImpl data filePath: " + filePath + ", fileName: " + fileName);
 
-        Resource resource = resourceLoader.getResource("file:" + filePath + fileName);
+        if (verifyFilePath(filePath, fileName)) {
 
-        if (resource.exists()) {
-            return new String(Files.readAllBytes(Paths.get(resource.getURI())));
+            Resource resource = resourceLoader.getResource("file:" + filePath + fileName);
+
+            if (resource.exists()) {
+                return new String(Files.readAllBytes(Paths.get(resource.getURI())));
+            } else {
+                throw new IOException("File not found: " + filePath + fileName);
+            }
+
         } else {
-
-            System.out.println("===FileRepositoryImpl file path: " + filePath);
-            throw new IOException("File not found: " + fileName);
+            throw new IOException("The file path and name are NOT correctly separated: "+ filePath + fileName);
         }
+
     }
 
-    private String readFileContent() throws IOException {
-        return new String(Files.readAllBytes(Paths.get(filePath)));
+    public static boolean verifyFilePath(String filePath, String fileName) throws IOException {
+        Path path = Paths.get(filePath);
+        Path fullPath = path.resolve(fileName);
+
+        // Check whether the normalized full path contains the expected separation
+        String expectedSeparator = System.getProperty("file.separator");
+        String fullPathStr = fullPath.toString();
+
+        // Ensure the file exists (or can be accessed)
+        if (Files.exists(fullPath) || Files.notExists(fullPath)) {
+            return fullPathStr.contains(expectedSeparator + fileName);
+        }
+        return false;
     }
+
+
+
 }

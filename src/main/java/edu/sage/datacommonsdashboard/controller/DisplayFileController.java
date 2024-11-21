@@ -41,22 +41,23 @@ public class DisplayFileController {
     // http://localhost:8080/hpc/dashboard/file?filename=casper_qstat_jobs.json
     @GetMapping("/hpc/dashboard/file")
     public ResponseEntity<String> readSystemFile(@RequestParam String filename) {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+
         try {
 
-            System.out.println("===Request filename: " + filename);
-
             String jsonData = fileRepositoryImpl.readFileWithPath(filename);
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
 
             return ResponseEntity.ok().headers(headers).body(jsonData);
 
         } catch (IOException e) {
 
             e.printStackTrace();
-            return new ResponseEntity<>("An error occurred while processing the request",
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+
+            return new ResponseEntity<>("An error occurred while processing the request.",
+                        HttpStatus.INTERNAL_SERVER_ERROR);
+
         }
     }
 
