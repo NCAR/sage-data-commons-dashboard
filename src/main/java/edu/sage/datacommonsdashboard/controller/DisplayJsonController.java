@@ -3,22 +3,19 @@ package edu.sage.datacommonsdashboard.controller;
 import edu.sage.datacommonsdashboard.repository.FileRepositoryImpl;
 import java.io.IOException;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-
 
 // For returning JSON directly (bypass view)
 @RestController
-public class DisplayFileController {
+public class DisplayJsonController {
 
     private FileRepositoryImpl fileRepositoryImpl;
 
-    public DisplayFileController(FileRepositoryImpl fileRepositoryImpl) {
+    public DisplayJsonController(FileRepositoryImpl fileRepositoryImpl) {
 
         this.fileRepositoryImpl = fileRepositoryImpl;
     }
@@ -33,7 +30,7 @@ public class DisplayFileController {
 
             e.printStackTrace();
 
-            throw new IOException("File Error");
+            throw new IOException("Error reading file: " + e.getMessage());
         }
     }
 

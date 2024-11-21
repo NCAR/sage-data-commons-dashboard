@@ -52,10 +52,10 @@ public class FileRepositoryImpl implements FileRepository {
         } else {
             throw new IOException("The file path and name are NOT correctly separated: "+ filePath + fileName);
         }
-
     }
 
     public static boolean verifyFilePath(String filePath, String fileName) throws IOException {
+
         Path path = Paths.get(filePath);
         Path fullPath = path.resolve(fileName);
 
