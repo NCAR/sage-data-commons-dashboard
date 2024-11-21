@@ -1,6 +1,7 @@
 package edu.sage.datacommonsdashboard.controller;
 
 import edu.sage.datacommonsdashboard.repository.FileRepositoryImpl;
+import java.io.IOException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +26,14 @@ public class DisplayFileController {
     // to get file name from url when it lives in resources
    // http://localhost:8080/hpc/dashboard?filename=qstat_casper_queue.json
     @GetMapping("/hpc/dashboard")
-    public String readResourceFile(@RequestParam String filename) {
+    public String readResourceFile(@RequestParam String filename) throws IOException {
         try {
             return fileRepositoryImpl.readFileFromResources(filename);
         } catch (IOException e) {
 
             e.printStackTrace();
-            return "Error occurred while reading file.";
+
+            throw new IOException("File Error");
         }
     }
 
@@ -40,7 +42,7 @@ public class DisplayFileController {
     // http://localhost:8080/hpc/dashboard/file?filename=casper_qstat_queue.json
     // http://localhost:8080/hpc/dashboard/file?filename=casper_qstat_jobs.json
     @GetMapping("/hpc/dashboard/file")
-    public ResponseEntity<String> readSystemFile(@RequestParam String filename) {
+    public ResponseEntity<String> readSystemFile(@RequestParam String filename) throws IOException {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
@@ -55,9 +57,11 @@ public class DisplayFileController {
 
             e.printStackTrace();
 
-            return new ResponseEntity<>("An error occurred while processing the request.",
-                        HttpStatus.INTERNAL_SERVER_ERROR);
+//            return new ResponseEntity<>("An error occurred while processing the request.",
+//                    HttpStatus.INTERNAL_SERVER_ERROR);
 
+            // This message is displayed on the 500 global error page
+            throw new IOException("Error reading file: " + e.getMessage());
         }
     }
 
