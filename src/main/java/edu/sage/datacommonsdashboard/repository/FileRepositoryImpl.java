@@ -64,7 +64,7 @@ public class FileRepositoryImpl implements FileRepository {
         String fullPathStr = fullPath.toString();
 
         // Ensure the file exists (or can be accessed)
-        if (Files.exists(fullPath) || Files.notExists(fullPath)) {
+        if (Files.exists(fullPath) ) {
             return fullPathStr.contains(expectedSeparator + fileName);
         }
         return false;
