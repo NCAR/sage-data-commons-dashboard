@@ -12,13 +12,13 @@ public interface FileRepository {
     String readFileWithPath(String filePath) throws IOException;
 
 
-    String getCasperQstatDataText();
+    String getCasperQstatDataText() throws IOException;
 
     String getDerechoQstatDataText();
 
     String getCasperQstatDataJson();
 
-    String getDerechoQstatDataJson();
+    String getDerechoQstatQueueDataJson();
 
     QueueData createQueueRow();
 

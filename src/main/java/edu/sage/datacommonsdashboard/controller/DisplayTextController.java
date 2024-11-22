@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -18,7 +19,7 @@ public class DisplayTextController {
     }
 
     @GetMapping(value = "/hpc/dashboard/casper")
-    public String showCasperPage(Model model) {
+    public String showCasperPage(Model model) throws IOException {
 
         String textCasperOutput = fileRepository.getCasperQstatDataText();
 
@@ -53,7 +54,7 @@ public class DisplayTextController {
     @GetMapping(value = "/hpc/dashboard/derecho/json")
     public String showDerechoPageJson(Model model) {
 
-        String textDerechoOutput = fileRepository.getDerechoQstatDataJson();
+        String textDerechoOutput = fileRepository.getDerechoQstatQueueDataJson();
 
         model.addAttribute("pageTitle", "Derecho Qstat Json Output");
 

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -61,7 +60,7 @@ public class FileRepositoryImpl implements FileRepository {
             }
 
         } else {
-            throw new IOException("The file path and name are NOT correctly separated: "+ filePath + fileName);
+            throw new IOException("File path error: "+ filePath + fileName);
         }
     }
 
@@ -83,83 +82,9 @@ public class FileRepositoryImpl implements FileRepository {
 
 
         @Override
-        public String getCasperQstatDataText() {
-            String textBlock = """
-                Job id            Name             User              Time Use S Queue
-                ----------------  ---------------- ----------------  -------- - -----
-                2399360.casper-p* GetGFSAnalysisF* nghido                   0 H htc
-                2399361.casper-p* GetGFSAnalysisF* nghido                   0 H htc
-                2705953.casper-p* create_climo_an* daeunlee                 0 H htc
-                2941107.casper-p* goes_gpu_1_4     csgteam                  0 H system
-                2945490.casper-p* cr-login-stable  lucaso            04:10:45 R jhublogin
-                2945506.casper-p* cr-login-stable  benkirk           03:54:51 R jhublogin
-                2945575.casper-p* cr-login-stable  tianqi            10:20:34 R jhublogin
-                2946346.casper-p* cr-login-stable  guoqiang          03:54:28 R jhublogin
-                2946401.casper-p* cr-login-stable  ylesiawu          03:49:15 R jhublogin
-                2946402.casper-p* cr-login-stable  jban              08:14:15 R jhublogin
-                2946786.casper-p* cr-login-stable  chayan            06:24:13 R jhublogin
-                2946787.casper-p* cr-login-stable  aparsells         07:41:09 R jhublogin
-                2946789.casper-p* cr-login-stable  tzaman            05:35:52 R jhublogin
-                2946796.casper-p* cr-login-stable  yiwenz            04:56:12 R jhublogin
-                2946799.casper-p* cr-login-stable  pangulo           03:34:06 R jhublogin
-                2946800.casper-p* cr-login-stable  zxhua             04:12:45 R jhublogin
-                2946801.casper-p* cr-login-stable  msaif             04:52:59 R jhublogin
-                2946822.casper-p* cr-login-stable  jianguan          03:44:09 R jhublogin
-                2946823.casper-p* cr-login-stable  groberg           04:58:41 R jhublogin
-                2946830.casper-p* cr-login-stable  ajacobs           124:30:* R jhublogin
-                2946833.casper-p* cr-login-stable  chennuo           14:58:36 R jhublogin
-                2946847.casper-p* cr-login-stable  liut              04:18:43 R jhublogin
-                2946853.casper-p* cr-login-stable  yeddebba          28:08:40 R jhublogin
-                2946865.casper-p* cr-login-stable  nikhilr           03:40:40 R jhublogin
-                2946868.casper-p* cr-login-stable  dtokuda           03:30:48 R jhublogin
-                2946871.casper-p* cr-login-stable  nmarkus           06:24:11 R jhublogin
-                2946899.casper-p* cr-login-stable  xinchang          07:14:00 R jhublogin
-                2946903.casper-p* cr-login-stable  farkian           02:44:26 R jhublogin
-                2946933.casper-p* cr-login-stable  xyzhao            04:17:13 R jhublogin
-                2946934.casper-p* cr-login-stable  harshah           05:23:36 R jhublogin
-                2946943.casper-p* cr-login-stable  asyed             03:14:29 R jhublogin
-                2946977.casper-p* cr-login-stable  arezoo            06:52:48 R jhublogin
-                2947005.casper-p* cr-login-stable  masih             10:22:45 R jhublogin
-                2947031.casper-p* cr-login-stable  qzou              04:28:14 R jhublogin
-                2947034.casper-p* cr-login-stable  sabina            03:42:47 R jhublogin
-                2947055.casper-p* cr-login-stable  xinan             04:04:27 R jhublogin
-                2947064.casper-p* cr-login-stable  fafrifa           07:03:16 R jhublogin
-                2947098.casper-p* cr-login-stable  abossolasco       03:51:50 R jhublogin
-                2947100.casper-p* cr-login-stable  wriggles          05:06:47 R jhublogin
-                2947103.casper-p* cr-login-stable  ito               08:03:35 R jhublogin
-                2947105.casper-p* cr-login-stable  sofian            04:38:20 R jhublogin
-                2947133.casper-p* cr-login-stable  amyliu            04:09:43 R jhublogin
-                2947149.casper-p* cr-login-stable  ekim              03:42:17 R jhublogin
-                2947190.casper-p* cr-login-stable  rtdatta           08:46:30 R jhublogin
-                2947224.casper-p* cr-login-stable  dadelgado         03:32:08 R jhublogin
-                2947391.casper-p* cr-login-stable  lianet            07:25:41 R jhublogin
-                2947520.casper-p* cr-login-stable  midhun            03:37:36 R jhublogin
-                2947650.casper-p* cr-login-stable  clittle           12:06:46 R jhublogin
-                2947782.casper-p* cr-login-stable  wchapman          09:00:50 R jhublogin
-                2947783.casper-p* cr-login-stable  miyawaki          03:54:41 R jhublogin
-                2947877.casper-p* cr-login-stable  yiwenzhang        28:57:21 R jhublogin
-                2947930.casper-p* cr-login-stable  bmoose            04:08:07 R jhublogin
-                2947931.casper-p* cr-login-stable  jhayron           05:11:37 R jhublogin
-                2947949.casper-p* cr-login-stable  tilmes            04:39:39 R jhublogin
-                2947951.casper-p* cr-login-stable  sdhavale          06:09:28 R jhublogin
-                2947957.casper-p* cr-login-stable  carmined          04:08:02 R jhublogin
-                2947995.casper-p* cr-login-stable  wasserstein       03:50:22 R jhublogin
-                2948007.casper-p* cr-login-stable  kuoyan            04:41:28 R jhublogin
-                2948030.casper-p* cr-login-stable  mingzhu           03:43:36 R jhublogin
-                2948045.casper-p* cr-login-stable  kinsaled          03:50:11 R jhublogin
-                2948062.casper-p* cr-login-stable  emadonna          03:23:43 R jhublogin
-                2948121.casper-p* cr-login-stable  mduetsch          03:52:45 R jhublogin
-                2948283.casper-p* cr-login-stable  che43             03:22:04 R jhublogin
-                2948328.casper-p* cr-login-stable  igomez            06:01:51 R jhublogin
-                2948329.casper-p* cr-login-stable  jingyiz           04:22:14 R jhublogin
-                2948343.casper-p* cr-login-stable  lsheji            03:38:56 R jhublogin
-                2948356.casper-p* cr-login-stable  juliacam          04:44:43 R jhublogin
-                2948376.casper-p* cr-login-stable  fengc             08:15:50 R jhublogin
-                2948398.casper-p* cr-login-stable  luzheng           04:38:39 R jhublogin
-                "casper_qstat.txt" 5566L, 450824B
-                """;
+        public String getCasperQstatDataText() throws IOException {
 
-            return textBlock;
+            return this.readFileFromResources("casper_qstat_jobs.txt");
         }
 
         @Override
@@ -242,7 +167,7 @@ public class FileRepositoryImpl implements FileRepository {
         }
 
         @Override
-        public String getDerechoQstatDataJson() {
+        public String getDerechoQstatQueueDataJson() {
 
             String textBlock = """
                 {
