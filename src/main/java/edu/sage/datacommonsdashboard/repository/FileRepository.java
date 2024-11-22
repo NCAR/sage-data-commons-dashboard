@@ -7,18 +7,17 @@ import java.util.List;
 
 public interface FileRepository {
 
-    String readFileFromResources(String fileName) throws IOException;
+    String getCasperQstatJobsText() throws IOException;
 
-    String readFileWithPath(String filePath) throws IOException;
+    String getCasperQstatJobsJson() throws IOException;
 
+    String getCasperQstatQueueText() throws IOException;
 
-    String getCasperQstatDataText() throws IOException;
+    String getCasperQstatQueueJson() throws IOException;
 
-    String getDerechoQstatDataText();
+    String getDerechoQstatQueueText() throws IOException;
 
-    String getCasperQstatDataJson();
-
-    String getDerechoQstatQueueDataJson();
+    String getDerechoQstatQueueJson()throws IOException;
 
     QueueData createQueueRow();
 

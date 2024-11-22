@@ -1,13 +1,11 @@
 package edu.sage.datacommonsdashboard.controller;
 
-import edu.sage.datacommonsdashboard.model.QueueData;
 import edu.sage.datacommonsdashboard.repository.FileRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.io.IOException;
-import java.util.List;
 
 @Controller
 public class DisplayTextController {
@@ -18,62 +16,48 @@ public class DisplayTextController {
         this.fileRepository = fileRepository;
     }
 
-    @GetMapping(value = "/hpc/dashboard/casper")
+    @GetMapping(value = "/hpc/dashboard/casper/jobs/text")
     public String showCasperPage(Model model) throws IOException {
 
-        String textCasperOutput = fileRepository.getCasperQstatDataText();
+        String textCasperOutput = fileRepository.getCasperQstatJobsText();
 
-        model.addAttribute("pageTitle", "Casper Qstat Text Output");
-
+        model.addAttribute("pageTitle", "Casper Qstat Jobs");
         model.addAttribute("textOutput", textCasperOutput);
+
         return "display-queue-data";  // The thymeleaf file
     }
 
-    @GetMapping(value = "/hpc/dashboard/derecho")
-    public String showDerechoPage(Model model) {
+    @GetMapping(value = "/hpc/dashboard/casper/queue/text")
+    public String showCasperPageJson(Model model) throws IOException {
 
-        String textDerechoOutput = fileRepository.getDerechoQstatDataText();
+        String textCasperOutput = fileRepository.getCasperQstatQueueText();
 
-        model.addAttribute("pageTitle", "Derecho Qstat Text Output");
-
-        model.addAttribute("textOutput", textDerechoOutput);
-        return "display-queue-data";  // The thymeleaf file
-    }
-
-    @GetMapping(value = "/hpc/dashboard/casper/json")
-    public String showCasperPageJson(Model model) {
-
-        String textCasperOutput = fileRepository.getCasperQstatDataJson();
-
-        model.addAttribute("pageTitle", "Casper Qstat Json Output");
-
+        model.addAttribute("pageTitle", "Casper Qstat Queue");
         model.addAttribute("textOutput", textCasperOutput);
+
         return "display-queue-data";  // The thymeleaf file
     }
 
-    @GetMapping(value = "/hpc/dashboard/derecho/json")
-    public String showDerechoPageJson(Model model) {
+    @GetMapping(value = "/hpc/dashboard/derecho/queue/text")
+    public String showDerechoQueueText(Model model) throws IOException {
 
-        String textDerechoOutput = fileRepository.getDerechoQstatQueueDataJson();
+        String textDerechoOutput = fileRepository.getDerechoQstatQueueText();
 
-        model.addAttribute("pageTitle", "Derecho Qstat Json Output");
-
+        model.addAttribute("pageTitle", "Derecho Qstat Queue");
         model.addAttribute("textOutput", textDerechoOutput);
+
         return "display-queue-data";  // The thymeleaf file
     }
 
-    @GetMapping(value = "/jsonrow")
-    public QueueData showJsonRow() {
+    @GetMapping(value = "/hpc/dashboard/derecho/jobs/text")
+    public String showDerechoJobsText(Model model) throws IOException {
 
-        QueueData queueData = fileRepository.createQueueRow();
+        String textDerechoOutput = fileRepository.getDerechoQstatQueueText();
 
-        return queueData;
-    }
+        model.addAttribute("pageTitle", "Derecho Qstat Jobs");
+        model.addAttribute("textOutput", textDerechoOutput);
 
-    @GetMapping(value = "/jsondata")
-    public List<String> showJsonFile() {
-
-        return fileRepository.convertTextToJson();
+        return "display-queue-data";  // The thymeleaf file
     }
 
 }

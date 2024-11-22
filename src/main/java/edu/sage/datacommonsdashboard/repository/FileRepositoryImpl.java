@@ -32,8 +32,32 @@ public class FileRepositoryImpl implements FileRepository {
     @Value("${dashboard.queue.file.path}")
     private String filePath;
 
+
     @Override
-    public String readFileFromResources(String fileName) throws IOException {
+    public String getCasperQstatJobsText() throws IOException {
+
+        return this.readFileFromResources("casper_qstat_jobs.txt");
+    }
+
+    @Override
+    public String getCasperQstatJobsJson() throws IOException {
+
+        return this.readFileFromResources("casper_qstat_jobs.json");
+    }
+
+    @Override
+    public String getCasperQstatQueueText() throws IOException {
+
+        return this.readFileFromResources("casper_qstat_queue.txt");
+    }
+
+    @Override
+    public String getCasperQstatQueueJson() throws IOException {
+
+        return this.readFileFromResources("casper_qstat_queue.json");
+    }
+
+    private String readFileFromResources(String fileName) throws IOException {
 
         Resource resource = resourceLoader.getResource("classpath:" + fileName);
 
@@ -44,8 +68,7 @@ public class FileRepositoryImpl implements FileRepository {
         }
     }
 
-    @Override
-    public String readFileWithPath(String fileName) throws IOException {
+    private String readFileWithPath(String fileName) throws IOException {
 
 //        System.out.println("===FileRepositoryImpl data filePath: " + filePath + ", fileName: " + fileName);
 
@@ -81,15 +104,11 @@ public class FileRepositoryImpl implements FileRepository {
     }
 
 
-        @Override
-        public String getCasperQstatDataText() throws IOException {
 
-            return this.readFileFromResources("casper_qstat_jobs.txt");
-        }
 
-        @Override
-        public String getDerechoQstatDataText() {
-            String textBlock = """
+    @Override
+    public String getDerechoQstatQueueText() {
+        String textBlock = """
                 Job id            Name             User              Time Use S Queue
                 ----------------  ---------------- ----------------  -------- - -----
                 6567439.desched1  st_archive.CLM5* akhtert                  0 H cpudev
@@ -163,13 +182,13 @@ public class FileRepositoryImpl implements FileRepository {
                 6587534.desched1  job_2024-11-11_* marcbecker        967:55:* R cpu
                 """;
 
-            return textBlock;
-        }
+        return textBlock;
+    }
 
-        @Override
-        public String getDerechoQstatQueueDataJson() {
+    @Override
+    public String getDerechoQstatQueueJson() {
 
-            String textBlock = """
+        String textBlock = """
                 {
                     "timestamp":1731528276,
                     "pbs_version":"2022.1.5.20240213134632",
@@ -474,88 +493,78 @@ public class FileRepositoryImpl implements FileRepository {
                     }
                 }""";
 
-            return textBlock;
-        }
+        return textBlock;
+    }
 
-        @Override
-        public String getCasperQstatDataJson() {
+    @Override
+    public QueueData createQueueRow() {
 
-            String textBlock = """
-    TBD
-    """;
+        QueueData queueData = new QueueData();
 
-            return textBlock;
-        }
+        // 2945490.casper-p* cr-login-stable  lucaso            04:10:45 R jhublogin
+        queueData.setJobId("2945490.casper-p*");
+        queueData.setName("cr-login-stable");
+        queueData.setUser("lucaso");
+        queueData.setTimeUse("04:10:45");
+        queueData.setStatus("R");
+        queueData.setQueue("jhublogin");
 
-        @Override
-        public QueueData createQueueRow() {
+        return queueData;
+    }
 
-            QueueData queueData = new QueueData();
+    @Override
+    public List<String> convertTextToJson() {
 
-            // 2945490.casper-p* cr-login-stable  lucaso            04:10:45 R jhublogin
-            queueData.setJobId("2945490.casper-p*");
-            queueData.setName("cr-login-stable");
-            queueData.setUser("lucaso");
-            queueData.setTimeUse("04:10:45");
-            queueData.setStatus("R");
-            queueData.setQueue("jhublogin");
+        // TODO: hardcoded file
+        String textFilePath = "/Users/cgrant/derecho_trim.txt";
 
-            return queueData;
-        }
-
-        @Override
-        public List<String> convertTextToJson() {
-
-            // TODO: hardcoded file
-            String textFilePath = "/Users/cgrant/derecho_trim.txt";
-
-            try {
-                List<String> lines = readLinesFromTextFile(textFilePath);
-                return lines;
-
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-        }
-
-        private static List<String> readLinesFromTextFile(String filePath) throws IOException {
-
-            List<String> lines = new ArrayList<>();
-            try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-                String line;
-                while ((line = br.readLine()) != null) {
-                    lines.add(line);
-                }
-            }
+        try {
+            List<String> lines = readLinesFromTextFile(textFilePath);
             return lines;
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
-        private static ArrayNode convertLinesToJson(List<String> lines) throws JSONException, JsonProcessingException {
+    }
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            ArrayNode jsonArray = objectMapper.createArrayNode();
+    private static List<String> readLinesFromTextFile(String filePath) throws IOException {
 
-            for (String line : lines) {
-                // Assuming each line represents a simple JSON object
-                //ObjectNode jsonNode = objectMapper.readValue(line, ObjectNode.class);
-                JSONObject jsonObject = convertToJson(line);
-                jsonArray.add(String.valueOf(jsonObject));
+        List<String> lines = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                lines.add(line);
             }
+        }
+        return lines;
+    }
 
-            return jsonArray;
+    private static ArrayNode convertLinesToJson(List<String> lines) throws JSONException, JsonProcessingException {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        ArrayNode jsonArray = objectMapper.createArrayNode();
+
+        for (String line : lines) {
+            // Assuming each line represents a simple JSON object
+            //ObjectNode jsonNode = objectMapper.readValue(line, ObjectNode.class);
+            JSONObject jsonObject = convertToJson(line);
+            jsonArray.add(String.valueOf(jsonObject));
         }
 
-        private static JSONObject convertToJson(String spaceSeparatedString) throws JSONException {
+        return jsonArray;
+    }
 
-            JSONObject jsonObject = new JSONObject();
+    private static JSONObject convertToJson(String spaceSeparatedString) throws JSONException {
 
-            // String[] elements = spaceSeparatedString.split(" ");
+        JSONObject jsonObject = new JSONObject();
 
-            // Temporary
-            jsonObject.put("key", spaceSeparatedString);
+        // String[] elements = spaceSeparatedString.split(" ");
 
-            return jsonObject;
-        }
+        // Temporary
+        jsonObject.put("key", spaceSeparatedString);
+
+        return jsonObject;
+    }
 
 }
