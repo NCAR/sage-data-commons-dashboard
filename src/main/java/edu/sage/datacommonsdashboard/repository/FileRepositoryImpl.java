@@ -1,11 +1,14 @@
 package edu.sage.datacommonsdashboard.repository;
 
+//import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import edu.sage.datacommonsdashboard.model.QueueData;
-import org.json.JSONException;
-import org.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -540,7 +543,7 @@ public class FileRepositoryImpl implements FileRepository {
         return lines;
     }
 
-    private static ArrayNode convertLinesToJson(List<String> lines) throws JSONException, JsonProcessingException {
+private static ArrayNode convertLinesToJson(List<String> lines) throws JsonProcessingException {
 
         ObjectMapper objectMapper = new ObjectMapper();
         ArrayNode jsonArray = objectMapper.createArrayNode();
@@ -548,16 +551,18 @@ public class FileRepositoryImpl implements FileRepository {
         for (String line : lines) {
             // Assuming each line represents a simple JSON object
             //ObjectNode jsonNode = objectMapper.readValue(line, ObjectNode.class);
-            JSONObject jsonObject = convertToJson(line);
+            ObjectNode jsonObject = convertToJson(line);
             jsonArray.add(String.valueOf(jsonObject));
         }
 
         return jsonArray;
     }
 
-    private static JSONObject convertToJson(String spaceSeparatedString) throws JSONException {
+    private static ObjectNode convertToJson(String spaceSeparatedString) throws JsonProcessingException {
 
-        JSONObject jsonObject = new JSONObject();
+        ObjectMapper mapper = new ObjectMapper();
+
+        ObjectNode jsonObject = mapper.createObjectNode();
 
         // String[] elements = spaceSeparatedString.split(" ");
 
