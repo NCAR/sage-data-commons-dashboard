@@ -17,7 +17,11 @@ public interface FileRepository {
 
     String getDerechoQstatQueueText() throws IOException;
 
-    String getDerechoQstatQueueJson()throws IOException;
+    String getDerechoQstatQueueJson() throws IOException;
+
+    String getDerechoQstatJobsText() throws IOException;
+
+    String getDerechoQstatJobsJson() throws IOException;
 
     QueueData createQueueRow();
 

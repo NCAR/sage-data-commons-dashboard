@@ -52,7 +52,7 @@ public class DisplayTextController {
     @GetMapping(value = "/hpc/dashboard/derecho/jobs/text")
     public String showDerechoJobsText(Model model) throws IOException {
 
-        String textDerechoOutput = fileRepository.getDerechoQstatQueueText();
+        String textDerechoOutput = fileRepository.getDerechoQstatJobsText();
 
         model.addAttribute("pageTitle", "Derecho Qstat Jobs");
         model.addAttribute("textOutput", textDerechoOutput);

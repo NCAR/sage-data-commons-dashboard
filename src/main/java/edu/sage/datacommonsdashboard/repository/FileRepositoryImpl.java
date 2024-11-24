@@ -60,6 +60,41 @@ public class FileRepositoryImpl implements FileRepository {
         return this.readFileFromResources("casper_qstat_queue.json");
     }
 
+    @Override
+    public String getDerechoQstatJobsText() throws IOException {
+
+        return this.readFileFromResources("derecho_qstat_jobs.txt");
+    }
+
+    @Override
+    public String getDerechoQstatJobsJson() throws IOException {
+
+        return this.readFileFromResources("derecho_qstat_jobs.json");
+    }
+
+    @Override
+    public String getDerechoQstatQueueText() throws IOException {
+
+        return this.readFileFromResources("derecho_qstat_queue.txt");
+    }
+
+    public static boolean verifyFilePath(String filePath, String fileName) throws IOException {
+
+        Path path = Paths.get(filePath);
+        Path fullPath = path.resolve(fileName);
+
+        // Check whether the normalized full path contains the expected separation
+        String expectedSeparator = System.getProperty("file.separator");
+        String fullPathStr = fullPath.toString();
+
+        // Ensure the file exists (or can be accessed)
+        if (Files.exists(fullPath) ) {
+            return fullPathStr.contains(expectedSeparator + fileName);
+        }
+        return false;
+    }
+
+
     private String readFileFromResources(String fileName) throws IOException {
 
         Resource resource = resourceLoader.getResource("classpath:" + fileName);
@@ -90,103 +125,9 @@ public class FileRepositoryImpl implements FileRepository {
         }
     }
 
-    public static boolean verifyFilePath(String filePath, String fileName) throws IOException {
-
-        Path path = Paths.get(filePath);
-        Path fullPath = path.resolve(fileName);
-
-        // Check whether the normalized full path contains the expected separation
-        String expectedSeparator = System.getProperty("file.separator");
-        String fullPathStr = fullPath.toString();
-
-        // Ensure the file exists (or can be accessed)
-        if (Files.exists(fullPath) ) {
-            return fullPathStr.contains(expectedSeparator + fileName);
-        }
-        return false;
-    }
 
 
 
-
-    @Override
-    public String getDerechoQstatQueueText() {
-        String textBlock = """
-                Job id            Name             User              Time Use S Queue
-                ----------------  ---------------- ----------------  -------- - -----
-                6567439.desched1  st_archive.CLM5* akhtert                  0 H cpudev
-                6572108.desched1  icepack_test     tcraig                   0 W main
-                6572197.desched1  cice_test        tcraig                   0 W main
-                6584419.desched1  CONUS404         chliu             28204:1* R cpu
-                6584651.desched1  PACE_mesh        duda              295:42:* R cpu
-                6584706.desched1  w04303           chengw            749:17:* R cpu
-                6584707.desched1  gsi              chengw                   0 H cpu
-                6584708.desched1  gsi              chengw                   0 H cpu
-                6584709.desched1  gsi              chengw                   0 H cpu
-                6584710.desched1  gsi              chengw                   0 H cpu
-                6584711.desched1  w04304           chengw                   0 H cpu
-                6584712.desched1  gsi              chengw                   0 H cpu
-                6584713.desched1  gsi              chengw                   0 H cpu
-                6584714.desched1  w04305           chengw                   0 H cpu
-                6585938.desched1  wx_6h            akn7              133:22:* R gpu
-                6585939.desched1  wx_6h            akn7                     0 H gpu
-                6585940.desched1  wx_6h            akn7                     0 H gpu
-                6585941.desched1  wx_6h            akn7                     0 H gpu
-                6585942.desched1  wx_6h            akn7                     0 H gpu
-                6585943.desched1  wx_6h            akn7                     0 H gpu
-                6585944.desched1  wx_6h            akn7                     0 H gpu
-                6585945.desched1  wx_6h            akn7                     0 H gpu
-                6585978.desched1  fuxi_6h          akn7              249:50:* R gpu
-                6585979.desched1  fuxi_6h          akn7                     0 H gpu
-                6585980.desched1  fuxi_6h          akn7                     0 H gpu
-                6585981.desched1  fuxi_6h          akn7                     0 H gpu
-                6585982.desched1  fuxi_6h          akn7                     0 H gpu
-                6585983.desched1  fuxi_6h          akn7                     0 H gpu
-                6585984.desched1  fuxi_6h          akn7                     0 H gpu
-                6585985.desched1  fuxi_6h          akn7                     0 H gpu
-                6586245.desched1  fuxi_dry         ksha              17:21:24 R gpu
-                6586246.desched1  fuxi_dry         ksha                     0 H gpu
-                6586247.desched1  fuxi_dry         ksha                     0 H gpu
-                6586248.desched1  fuxi_dry         ksha                     0 H gpu
-                6586249.desched1  fuxi_dry         ksha                     0 H gpu
-                6586250.desched1  fuxi_dry         ksha                     0 H gpu
-                6586251.desched1  fuxi_dry         ksha                     0 H gpu
-                6586252.desched1  fuxi_dry         ksha                     0 H gpu
-                6586253.desched1  fuxi_dry         ksha                     0 H gpu
-                6586755.desched1  CONUS404         chliu                    0 H cpu
-                6587466.desched1  F.MMIOx0.25_C5_* pacosta           17406:0* R cpu
-                6587467.desched1  F.MMIOx0.25_C5_* pacosta                  0 H cpu
-                6587483.desched1  job_2024-11-11_* marcbecker        756:31:* R cpu
-                6587488.desched1  job_2024-11-11_* marcbecker        952:32:* R cpu
-                6587490.desched1  job_2024-11-11_* marcbecker        931:02:* R cpu
-                6587503.desched1  job_2024-11-11_* marcbecker        806:35:* R cpu
-                6587505.desched1  job_2024-11-11_* marcbecker        872:33:* R cpu
-                6587507.desched1  job_2024-11-11_* marcbecker        864:57:* R cpu
-                6587508.desched1  job_2024-11-11_* marcbecker        836:43:* R cpu
-                6587509.desched1  job_2024-11-11_* marcbecker        914:05:* R cpu
-                6587510.desched1  job_2024-11-11_* marcbecker        863:11:* R cpu
-                6587511.desched1  job_2024-11-11_* marcbecker        762:26:* R cpu
-                6587514.desched1  job_2024-11-11_* marcbecker        853:19:* R cpu
-                6587516.desched1  job_2024-11-11_* marcbecker        642:18:* R cpu
-                6587517.desched1  job_2024-11-11_* marcbecker        836:45:* R cpu
-                6587519.desched1  job_2024-11-11_* marcbecker        701:12:* R cpu
-                6587521.desched1  job_2024-11-11_* marcbecker        770:53:* R cpu
-                6587522.desched1  job_2024-11-11_* marcbecker        771:19:* R cpu
-                6587524.desched1  job_2024-11-11_* marcbecker        901:20:* R cpu
-                6587525.desched1  job_2024-11-11_* marcbecker        874:24:* R cpu
-                6587526.desched1  job_2024-11-11_* marcbecker        701:23:* R cpu
-                6587527.desched1  job_2024-11-11_* marcbecker        809:36:* R cpu
-                6587528.desched1  job_2024-11-11_* marcbecker        914:28:* R cpu
-                6587529.desched1  job_2024-11-11_* marcbecker        855:16:* R cpu
-                6587530.desched1  job_2024-11-11_* marcbecker        748:18:* R cpu
-                6587531.desched1  job_2024-11-11_* marcbecker        783:18:* R cpu
-                6587532.desched1  job_2024-11-11_* marcbecker        881:37:* R cpu
-                6587533.desched1  job_2024-11-11_* marcbecker        895:09:* R cpu
-                6587534.desched1  job_2024-11-11_* marcbecker        967:55:* R cpu
-                """;
-
-        return textBlock;
-    }
 
     @Override
     public String getDerechoQstatQueueJson() {
@@ -498,6 +439,8 @@ public class FileRepositoryImpl implements FileRepository {
 
         return textBlock;
     }
+
+
 
     @Override
     public QueueData createQueueRow() {
