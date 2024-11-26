@@ -39,10 +39,8 @@ public class FileRepositoryImpl implements FileRepository {
         this.resourceLoader = resourceLoader;
     }
 
-
-
     @Value("${dashboard.queue.file.path}")
-    private String filePath;
+    protected String filePath;
 
 
     @Override
@@ -95,6 +93,10 @@ public class FileRepositoryImpl implements FileRepository {
 
     public static boolean verifyFilePath(String filePath, String fileName) throws IOException {
 
+        if (filePath == null || fileName == null) {
+            throw new IOException("File path or file name is null");
+        }
+
         Path path = Paths.get(filePath);
         Path fullPath = path.resolve(fileName);
 
@@ -109,10 +111,14 @@ public class FileRepositoryImpl implements FileRepository {
         return false;
     }
 
-
-    private String readFileFromResources(String fileName) throws IOException {
+    protected String readFileFromResources(String fileName) throws IOException {
 
         Resource resource = resourceLoader.getResource("classpath:" + fileName);
+
+        // Avoid NPE
+        if (resource == null) {
+            throw new IOException("Resource is null for file: " + fileName);
+        }
 
         if (resource.exists()) {
             return new String(Files.readAllBytes(Paths.get(resource.getURI())));
@@ -121,9 +127,13 @@ public class FileRepositoryImpl implements FileRepository {
         }
     }
 
-    private String readFileWithPath(String fileName) throws IOException {
+    protected String readFileWithPath(String fileName) throws IOException {
 
 //        System.out.println("===FileRepositoryImpl data filePath: " + filePath + ", fileName: " + fileName);
+
+        if (filePath == null) {
+            throw new IOException("File path is not set.");
+        }
 
         if (verifyFilePath(filePath, fileName)) {
 
@@ -139,7 +149,6 @@ public class FileRepositoryImpl implements FileRepository {
             throw new IOException("File path error: "+ filePath + fileName);
         }
     }
-
 
 
     @Override
@@ -171,7 +180,6 @@ public class FileRepositoryImpl implements FileRepository {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     private static List<String> readLinesFromTextFile(String filePath) throws IOException {
@@ -184,35 +192,6 @@ public class FileRepositoryImpl implements FileRepository {
             }
         }
         return lines;
-    }
-
-private static ArrayNode convertLinesToJson(List<String> lines) throws JsonProcessingException {
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        ArrayNode jsonArray = objectMapper.createArrayNode();
-
-        for (String line : lines) {
-            // Assuming each line represents a simple JSON object
-            //ObjectNode jsonNode = objectMapper.readValue(line, ObjectNode.class);
-            ObjectNode jsonObject = convertToJson(line);
-            jsonArray.add(String.valueOf(jsonObject));
-        }
-
-        return jsonArray;
-    }
-
-    private static ObjectNode convertToJson(String spaceSeparatedString) throws JsonProcessingException {
-
-        ObjectMapper mapper = new ObjectMapper();
-
-        ObjectNode jsonObject = mapper.createObjectNode();
-
-        // String[] elements = spaceSeparatedString.split(" ");
-
-        // Temporary
-        jsonObject.put("key", spaceSeparatedString);
-
-        return jsonObject;
     }
 
 }

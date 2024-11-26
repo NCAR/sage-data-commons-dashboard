@@ -2,7 +2,9 @@ package edu.sage.datacommonsdashboard.repository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.*;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
 import java.io.IOException;
@@ -11,15 +13,31 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-class FileRepositoryImplTest {
+class FileRepositoryTest {
+
+    @TempDir
+    Path tempDir;
 
     @InjectMocks
     private FileRepositoryImpl fileRepositoryImpl;
 
+    private static final String SAMPLE_CASPER_FILE_CONTENT = "Sample Casper file content";
+    private static final String SAMPLE_DERECHO_FILE_CONTENT = "Sample Derecho file content";
+    private static final String CASPER_FILE_NAME = "casper_qstat_jobs.txt";
+    private static final String DERECHO_FILE_NAME = "derecho_qstat_jobs.txt";
+
+    private Resource mockResource = mock(Resource.class);
+    private ResourceLoader mockResourceLoader = mock(ResourceLoader.class);
+
     @BeforeEach
     void setUp() {
 
+        fileRepositoryImpl = new FileRepositoryImpl(mockResourceLoader);
+        fileRepositoryImpl.filePath = tempDir.toString() + "/";
     }
 
     @Test
@@ -32,6 +50,7 @@ class FileRepositoryImplTest {
 
         try (MockedStatic<Files> filesMock = Mockito.mockStatic(Files.class)) {
 
+            // Simulate that the file exists
             filesMock.when(() -> Files.exists(fullPath)).thenReturn(true);
             filesMock.when(() -> Files.notExists(fullPath)).thenReturn(false);
 
@@ -62,12 +81,133 @@ class FileRepositoryImplTest {
     }
 
     @Test
-    void readFileWithPath_success() throws IOException {
+    public void given_text_file_resource_in_resource__when_get_get_contents__then_correct_string_contents_returned() throws IOException {
 
+        Path tempFile = Files.createTempFile("testCasperQstatJobs", ".txt");
+        Files.writeString(tempFile, SAMPLE_CASPER_FILE_CONTENT);
+
+        when(mockResourceLoader.getResource(anyString())).thenReturn(mockResource);
+        when(mockResource.exists()).thenReturn(true);
+        when(mockResource.getURI()).thenReturn(tempFile.toUri());
+
+        // Execute
+        String result = fileRepositoryImpl.getCasperQstatJobsText();
+
+        // Assert
+        assertEquals(SAMPLE_CASPER_FILE_CONTENT, result);
+        assertNotEquals(SAMPLE_DERECHO_FILE_CONTENT, result);
+
+        // Clean up
+        Files.deleteIfExists(tempFile);
     }
 
     @Test
-    void readFileWithPath_fileNotFound() {
+    public void given_text_file_resource_in_file_path__when_get_contents__then_correct_string_contents_returned() throws IOException {
 
+        // Create temp file and write content
+        Resource mockResource = mock(Resource.class);
+        Path tempFile = Files.createFile(tempDir.resolve(DERECHO_FILE_NAME));
+        Files.writeString(tempFile, SAMPLE_DERECHO_FILE_CONTENT);
+
+        //when(mockResourceLoader.getResource(anyString())).thenReturn(mockResource);
+        when(mockResourceLoader.getResource("file:" + tempDir.toString() + "/" + DERECHO_FILE_NAME)).thenReturn(mockResource);
+        when(mockResource.exists()).thenReturn(true);
+        when(mockResource.getURI()).thenReturn(tempFile.toUri());
+
+        // Execute
+        String result = fileRepositoryImpl.getDerechoQstatJobsText();
+
+        // Assert
+        assertNotEquals(SAMPLE_CASPER_FILE_CONTENT, result);
+        assertEquals(SAMPLE_DERECHO_FILE_CONTENT, result);
+
+        // Clean up
+        Files.deleteIfExists(tempFile);
     }
+
+    @Test
+    void given_text_file_resource_in_file_path__when_not_found__then_file_path_error() throws IOException {
+
+        // Mock resource loader behavior
+        Resource mockResource = mock(Resource.class);
+        when(mockResourceLoader.getResource("file:" + tempDir.toString() + "/" + DERECHO_FILE_NAME)).thenReturn(mockResource);
+        when(mockResource.exists()).thenReturn(false);
+
+        // Verify method throws IOException
+        IOException exception = assertThrows(IOException.class, () -> {
+            fileRepositoryImpl.getDerechoQstatJobsText();
+        });
+
+        assertEquals("File path error: " + tempDir.toString() + "/" + DERECHO_FILE_NAME, exception.getMessage());
+    }
+
+    @Test
+    void given_text_file_in_file_path__when_file_path_is_null__then_file_path_not_set_error() {
+
+        fileRepositoryImpl.filePath = null;
+
+        IOException exception = assertThrows(IOException.class, () -> {
+            fileRepositoryImpl.getDerechoQstatJobsText();
+        });
+
+        assertEquals("File path is not set.", exception.getMessage());
+    }
+
+    @Test
+    void given_text_file_resource__when_file_path_is_null__then_resource_null_error() {
+
+        fileRepositoryImpl.filePath = null;
+
+        IOException exception = assertThrows(IOException.class, () -> {
+            fileRepositoryImpl.readFileFromResources(CASPER_FILE_NAME);
+        });
+
+        assertEquals("Resource is null for file: casper_qstat_jobs.txt", exception.getMessage());
+    }
+
+    @Test
+    void given_text_file_in_path__when_file_path_is_invalid__then_file_path_error() {
+
+        fileRepositoryImpl.filePath = "invalidPath/";
+
+        IOException exception = assertThrows(IOException.class, () -> {
+            fileRepositoryImpl.readFileWithPath(CASPER_FILE_NAME);
+        });
+
+        assertEquals("File path error: invalidPath/casper_qstat_jobs.txt", exception.getMessage());
+    }
+
+    @Test
+    void given_text_file_resource__when_file_path_is_invalid__then_file_path_error() throws IOException {
+
+        when(mockResourceLoader.getResource("file:" + tempDir.toString() + "/" + CASPER_FILE_NAME)).thenReturn(mock(Resource.class));
+
+        IOException exception = assertThrows(IOException.class, () -> {
+            fileRepositoryImpl.readFileFromResources(CASPER_FILE_NAME);
+        });
+
+        assertEquals("Resource is null for file: " + CASPER_FILE_NAME, exception.getMessage());
+    }
+
+    @Test
+    void when_read_file_with_path__if_file_exists__then_success() throws IOException {
+
+        // Create temp file and write content
+        Path tempFile = Files.createFile(tempDir.resolve(CASPER_FILE_NAME));
+        Files.writeString(tempFile, CASPER_FILE_NAME);
+
+        // Mock resource loader behavior
+        Resource mockResource = mock(Resource.class);
+        when(mockResourceLoader.getResource("file:" + tempDir.toString() + "/" + CASPER_FILE_NAME)).thenReturn(mockResource);
+        when(mockResource.exists()).thenReturn(true);
+        when(mockResource.getURI()).thenReturn(tempFile.toUri());
+
+        // Verify method output
+        String result = fileRepositoryImpl.readFileWithPath(CASPER_FILE_NAME);
+        assertEquals(CASPER_FILE_NAME, result);
+
+        // Clean up temp file
+        Files.deleteIfExists(tempFile);
+    }
+
 }

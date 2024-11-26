@@ -49,7 +49,7 @@ public class DisplayJsonController {
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
 
         try {
-            String jsonData = fileRepository.getCasperQstatJobsJson();
+            String jsonData = fileRepository.getCasperQstatQueueJson();
             return ResponseEntity.ok().headers(headers).body(jsonData);
 
         } catch (IOException e) {
