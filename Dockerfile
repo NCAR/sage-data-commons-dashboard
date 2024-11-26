@@ -5,9 +5,9 @@ FROM openjdk:17-jdk-alpine
 ARG JAR_FILE=target/sage-data-commons-dashboard-0.0.1-SNAPSHOT.jar
 
 # Add the application's jar to the container
-COPY ${JAR_FILE} app.jar
+COPY ${JAR_FILE} /app.jar
 
-# Copy the local file to the container
+# Copy the local file to the container, where the properties file points (testing)
 COPY ./src/main/resources/casper_qstat_queue.json /tmp/casper_qstat_queue.json
 COPY ./src/main/resources/casper_qstat_jobs.json /tmp/casper_qstat_jobs.json
 
@@ -19,4 +19,4 @@ ENTRYPOINT ["java","-Dspring.config.location=${SPRING_CONFIG_LOCATION}","-jar","
 
 # docker build -t sage-data-commons-dashboard .
 # docker run --detach -p 9090:8080 -v /Users/cgrant/dashboard/queueapp.properties:/usr/local/dashboard/queueapp.properties sage-data-commons-dashboard
-# docker run --detach --name sage-data-commons-dashboard -p 9080:8080 -v /Users/cgrant/dashboard/queueapp.properties:/usr/local/dashboard/queueapp.properties sage-data-commons-dashboard
+# docker run --detach --name sage-data-commons-dashboard -p 9090:8080 -v /Users/cgrant/dashboard/queueapp.properties:/usr/local/dashboard/queueapp.properties sage-data-commons-dashboard
