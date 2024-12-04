@@ -3,7 +3,9 @@ package edu.sage.datacommonsdashboard.repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
@@ -13,7 +15,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -80,26 +81,27 @@ class FileRepositoryTest {
         }
     }
 
-    @Test
-    public void given_text_file_resource_in_resource__when_get_get_contents__then_correct_string_contents_returned() throws IOException {
-
-        Path tempFile = Files.createTempFile("testCasperQstatJobs", ".txt");
-        Files.writeString(tempFile, SAMPLE_CASPER_FILE_CONTENT);
-
-        when(mockResourceLoader.getResource(anyString())).thenReturn(mockResource);
-        when(mockResource.exists()).thenReturn(true);
-        when(mockResource.getURI()).thenReturn(tempFile.toUri());
-
-        // Execute
-        String result = fileRepositoryImpl.getCasperQstatJobsText();
-
-        // Assert
-        assertEquals(SAMPLE_CASPER_FILE_CONTENT, result);
-        assertNotEquals(SAMPLE_DERECHO_FILE_CONTENT, result);
-
-        // Clean up
-        Files.deleteIfExists(tempFile);
-    }
+    // Won't need this if we aren't going to look at files stored in src/main/resources dir
+//    @Test
+//    public void given_text_file_resource_in_resource__when_get_get_contents__then_correct_string_contents_returned() throws IOException {
+//
+//        Path tempFile = Files.createTempFile("testCasperQstatJobs", ".txt");
+//        Files.writeString(tempFile, SAMPLE_CASPER_FILE_CONTENT);
+//
+//        when(mockResourceLoader.getResource(anyString())).thenReturn(mockResource);
+//        when(mockResource.exists()).thenReturn(true);
+//        when(mockResource.getURI()).thenReturn(tempFile.toUri());
+//
+//        // Execute
+//        String result = fileRepositoryImpl.getCasperQstatJobsText();
+//
+//        // Assert
+//        assertEquals(SAMPLE_CASPER_FILE_CONTENT, result);
+//        assertNotEquals(SAMPLE_DERECHO_FILE_CONTENT, result);
+//
+//        // Clean up
+//        Files.deleteIfExists(tempFile);
+//    }
 
     @Test
     public void given_text_file_resource_in_file_path__when_get_contents__then_correct_string_contents_returned() throws IOException {
