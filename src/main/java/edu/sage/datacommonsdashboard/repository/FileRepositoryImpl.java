@@ -1,12 +1,6 @@
 package edu.sage.datacommonsdashboard.repository;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import edu.sage.datacommonsdashboard.model.QueueData;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -46,25 +40,25 @@ public class FileRepositoryImpl implements FileRepository {
     @Override
     public String getCasperQstatJobsText() throws IOException {
 
-        return this.readFileFromResources(CASPER_QSTAT_JOBS_TXT);
+        return this.readFileWithPath(CASPER_QSTAT_JOBS_TXT);
     }
 
     @Override
     public String getCasperQstatJobsJson() throws IOException {
 
-        return this.readFileFromResources(CASPER_QSTAT_JOBS_JSON);
+        return this.readFileWithPath(CASPER_QSTAT_JOBS_JSON);
     }
 
     @Override
     public String getCasperQstatQueueText() throws IOException {
 
-        return this.readFileFromResources(CASPER_QSTAT_QUEUE_TXT);
+        return this.readFileWithPath(CASPER_QSTAT_QUEUE_TXT);
     }
 
     @Override
     public String getCasperQstatQueueJson() throws IOException {
 
-        return this.readFileFromResources(CASPER_QSTAT_QUEUE_JSON);
+        return this.readFileWithPath(CASPER_QSTAT_QUEUE_JSON);
     }
 
     @Override
