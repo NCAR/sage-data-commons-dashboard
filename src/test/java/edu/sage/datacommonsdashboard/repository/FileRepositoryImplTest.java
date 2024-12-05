@@ -81,28 +81,6 @@ class FileRepositoryTest {
         }
     }
 
-    // Won't need this if we aren't going to look at files stored in src/main/resources dir
-//    @Test
-//    public void given_text_file_resource_in_resource__when_get_get_contents__then_correct_string_contents_returned() throws IOException {
-//
-//        Path tempFile = Files.createTempFile("testCasperQstatJobs", ".txt");
-//        Files.writeString(tempFile, SAMPLE_CASPER_FILE_CONTENT);
-//
-//        when(mockResourceLoader.getResource(anyString())).thenReturn(mockResource);
-//        when(mockResource.exists()).thenReturn(true);
-//        when(mockResource.getURI()).thenReturn(tempFile.toUri());
-//
-//        // Execute
-//        String result = fileRepositoryImpl.getCasperQstatJobsText();
-//
-//        // Assert
-//        assertEquals(SAMPLE_CASPER_FILE_CONTENT, result);
-//        assertNotEquals(SAMPLE_DERECHO_FILE_CONTENT, result);
-//
-//        // Clean up
-//        Files.deleteIfExists(tempFile);
-//    }
-
     @Test
     public void given_text_file_resource_in_file_path__when_get_contents__then_correct_string_contents_returned() throws IOException {
 
@@ -140,7 +118,7 @@ class FileRepositoryTest {
             fileRepositoryImpl.getDerechoQstatJobsText();
         });
 
-        assertEquals("File path error: " + tempDir.toString() + "/" + DERECHO_FILE_NAME, exception.getMessage());
+        assertEquals("File cannot be located: " + tempDir.toString() + "/" + DERECHO_FILE_NAME, exception.getMessage());
     }
 
     @Test
@@ -176,7 +154,7 @@ class FileRepositoryTest {
             fileRepositoryImpl.readFileWithPath(CASPER_FILE_NAME);
         });
 
-        assertEquals("File path error: invalidPath/casper_qstat_jobs.txt", exception.getMessage());
+        assertEquals("File cannot be located: invalidPath/casper_qstat_jobs.txt", exception.getMessage());
     }
 
     @Test

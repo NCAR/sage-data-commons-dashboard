@@ -1,17 +1,15 @@
 package edu.sage.datacommonsdashboard.controller;
 
-import edu.sage.datacommonsdashboard.model.QueueData;
 import edu.sage.datacommonsdashboard.repository.FileRepository;
-import edu.sage.datacommonsdashboard.repository.FileRepositoryImpl;
-import java.io.IOException;
-import java.util.List;
-
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
 
 
 // For returning JSON directly (bypass view)
@@ -31,15 +29,9 @@ public class DisplayJsonController {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
 
-        try {
-            String jsonData = fileRepository.getCasperQstatJobsJson();
-            return ResponseEntity.ok().headers(headers).body(jsonData);
+        String jsonData = fileRepository.getCasperQstatJobsJson();
+        return ResponseEntity.ok().headers(headers).body(jsonData);
 
-        } catch (IOException e) {
-
-            e.printStackTrace();
-            throw new IOException(e.getMessage());
-        }
     }
 
     @GetMapping("/hpc/dashboard/casper/queue/json")
@@ -48,20 +40,8 @@ public class DisplayJsonController {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
 
-        try {
-            String jsonData = fileRepository.getCasperQstatQueueJson();
-            return ResponseEntity.ok().headers(headers).body(jsonData);
-
-        } catch (IOException e) {
-
-            e.printStackTrace();
-
-//            return new ResponseEntity<>("An error occurred while processing the request.",
-//                    HttpStatus.INTERNAL_SERVER_ERROR);
-
-            // This message is displayed on the 500 global error page
-            throw new IOException(e.getMessage());
-        }
+        String jsonData = fileRepository.getCasperQstatQueueJson();
+        return ResponseEntity.ok().headers(headers).body(jsonData);
     }
 
     @GetMapping(value = "/hpc/dashboard/derecho/queue/json")
@@ -70,17 +50,8 @@ public class DisplayJsonController {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
 
-        try {
-            String jsonData = fileRepository.getDerechoQstatQueueJson();
-            return ResponseEntity.ok().headers(headers).body(jsonData);
-
-        } catch (IOException e) {
-
-            e.printStackTrace();
-
-            // This message is displayed on the 500 global error page
-            throw new IOException(e.getMessage());
-        }
+        String jsonData = fileRepository.getDerechoQstatQueueJson();
+        return ResponseEntity.ok().headers(headers).body(jsonData);
     }
 
     // to get file name from url when it lives on the file system
@@ -91,52 +62,15 @@ public class DisplayJsonController {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
 
-        try {
-            String jsonData = fileRepository.getDerechoQstatJobsJson();
-            return ResponseEntity.ok().headers(headers).body(jsonData);
-
-        } catch (IOException e) {
-
-            e.printStackTrace();
-
-            // This message is displayed on the 500 global error page
-            throw new IOException("Error reading file: " + e.getMessage());
-        }
+        String jsonData = fileRepository.getDerechoQstatJobsJson();
+        return ResponseEntity.ok().headers(headers).body(jsonData);
     }
 
-    // to get file name from url when it lives on the file system
-    // in a place designated by a property
-    @GetMapping("/hpc/dashboard/file")
-    public ResponseEntity<String> readSystemFile(@RequestParam String filename) throws IOException {
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
-
-        try {
-            String jsonData = fileRepository.getCasperQstatJobsJson();
-            return ResponseEntity.ok().headers(headers).body(jsonData);
-
-        } catch (IOException e) {
-
-            e.printStackTrace();
-
-            // This message is displayed on the 500 global error page
-            throw new IOException("Error reading file: " + e.getMessage());
-        }
-    }
-
-    @GetMapping(value = "/jsonrow")
-    public QueueData showJsonRow() {
-
-        QueueData queueData = fileRepository.createQueueRow();
-
-        return queueData;
-    }
-
-    @GetMapping(value = "/jsondata")
-    public List<String> showJsonFile() {
-
-        return fileRepository.convertTextToJson();
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<String> handleIOException(IOException ex) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Unable to process the request: " + ex.getMessage());
     }
 
 }
