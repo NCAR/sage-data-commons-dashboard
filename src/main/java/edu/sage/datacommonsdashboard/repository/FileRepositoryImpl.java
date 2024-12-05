@@ -1,19 +1,15 @@
 package edu.sage.datacommonsdashboard.repository;
 
-import edu.sage.datacommonsdashboard.model.QueueData;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Repository;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 @Repository
 public class FileRepositoryImpl implements FileRepository {
@@ -85,10 +81,10 @@ public class FileRepositoryImpl implements FileRepository {
         return this.readFileWithPath(DERECHO_QSTAT_QUEUE_JSON);
     }
 
-    public static boolean verifyFilePath(String filePath, String fileName) throws IOException {
+    public boolean verifyFilePath(String filePath, String fileName) throws FileNotFoundException {
 
         if (filePath == null || fileName == null) {
-            throw new IOException("File path or file name is null");
+            throw new FileNotFoundException("File path or file name is null");
         }
 
         Path path = Paths.get(filePath);
@@ -105,19 +101,23 @@ public class FileRepositoryImpl implements FileRepository {
         return false;
     }
 
-    protected String readFileFromResources(String fileName) throws IOException {
+    // Deprecated?
+    protected String readFileFromResources(String fileName) throws FileNotFoundException {
 
         Resource resource = resourceLoader.getResource("classpath:" + fileName);
 
-        // Avoid NPE
         if (resource == null) {
-            throw new IOException("Resource is null for file: " + fileName);
+            throw new FileNotFoundException("Resource is null for file: " + fileName);
         }
 
         if (resource.exists()) {
-            return new String(Files.readAllBytes(Paths.get(resource.getURI())));
+            try {
+                return new String(Files.readAllBytes(Paths.get(resource.getURI())));
+            } catch (IOException e) {
+                throw new RuntimeException("Error reading file: " + fileName, e);
+            }
         } else {
-            throw new IOException("File not found: " + filePath + fileName);
+            throw new FileNotFoundException("File not found: " + filePath + fileName);
         }
     }
 
@@ -126,7 +126,7 @@ public class FileRepositoryImpl implements FileRepository {
 //        System.out.println("===FileRepositoryImpl data filePath: " + filePath + ", fileName: " + fileName);
 
         if (filePath == null) {
-            throw new IOException("File path is not set.");
+            throw new FileNotFoundException("File path is not set.");
         }
 
         if (verifyFilePath(filePath, fileName)) {
@@ -134,58 +134,16 @@ public class FileRepositoryImpl implements FileRepository {
             Resource resource = resourceLoader.getResource("file:" + filePath + fileName);
 
             if (resource.exists()) {
+
                 return new String(Files.readAllBytes(Paths.get(resource.getURI())));
+
             } else {
-                throw new IOException("File not found: " + filePath + fileName);
+                throw new FileNotFoundException("File not found: " + filePath + fileName);
             }
 
         } else {
-            throw new IOException("File path error: "+ filePath + fileName);
+            throw new FileNotFoundException("File cannot be located: "+ filePath + fileName);
         }
-    }
-
-
-    @Override
-    public QueueData createQueueRow() {
-
-        QueueData queueData = new QueueData();
-
-        // 2945490.casper-p* cr-login-stable  lucaso            04:10:45 R jhublogin
-        queueData.setJobId("2945490.casper-p*");
-        queueData.setName("cr-login-stable");
-        queueData.setUser("lucaso");
-        queueData.setTimeUse("04:10:45");
-        queueData.setStatus("R");
-        queueData.setQueue("jhublogin");
-
-        return queueData;
-    }
-
-    @Override
-    public List<String> convertTextToJson() {
-
-        // TODO: hardcoded file
-        String textFilePath = "/Users/cgrant/derecho_trim.txt";
-
-        try {
-            List<String> lines = readLinesFromTextFile(textFilePath);
-            return lines;
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private static List<String> readLinesFromTextFile(String filePath) throws IOException {
-
-        List<String> lines = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                lines.add(line);
-            }
-        }
-        return lines;
     }
 
 }

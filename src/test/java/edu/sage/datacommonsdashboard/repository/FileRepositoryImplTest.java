@@ -55,7 +55,7 @@ class FileRepositoryTest {
             filesMock.when(() -> Files.exists(fullPath)).thenReturn(true);
             filesMock.when(() -> Files.notExists(fullPath)).thenReturn(false);
 
-            boolean result = FileRepositoryImpl.verifyFilePath(filePath, fileName);
+            boolean result = fileRepositoryImpl.verifyFilePath(filePath, fileName);
 
             assertTrue(result);
         }
@@ -75,7 +75,7 @@ class FileRepositoryTest {
             filesMock.when(() -> Files.exists(fullPath)).thenReturn(false);
             filesMock.when(() -> Files.notExists(fullPath)).thenReturn(true);
 
-            boolean result = FileRepositoryImpl.verifyFilePath(filePath, fileName);
+            boolean result = fileRepositoryImpl.verifyFilePath(filePath, fileName);
 
             assertFalse(result);
         }

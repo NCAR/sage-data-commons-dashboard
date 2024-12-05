@@ -1,9 +1,6 @@
 package edu.sage.datacommonsdashboard.repository;
 
-import edu.sage.datacommonsdashboard.model.QueueData;
-
 import java.io.IOException;
-import java.util.List;
 
 public interface FileRepository {
 
@@ -22,8 +19,4 @@ public interface FileRepository {
     String getDerechoQstatJobsText() throws IOException;
 
     String getDerechoQstatJobsJson() throws IOException;
-
-    QueueData createQueueRow();
-
-    List<String> convertTextToJson();
 }
