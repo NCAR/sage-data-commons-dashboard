@@ -3,23 +3,21 @@ package edu.sage.datacommonsdashboard.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 
-@ControllerAdvice
+//@ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(IOException.class)
+//    @ExceptionHandler(IOException.class)
     public ResponseEntity<String> handleIOException(IOException ex) {
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error: " + ex.getMessage());
     }
 
     // Handle all exceptions and return the 500 error page
-    @ExceptionHandler(Exception.class)
+//    @ExceptionHandler(Exception.class)
     public ModelAndView handleException(Exception ex, Model model) {
 
         ModelAndView modelAndView = new ModelAndView();
