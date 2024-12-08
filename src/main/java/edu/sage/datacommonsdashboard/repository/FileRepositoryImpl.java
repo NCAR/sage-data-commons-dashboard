@@ -14,7 +14,8 @@ import java.nio.file.Paths;
 @Repository
 public class FileRepositoryImpl implements FileRepository {
 
-    public static final String CASPER_QSTAT_JOBS_JSON = "casper_qstat_jobs.json";
+   public static final String CASPER_QSTAT_JOBS_JSON = "casper_qstat_jobs.json";
+    // public static final String CASPER_QSTAT_JOBS_JSON = "summarized_casper_qstat_jobs.json";
     public static final String CASPER_QSTAT_JOBS_TXT = "casper_qstat_jobs.txt";
     public static final String CASPER_QSTAT_QUEUE_TXT = "casper_qstat_queue.txt";
     public static final String CASPER_QSTAT_QUEUE_JSON = "casper_qstat_queue.json";

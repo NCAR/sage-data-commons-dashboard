@@ -4,7 +4,6 @@ import edu.sage.datacommonsdashboard.repository.FileRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,7 +44,7 @@ public class DisplayJsonController {
     }
 
     @GetMapping(value = "/hpc/dashboard/derecho/queue/json")
-    public ResponseEntity<String> showDerechoQueueJson(Model model) throws IOException {
+    public ResponseEntity<String> showDerechoQueueJson() throws IOException {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");

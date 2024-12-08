@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Job Details</title>
+</head>
+<body>
+
+<header></header>
+
+<main>
+    <h1 th:text="${pageTitle}"></h1>
+
+    <p><strong>Job Timestamp:</strong> <span th:text="${jobData.timestamp}"></span></p>
+    <p><strong>Job Pbs Version:</strong> <span th:text="${jobData.pbsVersion}"></span></p>
+    <p><strong>Job Pbs Server:</strong> <span th:text="${jobData.pbsServer}"></span></p>
+
+    <div th:each="job : ${jobData.getJobs()}">
+        <hr>
+        <p>
+            <span th:text="${job.key}"></span>
+        </p>
+        <p>
+        <div th:each="prop : ${job.value.getAdditionalProperties()}">
+            <strong><span th:text="${prop.key}"></span></strong>: <span th:text="${prop.value}"></span>
+        </div>
+        </p>
+    </div>
+
+</main>
+
+<footer>
+    <p>Copyright &copy; 2024 UCAR</p>
+</footer>
+
+</body>
+</html>
