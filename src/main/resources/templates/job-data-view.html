@@ -15,13 +15,13 @@
     <p><strong>Job Pbs Version:</strong> <span th:text="${jobData.pbsVersion}"></span></p>
     <p><strong>Job Pbs Server:</strong> <span th:text="${jobData.pbsServer}"></span></p>
 
-    <div th:each="job : ${jobData.getJobs()}">
+    <div th:each="job : ${jobData.jobs}">
         <hr>
         <p>
             <span th:text="${job.key}"></span>
         </p>
         <p>
-        <div th:each="prop : ${job.value.getAdditionalProperties()}">
+        <div th:each="prop : ${job.value.additionalProperties}">
             <strong><span th:text="${prop.key}"></span></strong>: <span th:text="${prop.value}"></span>
         </div>
         </p>
