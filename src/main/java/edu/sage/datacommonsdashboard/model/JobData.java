@@ -23,7 +23,6 @@ public class JobData {
     private String pbsVersion;
     @JsonProperty("pbs_server")
     private String pbsServer;
-
     @JsonProperty("Jobs")
     //private Jobs jobs;
     private Map<String, Jobs> jobs;

@@ -28,8 +28,11 @@ public class DisplayJobsController {
         String jsonData = fileRepository.getCasperQstatJobsJson();
         JobData jobData = this.convertJsonToJobData(jsonData);
 
+       // Map<String, Jobs> jobs = jobData.getJobs();
+
         model.addAttribute("pageTitle", "Casper Qstat Jobs");
         model.addAttribute("jobData", jobData);
+        model.addAttribute("capserPbs", jobData.getPbsServer());
 
         return "job-data-view";  // The thymeleaf file
     }
