@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Job Details</title>
+</head>
+<body>
+
+<header>Future Site Branding and Logo</header>
+
+<main>
+    <h1 th:text="${pageTitle}"></h1>
+
+    <p><strong>Timestamp:</strong> <span th:text="${jobData.timestamp}"></span></p>
+    <p><strong>Pbs Version:</strong> <span th:text="${jobData.pbsVersion}"></span></p>
+    <p><strong>Pbs Server:</strong> <span th:text="${jobData.pbsServer}"></span></p>
+
+    <table border="1" cellspacing="0" cellpadding="10">
+        <thead>
+        <tr>
+            <th>Job Key</th>
+            <th>Job Name</th>
+            <th>Job Owner</th>
+            <th>Job State</th>
+            <th>Queue</th>
+            <th>Priority</th>
+            <th>Comment</th>
+            <th>Exit Status</th>
+            <th>Variable List Summary</th>
+            <th>Memory</th>
+            <th>nCPUs</th>
+            <th>Walltime</th>
+        </tr>
+        </thead>
+        <tbody th:each="entry : ${jobData.jobs}">
+<!--        <tr><td><span th:text="${job.key}"></span></td>-->
+        <tr th:with="job=${entry.value}" >
+
+            <td><span th:text="${entry.key}"></span></td>
+            <td><span th:text="${job.jobName}"></span></td>
+            <td><span th:text="${job.jobOwner}"></span></td>
+            <td><span th:text="${job.jobState}"></span></td>
+            <td><span th:text="${job.queue}"></span></td>
+            <td><span th:text="${job.priority}"></span></td>
+            <td><span th:text="${job.comment}"></span></td>
+            <td><span th:text="${job.exitStatus}"></span></td>
+            <td><span th:text="${job.variableListSummary}"></span></td>
+
+            <td th:if="${job.resourceList != null}" th:with="resourceList=${job.resourceList}">
+                <span th:text="${job.resourceList.mem}"></span>
+            </td>
+            <td th:if="${job.resourceList != null}">
+                <span th:text="${job.resourceList.ncpus}"></span>
+            </td>
+            <td th:if="${job.resourceList != null}">
+                <span th:text="${job.resourceList.walltime}"></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</main>
+
+<footer>
+    <p>Copyright &copy; 2024 UCAR</p>
+</footer>
+
+</body>
+</html>
