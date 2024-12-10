@@ -81,50 +81,81 @@
             <td><span th:text="${job.priority}"></span></td>
             <td><span th:text="${job.qtime}"></span></td>
             <td><span th:text="${job.rerunable}"></span></td>
-<!--            <td><span th:text="${job.resourceList}"></span></td>-->
-
+            <!--            <td><span th:text="${job.resourceList}"></span></td>-->
             <td>
-                    <ul th:each="resourceList : ${job.resourceList}">
-                        <li>
-                            <strong>mem:</strong> <span th:text="${resourceList.mem}"></span>
-                        </li>
-                        <li>
-                            <strong>miprocs:</strong> <span th:text="${resourceList.mpiprocs}"></span>
-                        </li>
-                        <li>
-                            <strong>mps:</strong> <span th:text="${resourceList.mps}"></span>
-                        </li>
-                        <li>
-                            <strong>ncpus:</strong> <span th:text="${resourceList.ncpus}"></span>
-                        </li>
-                        <li>
-                            <strong>ngpus:</strong> <span th:text="${resourceList.ngpus}"></span>
-                        </li>
-                        <li>
-                            <strong>nodect:</strong> <span th:text="${resourceList.nodect}"></span>
-                        </li>
-                        <li>
-                            <strong>nvpus:</strong> <span th:text="${resourceList.nvpus}"></span>
-                        </li>
-                        <li>
-                            <strong>place:</strong> <span th:text="${resourceList.place}"></span>
-                        </li>
-                        <li>
-                            <strong>select:</strong> <span th:text="${resourceList.select}"></span>
-                        </li>
-                        <li>
-                            <strong>walltime:</strong> <span th:text="${resourceList.walltime}"></span>
-                        </li>
-                    </ul>
-
+                <ul th:each="resourceList : ${job.resourceList}">
+                    <li>
+                        <strong>mem:</strong> <span th:text="${resourceList.mem}"></span>
+                    </li>
+                    <li>
+                        <strong>miprocs:</strong> <span th:text="${resourceList.mpiprocs}"></span>
+                    </li>
+                    <li>
+                        <strong>mps:</strong> <span th:text="${resourceList.mps}"></span>
+                    </li>
+                    <li>
+                        <strong>ncpus:</strong> <span th:text="${resourceList.ncpus}"></span>
+                    </li>
+                    <li>
+                        <strong>ngpus:</strong> <span th:text="${resourceList.ngpus}"></span>
+                    </li>
+                    <li>
+                        <strong>nodect:</strong> <span th:text="${resourceList.nodect}"></span>
+                    </li>
+                    <li>
+                        <strong>nvpus:</strong> <span th:text="${resourceList.nvpus}"></span>
+                    </li>
+                    <li>
+                        <strong>place:</strong> <span th:text="${resourceList.place}"></span>
+                    </li>
+                    <li>
+                        <strong>select:</strong> <span th:text="${resourceList.select}"></span>
+                    </li>
+                    <li>
+                        <strong>walltime:</strong> <span th:text="${resourceList.walltime}"></span>
+                    </li>
+                </ul>
             </td>
-
             <td><span th:text="${job.stime}"></span></td>
             <td><span th:text="${job.obittime}"></span></td>
             <td><span th:text="${job.shellPathList}"></span></td>
             <td><span th:text="${job.jobdir}"></span></td>
             <td><span th:text="${job.substate}"></span></td>
-            <td><span th:text="${job.variableList}"></span></td>
+<!--        <td><span th:text="${job.variableList}"></span></td>-->
+            <td>
+                <ul th:each="variableList : ${job.variableList}">
+                    <li>
+                        <strong>pbsOHome:</strong> <span th:text="${variableList.pbsOHome}"></span>
+                    </li>
+                    <li>
+                        <strong>pbsOLang:</strong> <span th:text="${variableList.pbsOLang}"></span>
+                    </li>
+                    <li>
+                        <strong>pbsOLogname:</strong> <span th:text="${variableList.pbsOLogname}"></span>
+                    </li>
+                    <li>
+                        <strong>pbsOPath:</strong> <span th:text="${variableList.pbsOPath}"></span>
+                    </li>
+                    <li>
+                        <strong>pbsOMail:</strong> <span th:text="${variableList.pbsOMail}"></span>
+                    </li>
+                    <li>
+                        <strong>pbsOShell:</strong> <span th:text="${variableList.pbsOShell}"></span>
+                    </li>
+                    <li>
+                        <strong>pbsOHost:</strong> <span th:text="${variableList.pbsOHost}"></span>
+                    </li>
+                    <li>
+                        <strong>pbsOWorkdir:</strong> <span th:text="${variableList.pbsOWorkdir}"></span>
+                    </li>
+                    <li>
+                        <strong>pbsOSystem:</strong> <span th:text="${variableList.pbsOSystem}"></span>
+                    </li>
+                    <li>
+                        <strong>pbsOQueue:</strong> <span th:text="${variableList.pbsOQueue}"></span>
+                    </li>
+                </ul>
+            </td>
 
             <td><span th:text="${job.comment}"></span></td>
             <td><span th:text="${job.etime}"></span></td>
@@ -137,25 +168,25 @@
             <td><span th:text="${job.submitHost}"></span></td>
             <td><span th:text="${job.serverInstanceId}"></span></td>
 
-<!--            <td th:if="${job.resourceList != null}" th:with="resourceList=${job.resourceList}">-->
-<!--                <span th:text="${job.resourceList.mem}"></span>-->
-<!--            </td>-->
-<!--            <td th:if="${job.resourceList != null}">-->
-<!--                <span th:text="${job.resourceList.ncpus}"></span>-->
-<!--            </td>-->
-<!--            <td th:if="${job.resourceList != null}">-->
-<!--                <span th:text="${job.resourceList.walltime}"></span>-->
-<!--            </td>-->
+            <!--            <td th:if="${job.resourceList != null}" th:with="resourceList=${job.resourceList}">-->
+            <!--                <span th:text="${job.resourceList.mem}"></span>-->
+            <!--            </td>-->
+            <!--            <td th:if="${job.resourceList != null}">-->
+            <!--                <span th:text="${job.resourceList.ncpus}"></span>-->
+            <!--            </td>-->
+            <!--            <td th:if="${job.resourceList != null}">-->
+            <!--                <span th:text="${job.resourceList.walltime}"></span>-->
+            <!--            </td>-->
 
             <!-- Additional expandable ResourceList Fields -->
-<!--            <td th:if="${job.resourceList != null}">-->
-<!--                <ul>-->
-<!--                    <li th:each="field : ${#fields.allFields(job.resourceList)}">-->
-<!--                        <b th:text="${field.name}">Field Name</b>:-->
-<!--                        <span th:text="${field.getValue(job.resourceList)}">Field Value</span>-->
-<!--                    </li>-->
-<!--                </ul>-->
-<!--            </td>-->
+            <!--            <td th:if="${job.resourceList != null}">-->
+            <!--                <ul>-->
+            <!--                    <li th:each="field : ${#fields.allFields(job.resourceList)}">-->
+            <!--                        <b th:text="${field.name}">Field Name</b>:-->
+            <!--                        <span th:text="${field.getValue(job.resourceList)}">Field Value</span>-->
+            <!--                    </li>-->
+            <!--                </ul>-->
+            <!--            </td>-->
         </tr>
         </tbody>
     </table>

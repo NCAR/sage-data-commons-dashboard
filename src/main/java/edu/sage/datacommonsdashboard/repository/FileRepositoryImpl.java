@@ -124,7 +124,7 @@ public class FileRepositoryImpl implements FileRepository {
 
     protected String readFileWithPath(String fileName) throws IOException {
 
-//        System.out.println("===FileRepositoryImpl data filePath: " + filePath + ", fileName: " + fileName);
+       System.out.println("===FileRepositoryImpl data filePath: " + filePath + ", fileName: " + fileName);
 
         if (filePath == null) {
             throw new FileNotFoundException("File path is not set.");
