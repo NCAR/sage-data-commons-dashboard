@@ -3,6 +3,7 @@ package edu.sage.datacommonsdashboard.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.sage.datacommonsdashboard.model.Job;
 import edu.sage.datacommonsdashboard.model.JobData;
 import edu.sage.datacommonsdashboard.repository.FileRepository;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class DisplayJobsController {
@@ -32,7 +34,6 @@ public class DisplayJobsController {
 
         model.addAttribute("pageTitle", "Casper Qstat Jobs");
         model.addAttribute("jobData", jobData);
-        model.addAttribute("capserPbs", jobData.getPbsServer());
 
         return "job-data-view";  // The thymeleaf file
     }
@@ -77,6 +78,15 @@ public class DisplayJobsController {
         ObjectMapper objectMapper = new ObjectMapper();
 
         JobData jobData = objectMapper.readValue(jsonData, JobData.class);
+
+        // Debug
+        for (Map.Entry<String, Job> entry : jobData.getJobs().entrySet()) {
+            System.out.println("Job ID: " + entry.getKey());
+            Job job = entry.getValue();
+            System.out.println("  Job Name: " + job.getJobName());
+            System.out.println("  Owner: " + job.getJobOwner());
+            // Access other fields similarly
+        }
 
         return jobData;
     }

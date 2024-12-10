@@ -11,9 +11,9 @@
 <main>
     <h1 th:text="${pageTitle}"></h1>
 
-    <p><strong>Job Timestamp:</strong> <span th:text="${jobData.timestamp}"></span></p>
-    <p><strong>Job Pbs Version:</strong> <span th:text="${jobData.pbsVersion}"></span></p>
-    <p><strong>Job Pbs Server:</strong> <span th:text="${jobData.pbsServer}"></span></p>
+    <p><strong>Timestamp:</strong> <span th:text="${jobData.timestamp}"></span></p>
+    <p><strong>Pbs Version:</strong> <span th:text="${jobData.pbsVersion}"></span></p>
+    <p><strong>Pbs Server:</strong> <span th:text="${jobData.pbsServer}"></span></p>
 
     <div th:each="job : ${jobData.jobs}">
         <hr>
@@ -21,20 +21,25 @@
             <h3><span th:text="${job.key}"></span></h3>
         </div>
 
-        <div th:each="prop : ${job.value.additionalProperties}">
-            <strong><span th:text="${prop.key}"></span></strong>: <span th:text="${prop.value}"></span>
+        <div th:with="job=${job.value}">
+            <p><strong>Job Name:</strong> <span th:text="${job.jobName}"></span></p>
+            <p><strong>Job Owner:</strong> <span th:text="${job.jobOwner}"></span></p>
+            <p><strong>Job State:</strong> <span th:text="${job.jobState}"></span></p>
+            <p><strong>Queue:</strong> <span th:text="${job.queue}"></span></p>
+            <p><strong>Priority:</strong> <span th:text="${job.priority}"></span></p>
+            <p><strong>Comment:</strong> <span th:text="${job.comment}"></span></p>
+            <p><strong>Exit Status:</strong> <span th:text="${job.exitStatus}"></span></p>
+            <p><strong>Variable List Summary:</strong> <span th:text="${job.variableListSummary}"></span></p>
 
-
+            <h4>Resource List</h4>
+            <div th:with="resourceList=${job.resourceList}">
+                <ul th:if="${resourceList != null}">
+                    <li><strong>Memory:</strong> <span th:text="${resourceList.mem}"></span></li>
+                    <li><strong>nCPUs:</strong> <span th:text="${resourceList.ncpus}"></span></li>
+                    <li><strong>Walltime:</strong> <span th:text="${resourceList.walltime}"></span></li>
+                </ul>
+            </div>
         </div>
-
-<!--        <div th:with="resourceList=${job.value.resourceList}">-->
-<!--            <h2>Resource List</h2>-->
-<!--            <ul>-->
-<!--                <li><strong>Field 1:</strong> <span th:text="${resourceList.mem}"></span></li>-->
-<!--                <li><strong>Field 2:</strong> <span th:text="${resourceList.ncpus}"></span></li>-->
-<!--                <li><strong>Field 3:</strong> <span th:text="${resourceList.walltime}"></span></li>-->
-<!--            </ul>-->
-<!--        </div>-->
     </div>
 
 </main>

@@ -25,7 +25,7 @@ public class JobData {
     private String pbsServer;
     @JsonProperty("Jobs")
     //private Jobs jobs;
-    private Map<String, Jobs> jobs;
+    private Map<String, Job> jobs;
 
     @JsonIgnore
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
@@ -70,11 +70,11 @@ public class JobData {
 //        this.jobs = jobs;
 //    }
 
-    public Map<String, Jobs> getJobs() {
+    public Map<String, Job> getJobs() {
         return jobs;
     }
 
-    public void setJobs(Map<String, Jobs> jobs) {
+    public void setJobs(Map<String, Job> jobs) {
         this.jobs = jobs;
     }
 

@@ -20,7 +20,7 @@ import java.util.Map;
     "Variable_List_summary"
 })
 @Generated("jsonschema2pojo")
-public class CasperPbs {
+public class Job {
 
     @JsonProperty("Job_Name")
     private String jobName;
