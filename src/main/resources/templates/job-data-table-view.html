@@ -38,12 +38,14 @@
             <th>Queue Time</th>
             <th>Rerunable</th>
             <th>Resource List</th>
+
             <th>Start Time</th>
             <th>Obit Time</th>
             <th>Shell Path List</th>
             <th>Job Directory</th>
             <th>Substate</th>
             <th>Variable List</th>
+
             <th>Comment</th>
             <th>Elapsed Time</th>
             <th>Umask</th>
@@ -79,7 +81,43 @@
             <td><span th:text="${job.priority}"></span></td>
             <td><span th:text="${job.qtime}"></span></td>
             <td><span th:text="${job.rerunable}"></span></td>
-            <td><span th:text="${job.resourceList}"></span></td>
+<!--            <td><span th:text="${job.resourceList}"></span></td>-->
+
+            <td>
+                    <ul th:each="resourceList : ${job.resourceList}">
+                        <li>
+                            <strong>mem:</strong> <span th:text="${resourceList.mem}"></span>
+                        </li>
+                        <li>
+                            <strong>miprocs:</strong> <span th:text="${resourceList.mpiprocs}"></span>
+                        </li>
+                        <li>
+                            <strong>mps:</strong> <span th:text="${resourceList.mps}"></span>
+                        </li>
+                        <li>
+                            <strong>ncpus:</strong> <span th:text="${resourceList.ncpus}"></span>
+                        </li>
+                        <li>
+                            <strong>ngpus:</strong> <span th:text="${resourceList.ngpus}"></span>
+                        </li>
+                        <li>
+                            <strong>nodect:</strong> <span th:text="${resourceList.nodect}"></span>
+                        </li>
+                        <li>
+                            <strong>nvpus:</strong> <span th:text="${resourceList.nvpus}"></span>
+                        </li>
+                        <li>
+                            <strong>place:</strong> <span th:text="${resourceList.place}"></span>
+                        </li>
+                        <li>
+                            <strong>select:</strong> <span th:text="${resourceList.select}"></span>
+                        </li>
+                        <li>
+                            <strong>walltime:</strong> <span th:text="${resourceList.walltime}"></span>
+                        </li>
+                    </ul>
+
+            </td>
 
             <td><span th:text="${job.stime}"></span></td>
             <td><span th:text="${job.obittime}"></span></td>

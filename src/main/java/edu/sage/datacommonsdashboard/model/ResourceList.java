@@ -10,7 +10,14 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "mem",
+    "mpiprocs",
+    "mps",
     "ncpus",
+    "ngpus",
+    "nodect",
+    "nvpus",
+    "place",
+    "select",
     "walltime"
 })
 @Generated("jsonschema2pojo")
@@ -18,8 +25,22 @@ public class ResourceList {
 
     @JsonProperty("mem")
     private String mem;
+    @JsonProperty("mpiprocs")
+    private Integer mpiprocs;
+    @JsonProperty("mps")
+    private Integer mps;
     @JsonProperty("ncpus")
     private Integer ncpus;
+    @JsonProperty("ngpus")
+    private Integer ngpus;
+    @JsonProperty("nodect")
+    private Integer nodect;
+    @JsonProperty("nvpus")
+    private Integer nvpus;
+    @JsonProperty("place")
+    private String place;
+    @JsonProperty("select")
+    private String select;
     @JsonProperty("walltime")
     private String walltime;
     @JsonIgnore
@@ -35,6 +56,26 @@ public class ResourceList {
         this.mem = mem;
     }
 
+    @JsonProperty("mpiprocs")
+    public Integer getMpiprocs() {
+        return mpiprocs;
+    }
+
+    @JsonProperty("mpiprocs")
+    public void setMpiprocs(Integer mpiprocs) {
+        this.mpiprocs = mpiprocs;
+    }
+
+    @JsonProperty("mps")
+    public Integer getMps() {
+        return mps;
+    }
+
+    @JsonProperty("mps")
+    public void setMps(Integer mps) {
+        this.mps = mps;
+    }
+
     @JsonProperty("ncpus")
     public Integer getNcpus() {
         return ncpus;
@@ -43,6 +84,56 @@ public class ResourceList {
     @JsonProperty("ncpus")
     public void setNcpus(Integer ncpus) {
         this.ncpus = ncpus;
+    }
+
+    @JsonProperty("ngpus")
+    public Integer getNgpus() {
+        return ngpus;
+    }
+
+    @JsonProperty("ngpus")
+    public void setNgpus(Integer ngpus) {
+        this.ngpus = ngpus;
+    }
+
+    @JsonProperty("nodect")
+    public Integer getNodect() {
+        return nodect;
+    }
+
+    @JsonProperty("nodect")
+    public void setNodect(Integer nodect) {
+        this.nodect = nodect;
+    }
+
+    @JsonProperty("nvpus")
+    public Integer getNvpus() {
+        return nvpus;
+    }
+
+    @JsonProperty("nvpus")
+    public void setNvpus(Integer nvpus) {
+        this.nvpus = nvpus;
+    }
+
+    @JsonProperty("place")
+    public String getPlace() {
+        return place;
+    }
+
+    @JsonProperty("place")
+    public void setPlace(String place) {
+        this.place = place;
+    }
+
+    @JsonProperty("select")
+    public String getSelect() {
+        return select;
+    }
+
+    @JsonProperty("select")
+    public void setSelect(String select) {
+        this.select = select;
     }
 
     @JsonProperty("walltime")
