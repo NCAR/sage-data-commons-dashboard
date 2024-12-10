@@ -29,7 +29,6 @@
             <p><strong>Priority:</strong> <span th:text="${job.priority}"></span></p>
             <p><strong>Comment:</strong> <span th:text="${job.comment}"></span></p>
             <p><strong>Exit Status:</strong> <span th:text="${job.exitStatus}"></span></p>
-            <p><strong>Variable List Summary:</strong> <span th:text="${job.variableListSummary}"></span></p>
 
             <h4>Resource List</h4>
             <div th:with="resourceList=${job.resourceList}">
