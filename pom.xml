@@ -159,6 +159,9 @@
                             <filter>
                                 <regex>th:with</regex>
                             </filter>
+                            <filter>
+                                <regex>th:if</regex>
+                            </filter>
                         </filters>
                     </validator>
                 </configuration>
