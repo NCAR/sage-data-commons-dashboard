@@ -1,7 +1,6 @@
 package edu.sage.datacommonsdashboard.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.sage.datacommonsdashboard.model.JobData;
 import edu.sage.datacommonsdashboard.repository.FileRepository;
@@ -10,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.io.IOException;
-import java.util.List;
 
 @Controller
 public class DisplayJobsController {
@@ -28,8 +26,6 @@ public class DisplayJobsController {
         String jsonData = fileRepository.getCasperQstatJobsJson();
         JobData jobData = this.convertJsonToJobData(jsonData);
 
-       // Map<String, Jobs> jobs = jobData.getJobs();
-
         model.addAttribute("pageTitle", "Casper Qstat Jobs");
         model.addAttribute("jobData", jobData);
 
@@ -41,8 +37,6 @@ public class DisplayJobsController {
 
         String jsonData = fileRepository.getCasperQstatJobsJson();
         JobData jobData = this.convertJsonToJobData(jsonData);
-
-        // Map<String, Jobs> jobs = jobData.getJobs();
 
         model.addAttribute("pageTitle", "Casper Qstat Jobs");
         model.addAttribute("jobData", jobData);
@@ -91,34 +85,13 @@ public class DisplayJobsController {
 
         JobData jobData = objectMapper.readValue(jsonData, JobData.class);
 
-        // Debug
-//        for (Map.Entry<String, Job> entry : jobData.getJobs().entrySet()) {
-//            System.out.println("Job ID: " + entry.getKey());
-//            Job job = entry.getValue();
-//            System.out.println("  Job Name: " + job.getJobName());
-//            System.out.println("  Owner: " + job.getJobOwner());
-//            // Access other fields similarly
-//        }
-
         return jobData;
     }
 
-    // This won't work cuz the json doesn't have an array
-    private List<JobData> convertJsonToJobDataList(String jsonData) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        // Use TypeReference to indicate a list of JobData
-        List<JobData> jobDataList = objectMapper.readValue(jsonData, new TypeReference<List<JobData>>() {});
-
-        return jobDataList;
-    }
 
     public JobData convertJsonToMap(String jsonData) throws JsonProcessingException {
 
         ObjectMapper objectMapper = new ObjectMapper();
-
-        // Use TypeReference for dynamic JSON keys
-       // Map<String, JobData> resultMap = objectMapper.readValue(jsonData, new TypeReference<Map<String, JobData>>() {});
 
         JobData jobData = objectMapper.readValue(jsonData, JobData.class);
 

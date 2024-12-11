@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"/>
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <title>Job Details</title>
 </head>
 <body>
@@ -15,7 +15,7 @@
     <p><strong>Pbs Version:</strong> <span th:text="${jobData.pbsVersion}"></span></p>
     <p><strong>Pbs Server:</strong> <span th:text="${jobData.pbsServer}"></span></p>
 
-    <table class="table table-striped" >
+    <table>
         <thead>
         <tr>
             <th>Job Key</th>
@@ -168,25 +168,6 @@
             <td><span th:text="${job.submitHost}"></span></td>
             <td><span th:text="${job.serverInstanceId}"></span></td>
 
-            <!--            <td th:if="${job.resourceList != null}" th:with="resourceList=${job.resourceList}">-->
-            <!--                <span th:text="${job.resourceList.mem}"></span>-->
-            <!--            </td>-->
-            <!--            <td th:if="${job.resourceList != null}">-->
-            <!--                <span th:text="${job.resourceList.ncpus}"></span>-->
-            <!--            </td>-->
-            <!--            <td th:if="${job.resourceList != null}">-->
-            <!--                <span th:text="${job.resourceList.walltime}"></span>-->
-            <!--            </td>-->
-
-            <!-- Additional expandable ResourceList Fields -->
-            <!--            <td th:if="${job.resourceList != null}">-->
-            <!--                <ul>-->
-            <!--                    <li th:each="field : ${#fields.allFields(job.resourceList)}">-->
-            <!--                        <b th:text="${field.name}">Field Name</b>:-->
-            <!--                        <span th:text="${field.getValue(job.resourceList)}">Field Value</span>-->
-            <!--                    </li>-->
-            <!--                </ul>-->
-            <!--            </td>-->
         </tr>
         </tbody>
     </table>
@@ -194,7 +175,7 @@
 </main>
 
 <footer>
-    <p>Copyright &copy; 2024 UCAR</p>
+    <p>Copyright 2024 UCAR</p>
 </footer>
 
 </body>
