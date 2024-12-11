@@ -12,7 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Repository
-public class FileRepositoryImpl implements FileRepository {
+public class JobRepositoryImpl implements JobRepository {
 
    public static final String CASPER_QSTAT_JOBS_JSON = "casper_qstat_jobs.json";
     // public static final String CASPER_QSTAT_JOBS_JSON = "summarized_casper_qstat_jobs.json";
@@ -26,7 +26,7 @@ public class FileRepositoryImpl implements FileRepository {
 
     private final ResourceLoader resourceLoader;
 
-    public FileRepositoryImpl(ResourceLoader resourceLoader) {
+    public JobRepositoryImpl(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
     }
 
@@ -124,7 +124,7 @@ public class FileRepositoryImpl implements FileRepository {
 
     protected String readFileWithPath(String fileName) throws IOException {
 
-       System.out.println("===FileRepositoryImpl data filePath: " + filePath + ", fileName: " + fileName);
+       System.out.println("===JobRepositoryImpl data filePath: " + filePath + ", fileName: " + fileName);
 
         if (filePath == null) {
             throw new FileNotFoundException("File path is not set.");

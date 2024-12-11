@@ -2,7 +2,7 @@ package edu.sage.datacommonsdashboard.repository;
 
 import java.io.IOException;
 
-public interface FileRepository {
+public interface JobRepository {
 
     String getCasperQstatJobsText() throws IOException;
 

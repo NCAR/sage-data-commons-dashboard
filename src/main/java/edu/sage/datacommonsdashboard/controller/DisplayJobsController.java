@@ -3,7 +3,7 @@ package edu.sage.datacommonsdashboard.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.sage.datacommonsdashboard.model.JobData;
-import edu.sage.datacommonsdashboard.repository.FileRepository;
+import edu.sage.datacommonsdashboard.repository.JobRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,17 +13,17 @@ import java.io.IOException;
 @Controller
 public class DisplayJobsController {
 
-    private FileRepository fileRepository;
+    private JobRepository jobRepository;
 
-    public DisplayJobsController(FileRepository fileRepository) {
+    public DisplayJobsController(JobRepository jobRepository) {
 
-        this.fileRepository = fileRepository;
+        this.jobRepository = jobRepository;
     }
 
     @GetMapping(value = "/hpc/dashboard/casper/jobs")
     public String showCasperJobs(Model model) throws IOException {
 
-        String jsonData = fileRepository.getCasperQstatJobsJson();
+        String jsonData = jobRepository.getCasperQstatJobsJson();
         JobData jobData = this.convertJsonToJobData(jsonData);
 
         model.addAttribute("pageTitle", "Casper Qstat Jobs");
@@ -35,7 +35,7 @@ public class DisplayJobsController {
     @GetMapping(value = "/hpc/dashboard/casper/jobs/table")
     public String showCasperJobsTable(Model model) throws IOException {
 
-        String jsonData = fileRepository.getCasperQstatJobsJson();
+        String jsonData = jobRepository.getCasperQstatJobsJson();
         JobData jobData = this.convertJsonToJobData(jsonData);
 
         model.addAttribute("pageTitle", "Casper Qstat Jobs");
@@ -44,10 +44,22 @@ public class DisplayJobsController {
         return "job-data-table-view";  // The thymeleaf file
     }
 
+    @GetMapping(value = "/hpc/dashboard/derecho/jobs/table")
+    public String showDerechoJobsTable(Model model) throws IOException {
+
+        String jsonData = jobRepository.getDerechoQstatJobsJson();
+        JobData jobData = this.convertJsonToJobData(jsonData);
+
+        model.addAttribute("pageTitle", "Derecho Qstat Jobs");
+        model.addAttribute("jobData", jobData);
+
+        return "job-data-table-view";  // The thymeleaf file
+    }
+
 //    @GetMapping(value = "/hpc/dashboard/casper/queue")
 //    public String showCasperPageJson(Model model) throws IOException {
 //
-//        String jsonData = fileRepository.getCasperQstatQueueJson();
+//        String jsonData = jobRepository.getCasperQstatQueueJson();
 //
 //        model.addAttribute("pageTitle", "Casper Qstat Queue");
 //        model.addAttribute("jobData", jobData);
@@ -58,7 +70,7 @@ public class DisplayJobsController {
 //    @GetMapping(value = "/hpc/dashboard/derecho/queue")
 //    public String showDerechoQueueText(Model model) throws IOException {
 //
-//        String queueData = fileRepository.getDerechoQstatQueueJson();
+//        String queueData = jobRepository.getDerechoQstatQueueJson();
 //        QueueData jobData = this.convertJsonToQueueData(queueData);
 //
 //        model.addAttribute("pageTitle", "Derecho Qstat Queue");
@@ -70,7 +82,7 @@ public class DisplayJobsController {
     @GetMapping(value = "/hpc/dashboard/derecho/jobs")
     public String showDerechoJobsText(Model model) throws IOException {
 
-        String jsonData = fileRepository.getDerechoQstatJobsJson();
+        String jsonData = jobRepository.getDerechoQstatJobsJson();
         JobData jobData = this.convertJsonToMap(jsonData);
 
         model.addAttribute("pageTitle", "Derecho Qstat Jobs");
