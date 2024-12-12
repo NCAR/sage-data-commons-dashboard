@@ -27,20 +27,25 @@
             <th>Account Name</th>
             <th>Checkpoint</th>
             <th>Creation Time</th>
+            <th>Error Path</th>
             <th>Hold Types</th>
             <th>Join Path</th>
             <th>Keep Files</th>
             <th>Mail Points</th>
             <th>Modification Time</th>
+            <th>Output Path</th>
             <th>Priority</th>
             <th>Queue Time</th>
             <th>Rerunable</th>
             <th>Resource List</th>
+
             <th>Start Time</th>
             <th>Obit Time</th>
             <th>Shell Path List</th>
             <th>Job Directory</th>
             <th>Substate</th>
+            <th>Variable List</th>
+
             <th>Comment</th>
             <th>Elapsed Time</th>
             <th>Umask</th>
@@ -54,7 +59,9 @@
         </tr>
         </thead>
         <tbody th:each="entry : ${jobData.jobs}">
+
         <tr th:with="job=${entry.value}" >
+
             <td><span th:text="${entry.key}"></span></td>
             <td><span th:text="${job.jobName}"></span></td>
             <td><span th:text="${job.jobOwner}"></span></td>
@@ -64,14 +71,17 @@
             <td><span th:text="${job.accountName}"></span></td>
             <td><span th:text="${job.checkpoint}"></span></td>
             <td><span th:text="${job.ctime}"></span></td>
+            <td><span th:text="${job.errorPath}"></span></td>
             <td><span th:text="${job.holdTypes}"></span></td>
             <td><span th:text="${job.joinPath}"></span></td>
             <td><span th:text="${job.keepFiles}"></span></td>
             <td><span th:text="${job.mailPoints}"></span></td>
             <td><span th:text="${job.mtime}"></span></td>
+            <td><span th:text="${job.outputPath}"></span></td>
             <td><span th:text="${job.priority}"></span></td>
             <td><span th:text="${job.qtime}"></span></td>
             <td><span th:text="${job.rerunable}"></span></td>
+            <!--            <td><span th:text="${job.resourceList}"></span></td>-->
             <td>
                 <ul th:each="resourceList : ${job.resourceList}">
                     <li>
@@ -111,6 +121,42 @@
             <td><span th:text="${job.shellPathList}"></span></td>
             <td><span th:text="${job.jobdir}"></span></td>
             <td><span th:text="${job.substate}"></span></td>
+<!--        <td><span th:text="${job.variableList}"></span></td>-->
+            <td>
+                <ul th:each="variableList : ${job.variableList}">
+                    <li>
+                        <strong>pbsOHome:</strong> <span th:text="${variableList.pbsOHome}"></span>
+                    </li>
+                    <li>
+                        <strong>pbsOLang:</strong> <span th:text="${variableList.pbsOLang}"></span>
+                    </li>
+                    <li>
+                        <strong>pbsOLogname:</strong> <span th:text="${variableList.pbsOLogname}"></span>
+                    </li>
+                    <li>
+                        <strong>pbsOPath:</strong> <span th:text="${variableList.pbsOPath}"></span>
+                    </li>
+                    <li>
+                        <strong>pbsOMail:</strong> <span th:text="${variableList.pbsOMail}"></span>
+                    </li>
+                    <li>
+                        <strong>pbsOShell:</strong> <span th:text="${variableList.pbsOShell}"></span>
+                    </li>
+                    <li>
+                        <strong>pbsOHost:</strong> <span th:text="${variableList.pbsOHost}"></span>
+                    </li>
+                    <li>
+                        <strong>pbsOWorkdir:</strong> <span th:text="${variableList.pbsOWorkdir}"></span>
+                    </li>
+                    <li>
+                        <strong>pbsOSystem:</strong> <span th:text="${variableList.pbsOSystem}"></span>
+                    </li>
+                    <li>
+                        <strong>pbsOQueue:</strong> <span th:text="${variableList.pbsOQueue}"></span>
+                    </li>
+                </ul>
+            </td>
+
             <td><span th:text="${job.comment}"></span></td>
             <td><span th:text="${job.etime}"></span></td>
             <td><span th:text="${job.umask}"></span></td>
