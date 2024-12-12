@@ -56,6 +56,30 @@ public class DisplayJobsController {
         return "job-data-table-view";  // The thymeleaf file
     }
 
+    @GetMapping(value = "/hpc/dashboard/casper/jobs/tablefull")
+    public String showCasperJobsTableFull(Model model) throws IOException {
+
+        String jsonData = jobRepository.getCasperQstatJobsJson();
+        JobData jobData = this.convertJsonToJobData(jsonData);
+
+        model.addAttribute("pageTitle", "Casper Qstat Jobs");
+        model.addAttribute("jobData", jobData);
+
+        return "job-data-table-full-view";  // The thymeleaf file
+    }
+
+    @GetMapping(value = "/hpc/dashboard/derecho/jobs/tablefull")
+    public String showDerechoJobsFullTable(Model model) throws IOException {
+
+        String jsonData = jobRepository.getDerechoQstatJobsJson();
+        JobData jobData = this.convertJsonToJobData(jsonData);
+
+        model.addAttribute("pageTitle", "Derecho Qstat Jobs");
+        model.addAttribute("jobData", jobData);
+
+        return "job-data-table-full-view";  // The thymeleaf file
+    }
+
 //    @GetMapping(value = "/hpc/dashboard/casper/queue")
 //    public String showCasperPageJson(Model model) throws IOException {
 //
