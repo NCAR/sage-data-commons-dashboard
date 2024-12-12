@@ -162,6 +162,12 @@
                             <filter>
                                 <regex>th:if</regex>
                             </filter>
+                            <filter>
+                                <regex>th:include</regex>
+                            </filter>
+                            <filter>
+                                <regex>th:replace</regex>
+                            </filter>
                         </filters>
                     </validator>
                 </configuration>
