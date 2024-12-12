@@ -168,6 +168,9 @@
                             <filter>
                                 <regex>th:replace</regex>
                             </filter>
+                            <filter>
+                                <regex>th:href</regex>
+                            </filter>
                         </filters>
                     </validator>
                 </configuration>
