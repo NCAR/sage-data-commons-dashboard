@@ -1,6 +1,6 @@
 package edu.sage.datacommonsdashboard.controller;
 
-import edu.sage.datacommonsdashboard.repository.FileRepository;
+import edu.sage.datacommonsdashboard.repository.JobRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -13,15 +13,15 @@ import static org.mockito.Mockito.when;
 public class DisplayJsonControllerTest {
 
     @MockBean
-    private FileRepository mockFileRepository;
+    private JobRepository mockJobRepository;
 
     @Test
     public void when_request_casper_jobs_json__then_get_json() throws Exception {
 
         String mockJsonData = "{\"job\":\"sample\"}";
-        when(mockFileRepository.getCasperQstatJobsJson()).thenReturn(mockJsonData);
+        when(mockJobRepository.getCasperQstatJobsJson()).thenReturn(mockJsonData);
 
-        DisplayJsonController controller = new DisplayJsonController(mockFileRepository);
+        DisplayJsonController controller = new DisplayJsonController(mockJobRepository);
 
         ResponseEntity<String> response = controller.showCasperJobsJson();
         assertEquals(mockJsonData, response.getBody());
