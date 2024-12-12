@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Job Details</title>
+<head th:include="fragments/bootstrap :: head">
+    <title th:text="${pageTitle}">Job Details</title>
 </head>
 <body>
 
@@ -15,8 +14,8 @@
     <p><strong>Pbs Version:</strong> <span th:text="${jobData.pbsVersion}"></span></p>
     <p><strong>Pbs Server:</strong> <span th:text="${jobData.pbsServer}"></span></p>
 
-    <table>
-        <thead>
+    <table class="table table-bordered table-striped table-hover">
+        <thead class="table-header">
         <tr>
             <th>Job Key</th>
             <th>Job Name</th>
