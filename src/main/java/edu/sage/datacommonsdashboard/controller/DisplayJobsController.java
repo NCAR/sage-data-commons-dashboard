@@ -80,29 +80,6 @@ public class DisplayJobsController {
         return "job-data-table-full-view";  // The thymeleaf file
     }
 
-//    @GetMapping(value = "/hpc/dashboard/casper/queue")
-//    public String showCasperPageJson(Model model) throws IOException {
-//
-//        String jsonData = jobRepository.getCasperQstatQueueJson();
-//
-//        model.addAttribute("pageTitle", "Casper Qstat Queue");
-//        model.addAttribute("jobData", jobData);
-//
-//        return "display-queue-data";  // The thymeleaf file
-//    }
-
-//    @GetMapping(value = "/hpc/dashboard/derecho/queue")
-//    public String showDerechoQueueText(Model model) throws IOException {
-//
-//        String queueData = jobRepository.getDerechoQstatQueueJson();
-//        QueueData jobData = this.convertJsonToQueueData(queueData);
-//
-//        model.addAttribute("pageTitle", "Derecho Qstat Queue");
-//        model.addAttribute("jobData", jobData);
-//
-//        return "display-queue-data";  // The thymeleaf file
-//    }
-
     @GetMapping(value = "/hpc/dashboard/derecho/jobs")
     public String showDerechoJobsText(Model model) throws IOException {
 
@@ -123,7 +100,6 @@ public class DisplayJobsController {
 
         return jobData;
     }
-
 
     public JobData convertJsonToMap(String jsonData) throws JsonProcessingException {
 
