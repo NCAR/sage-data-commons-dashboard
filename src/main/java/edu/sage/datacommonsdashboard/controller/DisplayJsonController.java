@@ -2,9 +2,7 @@ package edu.sage.datacommonsdashboard.controller;
 
 import edu.sage.datacommonsdashboard.repository.JobRepository;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -65,11 +63,11 @@ public class DisplayJsonController {
         return ResponseEntity.ok().headers(headers).body(jsonData);
     }
 
-    @ExceptionHandler(IOException.class)
-    public ResponseEntity<String> handleIOException(IOException ex) {
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Unable to process the request: " + ex.getMessage());
-    }
+//    @ExceptionHandler(IOException.class)
+//    public ResponseEntity<String> handleIOException(IOException ex) {
+//        return ResponseEntity
+//                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                .body("Unable to process the request: " + ex.getMessage());
+//    }
 
 }
