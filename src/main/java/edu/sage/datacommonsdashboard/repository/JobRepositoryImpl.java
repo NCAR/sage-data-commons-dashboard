@@ -14,8 +14,7 @@ import java.nio.file.Paths;
 @Repository
 public class JobRepositoryImpl implements JobRepository {
 
-   public static final String CASPER_QSTAT_JOBS_JSON = "casper_qstat_jobs.json";
-    // public static final String CASPER_QSTAT_JOBS_JSON = "summarized_casper_qstat_jobs.json";
+    public static final String CASPER_QSTAT_JOBS_JSON = "casper_qstat_jobs.json";
     public static final String CASPER_QSTAT_JOBS_TXT = "casper_qstat_jobs.txt";
     public static final String CASPER_QSTAT_QUEUE_TXT = "casper_qstat_queue.txt";
     public static final String CASPER_QSTAT_QUEUE_JSON = "casper_qstat_queue.json";
@@ -32,7 +31,6 @@ public class JobRepositoryImpl implements JobRepository {
 
     @Value("${dashboard.queue.file.path}")
     protected String filePath;
-
 
     @Override
     public String getCasperQstatJobsText() throws IOException {
