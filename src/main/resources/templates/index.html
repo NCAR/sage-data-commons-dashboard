@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/bootstrap :: head">
+    <title>Data Commons Dashboard</title>
+</head>
+<body>
+
+<header>Future Site Branding and Logo</header>
+
+<h1>Sage Data Commons Dashboard</h1>
+<div>Example Job Pages</div>
+
+<ul>
+    <li><a th:href="@{/hpc/dashboard/casper/jobs/table}">Casper Jobs Table</a></li>
+</ul>
+<ul>
+    <li><a th:href="@{/hpc/dashboard/derecho/jobs/table}">Derecho Jobs Table</a></li>
+</ul>
+<ul>
+    <li><a th:href="@{/hpc/dashboard/casper/jobs/tablefull}">Casper Jobs Table Full Width</a></li>
+</ul>
+<ul>
+    <li><a th:href="@{/hpc/dashboard/casper/jobs/tablefull}">Derecho Jobs Table Full Width</a></li>
+</ul>
+<ul>
+    <li><a th:href="@{/hpc/dashboard/casper/jobs/json}">Casper Jobs Json</a></li>
+</ul>
+<ul>
+    <li><a th:href="@{/hpc/dashboard/derecho/jobs/json}">Derecho Jobs Json</a></li>
+</ul>
+<ul>
+    <li><a th:href="@{/hpc/dashboard/casper/queue/json}">Casper Queue Json</a></li>
+</ul>
+<ul>
+    <li><a th:href="@{/hpc/dashboard/derecho/queue/json}">Derecho Queue Json</a></li>
+</ul>
+<ul>
+    <li><a th:href="@{/hpc/dashboard/casper/jobs/text}">Casper Jobs Text</a></li>
+</ul>
+<ul>
+    <li><a th:href="@{/hpc/dashboard/derecho/jobs/text}">Derecho Jobs Text</a></li>
+</ul>
+<ul>
+    <li><a th:href="@{/hpc/dashboard/casper/queue/text}">Casper Queue Text</a></li>
+</ul>
+<ul>
+    <li><a th:href="@{/hpc/dashboard/derecho/queue/text}">Derecho Queue Text</a></li>
+</ul>
+
+
+<footer>
+    <p>Copyright 2024 UCAR</p>
+</footer>
+
+</body>
+</html>
