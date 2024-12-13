@@ -10,6 +10,6 @@ public class HomeController {
     @GetMapping("/")
     public String showHomePage(Model model) {
         model.addAttribute("pageTitle", "Home Page");
-        return "index"; // Corresponds to src/main/resources/templates/index.html
+        return "index";
     }
 }
