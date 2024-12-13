@@ -1,22 +1,22 @@
 package edu.sage.datacommonsdashboard.repository;
 
-import java.io.IOException;
+import edu.sage.datacommonsdashboard.service.FileNotReadableException;
 
 public interface JobRepository {
 
-    String getCasperQstatJobsText() throws IOException;
+    String getCasperQstatJobsText() throws FileNotReadableException;
 
-    String getCasperQstatJobsJson() throws IOException;
+    String getCasperQstatJobsJson() throws FileNotReadableException;
 
-    String getCasperQstatQueueText() throws IOException;
+    String getCasperQstatQueueText() throws FileNotReadableException;
 
-    String getCasperQstatQueueJson() throws IOException;
+    String getCasperQstatQueueJson() throws FileNotReadableException;
 
-    String getDerechoQstatQueueText() throws IOException;
+    String getDerechoQstatQueueText() throws FileNotReadableException;
 
-    String getDerechoQstatQueueJson() throws IOException;
+    String getDerechoQstatQueueJson() throws FileNotReadableException;
 
-    String getDerechoQstatJobsText() throws IOException;
+    String getDerechoQstatJobsText() throws FileNotReadableException;
 
-    String getDerechoQstatJobsJson() throws IOException;
+    String getDerechoQstatJobsJson() throws FileNotReadableException;
 }

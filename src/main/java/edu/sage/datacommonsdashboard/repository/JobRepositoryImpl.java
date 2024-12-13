@@ -1,11 +1,13 @@
 package edu.sage.datacommonsdashboard.repository;
 
+import edu.sage.datacommonsdashboard.service.FileNotReadableException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Repository;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,6 +27,8 @@ public class JobRepositoryImpl implements JobRepository {
 
     private final ResourceLoader resourceLoader;
 
+    private static final Logger logger = LoggerFactory.getLogger(JobRepositoryImpl.class);
+
     public JobRepositoryImpl(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
     }
@@ -33,57 +37,57 @@ public class JobRepositoryImpl implements JobRepository {
     protected String filePath;
 
     @Override
-    public String getCasperQstatJobsText() throws IOException {
+    public String getCasperQstatJobsText() throws FileNotReadableException {
 
         return this.readFileWithPath(CASPER_QSTAT_JOBS_TXT);
     }
 
     @Override
-    public String getCasperQstatJobsJson() throws IOException {
+    public String getCasperQstatJobsJson() throws FileNotReadableException {
 
         return this.readFileWithPath(CASPER_QSTAT_JOBS_JSON);
     }
 
     @Override
-    public String getCasperQstatQueueText() throws IOException {
+    public String getCasperQstatQueueText() throws FileNotReadableException {
 
         return this.readFileWithPath(CASPER_QSTAT_QUEUE_TXT);
     }
 
     @Override
-    public String getCasperQstatQueueJson() throws IOException {
+    public String getCasperQstatQueueJson() throws FileNotReadableException {
 
         return this.readFileWithPath(CASPER_QSTAT_QUEUE_JSON);
     }
 
     @Override
-    public String getDerechoQstatJobsText() throws IOException {
+    public String getDerechoQstatJobsText() throws FileNotReadableException {
 
         return this.readFileWithPath(DERECHO_QSTAT_JOBS_TXT);
     }
 
     @Override
-    public String getDerechoQstatJobsJson() throws IOException {
+    public String getDerechoQstatJobsJson() throws FileNotReadableException {
 
         return this.readFileWithPath(DERECHO_QSTAT_JOBS_JSON);
     }
 
     @Override
-    public String getDerechoQstatQueueText() throws IOException {
+    public String getDerechoQstatQueueText() throws FileNotReadableException {
 
         return this.readFileWithPath(DERECHO_QSTAT_QUEUE_TXT);
     }
 
     @Override
-    public String getDerechoQstatQueueJson() throws IOException {
+    public String getDerechoQstatQueueJson() throws FileNotReadableException {
 
         return this.readFileWithPath(DERECHO_QSTAT_QUEUE_JSON);
     }
 
-    public boolean verifyFilePath(String filePath, String fileName) throws FileNotFoundException {
+    public boolean verifyFilePath(String filePath, String fileName) throws FileNotReadableException {
 
         if (filePath == null || fileName == null) {
-            throw new FileNotFoundException("File path or file name is null");
+            throw new FileNotReadableException("File path or file name is null");
         }
 
         Path path = Paths.get(filePath);
@@ -101,12 +105,12 @@ public class JobRepositoryImpl implements JobRepository {
     }
 
     // Deprecated?
-    protected String readFileFromResources(String fileName) throws FileNotFoundException {
+    protected String readFileFromResources(String fileName) throws FileNotReadableException {
 
         Resource resource = resourceLoader.getResource("classpath:" + fileName);
 
         if (resource == null) {
-            throw new FileNotFoundException("Resource is null for file: " + fileName);
+            throw new FileNotReadableException("Resource is null for file: " + fileName);
         }
 
         if (resource.exists()) {
@@ -116,16 +120,16 @@ public class JobRepositoryImpl implements JobRepository {
                 throw new RuntimeException("Error reading file: " + fileName, e);
             }
         } else {
-            throw new FileNotFoundException("File not found: " + filePath + fileName);
+            throw new FileNotReadableException("Resource does not exist: " + filePath + fileName);
         }
     }
 
-    protected String readFileWithPath(String fileName) throws IOException {
+    protected String readFileWithPath(String fileName) throws FileNotReadableException {
 
        System.out.println("===JobRepositoryImpl data filePath: " + filePath + ", fileName: " + fileName);
 
         if (filePath == null) {
-            throw new FileNotFoundException("File path is not set.");
+            throw new FileNotReadableException("File path is not set.");
         }
 
         if (verifyFilePath(filePath, fileName)) {
@@ -134,14 +138,22 @@ public class JobRepositoryImpl implements JobRepository {
 
             if (resource.exists()) {
 
-                return new String(Files.readAllBytes(Paths.get(resource.getURI())));
+                try {
+
+                    return new String(Files.readAllBytes(Paths.get(resource.getURI())));
+
+                } catch (IOException ex) {
+
+                    logger.error("Error reading file: {}", fileName, ex);
+                    throw new FileNotReadableException("Error reading file: " + fileName, ex);
+                }
 
             } else {
-                throw new FileNotFoundException("File not found: " + filePath + fileName);
+                throw new FileNotReadableException("Resource does not exist: " + filePath + fileName);
             }
 
         } else {
-            throw new FileNotFoundException("File cannot be located: "+ filePath + fileName);
+            throw new FileNotReadableException("File cannot be located: "+ filePath + fileName);
         }
     }
 

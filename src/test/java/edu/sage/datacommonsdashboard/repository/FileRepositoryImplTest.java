@@ -1,5 +1,6 @@
 package edu.sage.datacommonsdashboard.repository;
 
+import edu.sage.datacommonsdashboard.service.FileNotReadableException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -114,7 +115,7 @@ class JobRepositoryTest {
         when(mockResource.exists()).thenReturn(false);
 
         // Verify method throws IOException
-        IOException exception = assertThrows(IOException.class, () -> {
+        FileNotReadableException exception = assertThrows(FileNotReadableException.class, () -> {
             jobRepositoryImpl.getDerechoQstatJobsText();
         });
 
@@ -126,7 +127,7 @@ class JobRepositoryTest {
 
         jobRepositoryImpl.filePath = null;
 
-        IOException exception = assertThrows(IOException.class, () -> {
+        FileNotReadableException exception = assertThrows(FileNotReadableException.class, () -> {
             jobRepositoryImpl.getDerechoQstatJobsText();
         });
 
@@ -138,7 +139,7 @@ class JobRepositoryTest {
 
         jobRepositoryImpl.filePath = null;
 
-        IOException exception = assertThrows(IOException.class, () -> {
+        FileNotReadableException exception = assertThrows(FileNotReadableException.class, () -> {
             jobRepositoryImpl.readFileFromResources(CASPER_FILE_NAME);
         });
 
@@ -150,7 +151,7 @@ class JobRepositoryTest {
 
         jobRepositoryImpl.filePath = "invalidPath/";
 
-        IOException exception = assertThrows(IOException.class, () -> {
+        FileNotReadableException exception = assertThrows(FileNotReadableException.class, () -> {
             jobRepositoryImpl.readFileWithPath(CASPER_FILE_NAME);
         });
 
@@ -162,7 +163,7 @@ class JobRepositoryTest {
 
         when(mockResourceLoader.getResource("file:" + tempDir.toString() + "/" + CASPER_FILE_NAME)).thenReturn(mock(Resource.class));
 
-        IOException exception = assertThrows(IOException.class, () -> {
+        FileNotReadableException exception = assertThrows(FileNotReadableException.class, () -> {
             jobRepositoryImpl.readFileFromResources(CASPER_FILE_NAME);
         });
 
