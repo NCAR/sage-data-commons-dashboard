@@ -1,8 +1,4 @@
 #!/bin/bash
-#
-# sample crontab entry (run crontab -e)
-# */1 * * * * /glade/u/home/<your username>/qstat/qstat-by-hpc-resource.sh 1> /glade/u/home/<your username>/qstat/qstat-by-hpc-resource.log 2>&1
-#
 
 export PATH=/glade/u/apps/opt/qstat-cache/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/pbs/bin
 
