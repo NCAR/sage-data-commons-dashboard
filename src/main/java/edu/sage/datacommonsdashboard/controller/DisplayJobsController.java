@@ -2,7 +2,7 @@ package edu.sage.datacommonsdashboard.controller;
 
 import edu.sage.datacommonsdashboard.model.JobData;
 import edu.sage.datacommonsdashboard.repository.JobQueueRepository;
-import edu.sage.datacommonsdashboard.service.JsonHandlerService;
+import edu.sage.datacommonsdashboard.util.JsonConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,19 +13,19 @@ import java.util.Date;
 public class DisplayJobsController {
 
     private JobQueueRepository jobQueueRepository;
-    private JsonHandlerService jsonHandlerService;
+    private JsonConverter jsonConverter;
 
-    public DisplayJobsController(JobQueueRepository jobQueueRepository, JsonHandlerService jsonHandlerService) {
+    public DisplayJobsController(JobQueueRepository jobQueueRepository, JsonConverter jsonConverter) {
 
         this.jobQueueRepository = jobQueueRepository;
-        this.jsonHandlerService = jsonHandlerService;
+        this.jsonConverter = jsonConverter;
     }
 
     @GetMapping(value = "/hpc/dashboard/casper/jobs/table")
     public String showCasperJobsTable(Model model)  {
 
         String jsonData = jobQueueRepository.getCasperQstatJobsJson();
-        JobData jobData = jsonHandlerService.convertJsonToJobData(jsonData);
+        JobData jobData = jsonConverter.convertJsonToJobData(jsonData);
 
         model.addAttribute("pageTitle", "Casper Qstat Jobs");
         model.addAttribute("jobData", jobData);
@@ -38,7 +38,7 @@ public class DisplayJobsController {
     public String showDerechoJobsTable(Model model)  {
 
         String jsonData = jobQueueRepository.getDerechoQstatJobsJson();
-        JobData jobData = jsonHandlerService.convertJsonToJobData(jsonData);
+        JobData jobData = jsonConverter.convertJsonToJobData(jsonData);
 
         model.addAttribute("pageTitle", "Derecho Qstat Jobs");
         model.addAttribute("jobData", jobData);
@@ -51,7 +51,7 @@ public class DisplayJobsController {
     public String showCasperJobsTableFull(Model model)  {
 
         String jsonData = jobQueueRepository.getCasperQstatJobsJson();
-        JobData jobData = jsonHandlerService.convertJsonToJobData(jsonData);
+        JobData jobData = jsonConverter.convertJsonToJobData(jsonData);
 
         model.addAttribute("pageTitle", "Casper Qstat Jobs");
         model.addAttribute("jobData", jobData);
@@ -65,7 +65,7 @@ public class DisplayJobsController {
     public String showDerechoJobsFullTable(Model model) {
 
         String jsonData = jobQueueRepository.getDerechoQstatJobsJson();
-        JobData jobData = jsonHandlerService.convertJsonToJobData(jsonData);
+        JobData jobData = jsonConverter.convertJsonToJobData(jsonData);
 
         model.addAttribute("pageTitle", "Derecho Qstat Jobs");
         model.addAttribute("jobData", jobData);
@@ -78,7 +78,7 @@ public class DisplayJobsController {
     public String showCasperJobs(Model model)  {
 
         String jsonData = jobQueueRepository.getCasperQstatJobsJson();
-        JobData jobData = jsonHandlerService.convertJsonToJobData(jsonData);
+        JobData jobData = jsonConverter.convertJsonToJobData(jsonData);
 
         model.addAttribute("pageTitle", "Casper Qstat Jobs");
         model.addAttribute("jobData", jobData);
@@ -90,7 +90,7 @@ public class DisplayJobsController {
     public String showDerechoJobsText(Model model) {
 
         String jsonData = jobQueueRepository.getDerechoQstatJobsJson();
-        JobData jobData = jsonHandlerService.convertJsonToJobData(jsonData);
+        JobData jobData = jsonConverter.convertJsonToJobData(jsonData);
 
         model.addAttribute("pageTitle", "Derecho Qstat Jobs");
         model.addAttribute("jobData", jobData);

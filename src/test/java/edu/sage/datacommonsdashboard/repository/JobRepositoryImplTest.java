@@ -1,6 +1,6 @@
 package edu.sage.datacommonsdashboard.repository;
 
-import edu.sage.datacommonsdashboard.service.FileNotReadableException;
+import edu.sage.datacommonsdashboard.exception.FileNotReadableException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;

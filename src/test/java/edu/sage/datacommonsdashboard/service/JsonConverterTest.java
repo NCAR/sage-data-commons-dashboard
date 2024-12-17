@@ -2,8 +2,10 @@ package edu.sage.datacommonsdashboard.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.sage.datacommonsdashboard.exception.JsonParsingException;
 import edu.sage.datacommonsdashboard.model.Job;
 import edu.sage.datacommonsdashboard.model.JobData;
+import edu.sage.datacommonsdashboard.util.JsonConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,15 +14,15 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class JsonHandlerServiceTest {
+class JsonConverterTest {
 
     private ObjectMapper objectMapper;
-    private JsonHandlerService jsonHandlerService;
+    private JsonConverter jsonConverter;
 
     @BeforeEach
     void setUp() {
         objectMapper = mock(ObjectMapper.class); // Mock the ObjectMapper
-        jsonHandlerService = new JsonHandlerService(); // Inject the mock into the service
+        jsonConverter = new JsonConverter(); // Inject the mock into the service
     }
 
     @Test
@@ -52,7 +54,7 @@ class JsonHandlerServiceTest {
 
         when(objectMapper.readValue(json, JobData.class)).thenReturn(expectedObject); // Mock behavior
 
-        JobData result = jsonHandlerService.convertJsonToJobData(json);
+        JobData result = jsonConverter.convertJsonToJobData(json);
 
         assertNotNull(result);
         assertEquals("casper-pbs", result.getPbsServer());
@@ -71,7 +73,7 @@ class JsonHandlerServiceTest {
         when(objectMapper.readValue(invalidJson, JobData.class)).thenThrow(new JsonProcessingException("JSON parsing error") {});
 
         JsonParsingException exception = assertThrows(JsonParsingException.class, () -> {
-            jsonHandlerService.convertJsonToJobData(invalidJson);
+            jsonConverter.convertJsonToJobData(invalidJson);
         });
 
         assertEquals("Failed to parse JSON: " + invalidJson, exception.getMessage());
@@ -83,7 +85,7 @@ class JsonHandlerServiceTest {
         String emptyJson = "";
 
         JsonParsingException exception = assertThrows(JsonParsingException.class, () -> {
-            jsonHandlerService.convertJsonToJobData(emptyJson);
+            jsonConverter.convertJsonToJobData(emptyJson);
         });
 
         assertEquals("Input JSON is null or empty.", exception.getMessage());
@@ -96,7 +98,7 @@ class JsonHandlerServiceTest {
         String nullJson = null;
 
         JsonParsingException exception = assertThrows(JsonParsingException.class, () -> {
-            jsonHandlerService.convertJsonToJobData(nullJson);
+            jsonConverter.convertJsonToJobData(nullJson);
         });
 
         assertEquals("Input JSON is null or empty.", exception.getMessage());

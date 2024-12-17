@@ -1,12 +1,13 @@
-package edu.sage.datacommonsdashboard.service;
+package edu.sage.datacommonsdashboard.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.sage.datacommonsdashboard.exception.JsonParsingException;
 import edu.sage.datacommonsdashboard.model.JobData;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
-public class JsonHandlerService {
+@Component
+public class JsonConverter {
 
     public JobData convertJsonToJobData(String json) {
 

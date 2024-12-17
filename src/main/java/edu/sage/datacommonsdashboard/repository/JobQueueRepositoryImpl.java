@@ -1,6 +1,6 @@
 package edu.sage.datacommonsdashboard.repository;
 
-import edu.sage.datacommonsdashboard.service.FileNotReadableException;
+import edu.sage.datacommonsdashboard.exception.FileNotReadableException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
