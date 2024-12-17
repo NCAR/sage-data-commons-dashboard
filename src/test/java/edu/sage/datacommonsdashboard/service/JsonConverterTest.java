@@ -21,8 +21,8 @@ class JsonConverterTest {
 
     @BeforeEach
     void setUp() {
-        objectMapper = mock(ObjectMapper.class); // Mock the ObjectMapper
-        jsonConverter = new JsonConverter(); // Inject the mock into the service
+        objectMapper = mock(ObjectMapper.class);
+        jsonConverter = new JsonConverter();
     }
 
     @Test
