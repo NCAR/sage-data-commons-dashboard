@@ -1,6 +1,6 @@
 package edu.sage.datacommonsdashboard.controller;
 
-import edu.sage.datacommonsdashboard.repository.JobRepository;
+import edu.sage.datacommonsdashboard.repository.JobQueueRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,11 +13,11 @@ import java.io.IOException;
 @RestController
 public class DisplayJsonController {
 
-    private JobRepository jobRepository;
+    private JobQueueRepository jobQueueRepository;
 
-    public DisplayJsonController(JobRepository jobRepository) {
+    public DisplayJsonController(JobQueueRepository jobQueueRepository) {
 
-        this.jobRepository = jobRepository;
+        this.jobQueueRepository = jobQueueRepository;
     }
 
     @GetMapping("/hpc/dashboard/casper/jobs/json")
@@ -26,7 +26,7 @@ public class DisplayJsonController {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
 
-        String jsonData = jobRepository.getCasperQstatJobsJson();
+        String jsonData = jobQueueRepository.getCasperQstatJobsJson();
         return ResponseEntity.ok().headers(headers).body(jsonData);
 
     }
@@ -37,7 +37,7 @@ public class DisplayJsonController {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
 
-        String jsonData = jobRepository.getCasperQstatQueueJson();
+        String jsonData = jobQueueRepository.getCasperQstatQueueJson();
         return ResponseEntity.ok().headers(headers).body(jsonData);
     }
 
@@ -47,7 +47,7 @@ public class DisplayJsonController {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
 
-        String jsonData = jobRepository.getDerechoQstatQueueJson();
+        String jsonData = jobQueueRepository.getDerechoQstatQueueJson();
         return ResponseEntity.ok().headers(headers).body(jsonData);
     }
 
@@ -59,7 +59,7 @@ public class DisplayJsonController {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
 
-        String jsonData = jobRepository.getDerechoQstatJobsJson();
+        String jsonData = jobQueueRepository.getDerechoQstatJobsJson();
         return ResponseEntity.ok().headers(headers).body(jsonData);
     }
 

@@ -1,44 +1,35 @@
 package edu.sage.datacommonsdashboard.controller;
 
 import edu.sage.datacommonsdashboard.model.JobData;
-import edu.sage.datacommonsdashboard.repository.JobRepository;
+import edu.sage.datacommonsdashboard.repository.JobQueueRepository;
 import edu.sage.datacommonsdashboard.service.JsonHandlerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.Date;
+
 @Controller
 public class DisplayJobsController {
 
-    private JobRepository jobRepository;
+    private JobQueueRepository jobQueueRepository;
     private JsonHandlerService jsonHandlerService;
 
-    public DisplayJobsController(JobRepository jobRepository, JsonHandlerService jsonHandlerService) {
+    public DisplayJobsController(JobQueueRepository jobQueueRepository, JsonHandlerService jsonHandlerService) {
 
-        this.jobRepository = jobRepository;
+        this.jobQueueRepository = jobQueueRepository;
         this.jsonHandlerService = jsonHandlerService;
-    }
-
-    @GetMapping(value = "/hpc/dashboard/casper/jobs")
-    public String showCasperJobs(Model model)  {
-
-        String jsonData = jobRepository.getCasperQstatJobsJson();
-        JobData jobData = jsonHandlerService.convertJsonToJobData(jsonData);
-
-        model.addAttribute("pageTitle", "Casper Qstat Jobs");
-        model.addAttribute("jobData", jobData);
-
-        return "job-data-view";  // The thymeleaf file
     }
 
     @GetMapping(value = "/hpc/dashboard/casper/jobs/table")
     public String showCasperJobsTable(Model model)  {
 
-        String jsonData = jobRepository.getCasperQstatJobsJson();
+        String jsonData = jobQueueRepository.getCasperQstatJobsJson();
         JobData jobData = jsonHandlerService.convertJsonToJobData(jsonData);
 
         model.addAttribute("pageTitle", "Casper Qstat Jobs");
         model.addAttribute("jobData", jobData);
+        model.addAttribute("formattedTimestamp", this.convertTimestamp(jobData.getTimestamp()));
 
         return "job-data-table-view";  // The thymeleaf file
     }
@@ -46,11 +37,12 @@ public class DisplayJobsController {
     @GetMapping(value = "/hpc/dashboard/derecho/jobs/table")
     public String showDerechoJobsTable(Model model)  {
 
-        String jsonData = jobRepository.getDerechoQstatJobsJson();
+        String jsonData = jobQueueRepository.getDerechoQstatJobsJson();
         JobData jobData = jsonHandlerService.convertJsonToJobData(jsonData);
 
         model.addAttribute("pageTitle", "Derecho Qstat Jobs");
         model.addAttribute("jobData", jobData);
+        model.addAttribute("formattedTimestamp", this.convertTimestamp(jobData.getTimestamp()));
 
         return "job-data-table-view";  // The thymeleaf file
     }
@@ -58,11 +50,13 @@ public class DisplayJobsController {
     @GetMapping(value = "/hpc/dashboard/casper/jobs/tablefull")
     public String showCasperJobsTableFull(Model model)  {
 
-        String jsonData = jobRepository.getCasperQstatJobsJson();
+        String jsonData = jobQueueRepository.getCasperQstatJobsJson();
         JobData jobData = jsonHandlerService.convertJsonToJobData(jsonData);
 
         model.addAttribute("pageTitle", "Casper Qstat Jobs");
         model.addAttribute("jobData", jobData);
+        model.addAttribute("formattedTimestamp", this.convertTimestamp(jobData.getTimestamp()));
+
 
         return "job-data-table-full-view";  // The thymeleaf file
     }
@@ -70,25 +64,42 @@ public class DisplayJobsController {
     @GetMapping(value = "/hpc/dashboard/derecho/jobs/tablefull")
     public String showDerechoJobsFullTable(Model model) {
 
-        String jsonData = jobRepository.getDerechoQstatJobsJson();
+        String jsonData = jobQueueRepository.getDerechoQstatJobsJson();
         JobData jobData = jsonHandlerService.convertJsonToJobData(jsonData);
 
         model.addAttribute("pageTitle", "Derecho Qstat Jobs");
         model.addAttribute("jobData", jobData);
+        model.addAttribute("formattedTimestamp", this.convertTimestamp(jobData.getTimestamp()));
 
         return "job-data-table-full-view";  // The thymeleaf file
+    }
+
+    @GetMapping(value = "/hpc/dashboard/casper/jobs")
+    public String showCasperJobs(Model model)  {
+
+        String jsonData = jobQueueRepository.getCasperQstatJobsJson();
+        JobData jobData = jsonHandlerService.convertJsonToJobData(jsonData);
+
+        model.addAttribute("pageTitle", "Casper Qstat Jobs");
+        model.addAttribute("jobData", jobData);
+
+        return "job-data-view";  // The thymeleaf file
     }
 
     @GetMapping(value = "/hpc/dashboard/derecho/jobs")
     public String showDerechoJobsText(Model model) {
 
-        String jsonData = jobRepository.getDerechoQstatJobsJson();
+        String jsonData = jobQueueRepository.getDerechoQstatJobsJson();
         JobData jobData = jsonHandlerService.convertJsonToJobData(jsonData);
 
         model.addAttribute("pageTitle", "Derecho Qstat Jobs");
         model.addAttribute("jobData", jobData);
 
         return "job-data-view";  // The thymeleaf file
+    }
+
+    protected Date convertTimestamp (Integer timestamp) {
+        return new Date (timestamp * 1000);
     }
 
 }

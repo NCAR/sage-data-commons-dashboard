@@ -19,13 +19,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class JobRepositoryTest {
+class JobQueueRepositoryTest {
 
     @TempDir
     Path tempDir;
 
     @InjectMocks
-    private JobRepositoryImpl jobRepositoryImpl;
+    private JobQueueRepositoryImpl jobRepositoryImpl;
 
     private static final String SAMPLE_CASPER_FILE_CONTENT = "Sample Casper file content";
     private static final String SAMPLE_DERECHO_FILE_CONTENT = "Sample Derecho file content";
@@ -38,7 +38,7 @@ class JobRepositoryTest {
     @BeforeEach
     void setUp() {
 
-        jobRepositoryImpl = new JobRepositoryImpl(mockResourceLoader);
+        jobRepositoryImpl = new JobQueueRepositoryImpl(mockResourceLoader);
         jobRepositoryImpl.filePath = tempDir.toString() + "/";
     }
 

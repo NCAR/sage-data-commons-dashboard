@@ -1,6 +1,6 @@
 package edu.sage.datacommonsdashboard.controller;
 
-import edu.sage.datacommonsdashboard.repository.JobRepository;
+import edu.sage.datacommonsdashboard.repository.JobQueueRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,16 +10,16 @@ import java.io.IOException;
 @Controller
 public class DisplayTextController {
 
-    private JobRepository jobRepository;
+    private JobQueueRepository jobQueueRepository;
 
-    public DisplayTextController(JobRepository jobRepository) {
-        this.jobRepository = jobRepository;
+    public DisplayTextController(JobQueueRepository jobQueueRepository) {
+        this.jobQueueRepository = jobQueueRepository;
     }
 
     @GetMapping(value = "/hpc/dashboard/casper/jobs/text")
     public String showCasperPage(Model model) throws IOException {
 
-        String textCasperOutput = jobRepository.getCasperQstatJobsText();
+        String textCasperOutput = jobQueueRepository.getCasperQstatJobsText();
 
         model.addAttribute("pageTitle", "Casper Qstat Jobs");
         model.addAttribute("textOutput", textCasperOutput);
@@ -30,7 +30,7 @@ public class DisplayTextController {
     @GetMapping(value = "/hpc/dashboard/casper/queue/text")
     public String showCasperPageJson(Model model) throws IOException {
 
-        String textCasperOutput = jobRepository.getCasperQstatQueueText();
+        String textCasperOutput = jobQueueRepository.getCasperQstatQueueText();
 
         model.addAttribute("pageTitle", "Casper Qstat Queue");
         model.addAttribute("textOutput", textCasperOutput);
@@ -41,7 +41,7 @@ public class DisplayTextController {
     @GetMapping(value = "/hpc/dashboard/derecho/queue/text")
     public String showDerechoQueueText(Model model) throws IOException {
 
-        String textDerechoOutput = jobRepository.getDerechoQstatQueueText();
+        String textDerechoOutput = jobQueueRepository.getDerechoQstatQueueText();
 
         model.addAttribute("pageTitle", "Derecho Qstat Queue");
         model.addAttribute("textOutput", textDerechoOutput);
@@ -52,7 +52,7 @@ public class DisplayTextController {
     @GetMapping(value = "/hpc/dashboard/derecho/jobs/text")
     public String showDerechoJobsText(Model model) throws IOException {
 
-        String textDerechoOutput = jobRepository.getDerechoQstatJobsText();
+        String textDerechoOutput = jobQueueRepository.getDerechoQstatJobsText();
 
         model.addAttribute("pageTitle", "Derecho Qstat Jobs");
         model.addAttribute("textOutput", textDerechoOutput);

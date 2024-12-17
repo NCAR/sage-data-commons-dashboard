@@ -14,7 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Repository
-public class JobRepositoryImpl implements JobRepository {
+public class JobQueueRepositoryImpl implements JobQueueRepository {
 
     public static final String CASPER_QSTAT_JOBS_JSON = "casper_qstat_jobs.json";
     public static final String CASPER_QSTAT_JOBS_TXT = "casper_qstat_jobs.txt";
@@ -27,9 +27,9 @@ public class JobRepositoryImpl implements JobRepository {
 
     private final ResourceLoader resourceLoader;
 
-    private static final Logger logger = LoggerFactory.getLogger(JobRepositoryImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(JobQueueRepositoryImpl.class);
 
-    public JobRepositoryImpl(ResourceLoader resourceLoader) {
+    public JobQueueRepositoryImpl(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
     }
 
@@ -126,7 +126,7 @@ public class JobRepositoryImpl implements JobRepository {
 
     protected String readFileWithPath(String fileName) throws FileNotReadableException {
 
-       System.out.println("===JobRepositoryImpl data filePath: " + filePath + ", fileName: " + fileName);
+       System.out.println("===JobQueueRepositoryImpl data filePath: " + filePath + ", fileName: " + fileName);
 
         if (filePath == null) {
             throw new FileNotReadableException("File path is not set.");

@@ -1,6 +1,6 @@
 package edu.sage.datacommonsdashboard.controller;
 
-import edu.sage.datacommonsdashboard.repository.JobRepository;
+import edu.sage.datacommonsdashboard.repository.JobQueueRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -13,7 +13,7 @@ import static org.mockito.Mockito.when;
 public class DisplayTextControllerTest {
 
     @MockBean
-    private JobRepository mockJobRepository;
+    private JobQueueRepository mockJobQueueRepository;
 
     @MockBean
     private Model mockModel;
@@ -21,9 +21,9 @@ public class DisplayTextControllerTest {
     @Test
     public void when_request_casper_jobs_text__then_get_view_name() throws Exception {
 
-        when(mockJobRepository.getCasperQstatJobsText()).thenReturn("mockTextOutput");
+        when(mockJobQueueRepository.getCasperQstatJobsText()).thenReturn("mockTextOutput");
 
-        DisplayTextController controller = new DisplayTextController(mockJobRepository);
+        DisplayTextController controller = new DisplayTextController(mockJobQueueRepository);
 
         String viewName = controller.showCasperPage(mockModel);
         assertEquals("display-queue-data", viewName);

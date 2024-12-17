@@ -2,7 +2,7 @@ package edu.sage.datacommonsdashboard.repository;
 
 import edu.sage.datacommonsdashboard.service.FileNotReadableException;
 
-public interface JobRepository {
+public interface JobQueueRepository {
 
     String getCasperQstatJobsText() throws FileNotReadableException;
 
