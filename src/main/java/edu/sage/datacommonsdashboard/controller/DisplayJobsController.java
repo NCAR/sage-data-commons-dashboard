@@ -99,7 +99,7 @@ public class DisplayJobsController {
     }
 
     protected Date convertTimestamp (Integer timestamp) {
-        return new Date (timestamp * 1000);
+        return new Date (timestamp * 1000L);
     }
 
 }
