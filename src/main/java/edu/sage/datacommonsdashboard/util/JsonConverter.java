@@ -24,7 +24,19 @@ public class JsonConverter {
 
         } catch (JsonProcessingException e) {
 
-            throw new JsonParsingException("Failed to parse JSON: " + json, e);
-        }
+            // Extract location details from the exception
+            String errorMessage = String.format(
+                    "Failed to parse JSON at line: %d, column: %d. Error message: %s",
+                    e.getLocation().getLineNr(),
+                    e.getLocation().getColumnNr(),
+                    e.getOriginalMessage()
+            );
+
+            throw new JsonParsingException(errorMessage, e);
+
+        }  catch (Exception e) {
+
+            throw new JsonParsingException("Failed to parse JSON", e);
+    }
     }
 }

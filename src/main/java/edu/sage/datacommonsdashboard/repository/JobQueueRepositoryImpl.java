@@ -18,12 +18,13 @@ public class JobQueueRepositoryImpl implements JobQueueRepository {
 
     public static final String CASPER_QSTAT_JOBS_JSON = "casper_qstat_jobs.json";
     public static final String CASPER_QSTAT_JOBS_TXT = "casper_qstat_jobs.txt";
-    public static final String CASPER_QSTAT_QUEUE_TXT = "casper_qstat_queue.txt";
     public static final String CASPER_QSTAT_QUEUE_JSON = "casper_qstat_queue.json";
-    public static final String DERECHO_QSTAT_JOBS_TXT = "derecho_qstat_jobs.txt";
+    public static final String CASPER_QSTAT_QUEUE_TXT = "casper_qstat_queue.txt";
+
     public static final String DERECHO_QSTAT_JOBS_JSON = "derecho_qstat_jobs.json";
-    public static final String DERECHO_QSTAT_QUEUE_TXT = "derecho_qstat_queue.txt";
+    public static final String DERECHO_QSTAT_JOBS_TXT = "derecho_qstat_jobs.txt";
     public static final String DERECHO_QSTAT_QUEUE_JSON = "derecho_qstat_queue.json";
+    public static final String DERECHO_QSTAT_QUEUE_TXT = "derecho_qstat_queue.txt";
 
     private final ResourceLoader resourceLoader;
 

@@ -1,11 +1,10 @@
-package edu.sage.datacommonsdashboard.service;
+package edu.sage.datacommonsdashboard.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.sage.datacommonsdashboard.exception.JsonParsingException;
 import edu.sage.datacommonsdashboard.model.Job;
 import edu.sage.datacommonsdashboard.model.JobData;
-import edu.sage.datacommonsdashboard.util.JsonConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -76,7 +75,7 @@ class JsonConverterTest {
             jsonConverter.convertJsonToJobData(invalidJson);
         });
 
-        assertEquals("Failed to parse JSON: " + invalidJson, exception.getMessage());
+        assertEquals("Failed to parse JSON at line: 1, column: 6. Error message: Unrecognized token 'plain': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false')", exception.getMessage());
     }
 
     @Test
