@@ -24,11 +24,18 @@ public class JsonConverter {
 
         } catch (JsonProcessingException e) {
 
+            int errorLine = e.getLocation().getLineNr();
+            int errorColumn = e.getLocation().getColumnNr();
+
+            // Try to extract the problematic line from the JSON
+            String problematicLine = extractJsonLine(json, errorLine);
+
             // Extract location details from the exception
             String errorMessage = String.format(
-                    "Failed to parse JSON at line: %d, column: %d. Error message: %s",
-                    e.getLocation().getLineNr(),
-                    e.getLocation().getColumnNr(),
+                    "Failed to parse JSON at line: %d, column: %d. Problematic line: %s. Error message: %s. ",
+                    errorLine,
+                    errorColumn,
+                    problematicLine,
                     e.getOriginalMessage()
             );
 
@@ -37,6 +44,21 @@ public class JsonConverter {
         }  catch (Exception e) {
 
             throw new JsonParsingException("Failed to parse JSON", e);
+        }
     }
+
+    private String extractJsonLine(String json, int errorLine) {
+
+        String[] lines = json.split("\n");
+
+        // Ensure the errorLine is within bounds
+        if (errorLine > 0 && errorLine <= lines.length) {
+            // Return the specific line causing the issue
+            String targetLine = lines[errorLine - 1].trim(); // -1 because line numbers are 1-based
+            return targetLine;
+        }
+
+        // Return a fallback message if the line cannot be found
+        return "<Unable to extract problematic line>";
     }
 }
