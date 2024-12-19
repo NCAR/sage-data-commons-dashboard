@@ -75,7 +75,13 @@ class JsonConverterTest {
             jsonConverter.convertJsonToJobData(invalidJson);
         });
 
-        assertEquals("Failed to parse JSON at line: 1, column: 6. Error message: Unrecognized token 'plain': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false')", exception.getMessage());
+        // Just read the first line of the error message because the rest is too long
+        String fullMessage = exception.getMessage();
+        String firstLine = fullMessage.split("\n")[0]; // Split by newline and get the first line
+
+        String expectedMessage = "Failed to parse JSON at line: 1, column: 6. ==>Problematic line: plain text not json.";
+
+        assertEquals(expectedMessage, firstLine);
     }
 
     @Test

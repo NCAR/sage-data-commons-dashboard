@@ -1,6 +1,7 @@
 package edu.sage.datacommonsdashboard.repository;
 
 import edu.sage.datacommonsdashboard.exception.FileNotReadableException;
+import edu.sage.datacommonsdashboard.util.JsonConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -32,13 +33,13 @@ class JobQueueRepositoryTest {
     private static final String CASPER_FILE_NAME = "casper_qstat_jobs.txt";
     private static final String DERECHO_FILE_NAME = "derecho_qstat_jobs.txt";
 
-    private Resource mockResource = mock(Resource.class);
+    private JsonConverter mockJsonConverter = mock(JsonConverter.class);
     private ResourceLoader mockResourceLoader = mock(ResourceLoader.class);
 
     @BeforeEach
     void setUp() {
 
-        jobRepositoryImpl = new JobQueueRepositoryImpl(mockResourceLoader);
+        jobRepositoryImpl = new JobQueueRepositoryImpl(mockResourceLoader, mockJsonConverter);
         jobRepositoryImpl.filePath = tempDir.toString() + "/";
     }
 

@@ -30,9 +30,13 @@ public class JsonConverter {
             // Try to extract the problematic line from the JSON
             String problematicLine = extractJsonLine(json, errorLine);
 
+            // TODO: logger
+            System.out.println("Problematic Line: " + problematicLine);
+            System.out.println(json); // Because the file gets replaced every minute so we'd have no other record
+
             // Extract location details from the exception
             String errorMessage = String.format(
-                    "Failed to parse JSON at line: %d, column: %d. Problematic line: %s. Error message: %s. ",
+                    "Failed to parse JSON at line: %d, column: %d. ==>Problematic line: %s.\nError message: %s. ",
                     errorLine,
                     errorColumn,
                     problematicLine,
@@ -43,7 +47,7 @@ public class JsonConverter {
 
         }  catch (Exception e) {
 
-            throw new JsonParsingException("Failed to parse JSON", e);
+            throw new JsonParsingException("Failed to parse JSON.", e);
         }
     }
 

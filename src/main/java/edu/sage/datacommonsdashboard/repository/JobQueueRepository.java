@@ -1,22 +1,23 @@
 package edu.sage.datacommonsdashboard.repository;
 
 import edu.sage.datacommonsdashboard.exception.FileNotReadableException;
+import edu.sage.datacommonsdashboard.model.JobData;
 
 public interface JobQueueRepository {
 
     String getCasperQstatJobsText() throws FileNotReadableException;
 
-    String getCasperQstatJobsJson() throws FileNotReadableException;
+    JobData getCasperQstatJobsJson() throws FileNotReadableException;
 
     String getCasperQstatQueueText() throws FileNotReadableException;
 
-    String getCasperQstatQueueJson() throws FileNotReadableException;
+    JobData getCasperQstatQueueJson() throws FileNotReadableException;
 
     String getDerechoQstatQueueText() throws FileNotReadableException;
 
-    String getDerechoQstatQueueJson() throws FileNotReadableException;
+    JobData getDerechoQstatQueueJson() throws FileNotReadableException;
 
     String getDerechoQstatJobsText() throws FileNotReadableException;
 
-    String getDerechoQstatJobsJson() throws FileNotReadableException;
+    JobData getDerechoQstatJobsJson() throws FileNotReadableException;
 }

@@ -1,6 +1,8 @@
 package edu.sage.datacommonsdashboard.repository;
 
 import edu.sage.datacommonsdashboard.exception.FileNotReadableException;
+import edu.sage.datacommonsdashboard.model.JobData;
+import edu.sage.datacommonsdashboard.util.JsonConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,11 +29,14 @@ public class JobQueueRepositoryImpl implements JobQueueRepository {
     public static final String DERECHO_QSTAT_QUEUE_TXT = "derecho_qstat_queue.txt";
 
     private final ResourceLoader resourceLoader;
+    private JsonConverter jsonConverter;
 
     private static final Logger logger = LoggerFactory.getLogger(JobQueueRepositoryImpl.class);
 
-    public JobQueueRepositoryImpl(ResourceLoader resourceLoader) {
+    public JobQueueRepositoryImpl(ResourceLoader resourceLoader, JsonConverter jsonConverter) {
+
         this.resourceLoader = resourceLoader;
+        this.jsonConverter = jsonConverter;
     }
 
     @Value("${dashboard.queue.file.path}")
@@ -44,9 +49,10 @@ public class JobQueueRepositoryImpl implements JobQueueRepository {
     }
 
     @Override
-    public String getCasperQstatJobsJson() throws FileNotReadableException {
+    public JobData getCasperQstatJobsJson() throws FileNotReadableException {
 
-        return this.readFileWithPath(CASPER_QSTAT_JOBS_JSON);
+        String jsonData =  this.readFileWithPath(CASPER_QSTAT_JOBS_JSON);
+        return jsonConverter.convertJsonToJobData(jsonData);
     }
 
     @Override
@@ -56,9 +62,10 @@ public class JobQueueRepositoryImpl implements JobQueueRepository {
     }
 
     @Override
-    public String getCasperQstatQueueJson() throws FileNotReadableException {
+    public JobData getCasperQstatQueueJson() throws FileNotReadableException {
 
-        return this.readFileWithPath(CASPER_QSTAT_QUEUE_JSON);
+        String jsonData =  this.readFileWithPath(CASPER_QSTAT_QUEUE_JSON);
+        return jsonConverter.convertJsonToJobData(jsonData);
     }
 
     @Override
@@ -68,9 +75,10 @@ public class JobQueueRepositoryImpl implements JobQueueRepository {
     }
 
     @Override
-    public String getDerechoQstatJobsJson() throws FileNotReadableException {
+    public JobData getDerechoQstatJobsJson() throws FileNotReadableException {
 
-        return this.readFileWithPath(DERECHO_QSTAT_JOBS_JSON);
+        String jsonData =  this.readFileWithPath(DERECHO_QSTAT_JOBS_JSON);
+        return jsonConverter.convertJsonToJobData(jsonData);
     }
 
     @Override
@@ -80,9 +88,10 @@ public class JobQueueRepositoryImpl implements JobQueueRepository {
     }
 
     @Override
-    public String getDerechoQstatQueueJson() throws FileNotReadableException {
+    public JobData getDerechoQstatQueueJson() throws FileNotReadableException {
 
-        return this.readFileWithPath(DERECHO_QSTAT_QUEUE_JSON);
+        String jsonData = readFileWithPath(DERECHO_QSTAT_QUEUE_JSON);
+        return jsonConverter.convertJsonToJobData(jsonData);
     }
 
     public boolean verifyFilePath(String filePath, String fileName) throws FileNotReadableException {

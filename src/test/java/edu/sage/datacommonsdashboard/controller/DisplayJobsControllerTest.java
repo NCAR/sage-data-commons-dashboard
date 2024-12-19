@@ -2,7 +2,6 @@ package edu.sage.datacommonsdashboard.controller;
 
 import edu.sage.datacommonsdashboard.model.JobData;
 import edu.sage.datacommonsdashboard.repository.JobQueueRepository;
-import edu.sage.datacommonsdashboard.util.JsonConverter;
 import org.junit.jupiter.api.Test;
 import org.springframework.ui.Model;
 
@@ -15,9 +14,8 @@ import static org.mockito.Mockito.*;
 public class DisplayJobsControllerTest {
 
     private JobQueueRepository mockJobQueueRepository = mock(JobQueueRepository.class);
-    private JsonConverter mockJsonConverter= mock(JsonConverter.class);
 
-    private final DisplayJobsController controller = new DisplayJobsController(mockJobQueueRepository, mockJsonConverter);
+    private final DisplayJobsController controller = new DisplayJobsController(mockJobQueueRepository);
 
     @Test
     void testConvertTimestamp_validTimestamp() {
@@ -65,13 +63,12 @@ public class DisplayJobsControllerTest {
     void testShowCasperJobsTable() {
 
         Model model = mock(Model.class);
-        String mockJsonData = "{\"mock\":\"data\"}";
+
         JobData mockJobData = mock(JobData.class);
 
         when (mockJobData.getTimestamp()).thenReturn(1672531200); // Dec 31, 2022
 
-        when(mockJobQueueRepository.getCasperQstatJobsJson()).thenReturn(mockJsonData);
-        when(mockJsonConverter.convertJsonToJobData(mockJsonData)).thenReturn(mockJobData);
+        when(mockJobQueueRepository.getCasperQstatJobsJson()).thenReturn(mockJobData);
 
         String viewName = controller.showCasperJobsTable(model);
 
@@ -86,6 +83,5 @@ public class DisplayJobsControllerTest {
 
         // Verify repository and converter interactions
         verify(mockJobQueueRepository, times(1)).getCasperQstatJobsJson();
-        verify(mockJsonConverter, times(1)).convertJsonToJobData(mockJsonData);
     }
 }

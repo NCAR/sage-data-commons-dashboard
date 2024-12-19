@@ -1,5 +1,6 @@
 package edu.sage.datacommonsdashboard.controller;
 
+import edu.sage.datacommonsdashboard.model.JobData;
 import edu.sage.datacommonsdashboard.repository.JobQueueRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -21,53 +22,45 @@ public class DisplayJsonController {
     }
 
     @GetMapping("/hpc/dashboard/casper/jobs/json")
-    public ResponseEntity<String> showCasperJobsJson() throws IOException {
+    public ResponseEntity<JobData> showCasperJobsJson()  {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
 
-        String jsonData = jobQueueRepository.getCasperQstatJobsJson();
-        return ResponseEntity.ok().headers(headers).body(jsonData);
-
+        JobData jobData = jobQueueRepository.getCasperQstatJobsJson();
+        return ResponseEntity.ok().headers(headers).body(jobData);
     }
 
     @GetMapping("/hpc/dashboard/casper/queue/json")
-    public ResponseEntity<String> showCasperQueueJson() throws IOException {
+    public ResponseEntity<JobData> showCasperQueueJson()  {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
 
-        String jsonData = jobQueueRepository.getCasperQstatQueueJson();
-        return ResponseEntity.ok().headers(headers).body(jsonData);
+        JobData jobData = jobQueueRepository.getCasperQstatQueueJson();
+        return ResponseEntity.ok().headers(headers).body(jobData);
     }
 
     @GetMapping(value = "/hpc/dashboard/derecho/queue/json")
-    public ResponseEntity<String> showDerechoQueueJson() throws IOException {
+    public ResponseEntity<JobData> showDerechoQueueJson()  {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
 
-        String jsonData = jobQueueRepository.getDerechoQstatQueueJson();
-        return ResponseEntity.ok().headers(headers).body(jsonData);
+        JobData jobData = jobQueueRepository.getDerechoQstatQueueJson();
+        return ResponseEntity.ok().headers(headers).body(jobData);
     }
 
     // to get file name from url when it lives on the file system
     // in a place designated by a property
     @GetMapping("/hpc/dashboard/derecho/jobs/json")
-    public ResponseEntity<String> showDerechoJobsJson() throws IOException {
+    public ResponseEntity<JobData> showDerechoJobsJson() throws IOException {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
 
-        String jsonData = jobQueueRepository.getDerechoQstatJobsJson();
-        return ResponseEntity.ok().headers(headers).body(jsonData);
+        JobData jobData = jobQueueRepository.getDerechoQstatJobsJson();
+        return ResponseEntity.ok().headers(headers).body(jobData);
     }
-
-//    @ExceptionHandler(IOException.class)
-//    public ResponseEntity<String> handleIOException(IOException ex) {
-//        return ResponseEntity
-//                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                .body("Unable to process the request: " + ex.getMessage());
-//    }
 
 }
