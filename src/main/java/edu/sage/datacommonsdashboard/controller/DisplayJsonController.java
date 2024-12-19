@@ -7,8 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-
 
 // For returning JSON directly (bypass view)
 @RestController
@@ -54,7 +52,7 @@ public class DisplayJsonController {
     // to get file name from url when it lives on the file system
     // in a place designated by a property
     @GetMapping("/hpc/dashboard/derecho/jobs/json")
-    public ResponseEntity<JobData> showDerechoJobsJson() throws IOException {
+    public ResponseEntity<JobData> showDerechoJobsJson() {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
