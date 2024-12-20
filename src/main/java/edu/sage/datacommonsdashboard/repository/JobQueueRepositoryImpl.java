@@ -125,7 +125,7 @@ public class JobQueueRepositoryImpl implements JobQueueRepository {
 
         if (verifyFilePath(filePath, fileName)) {
 
-            Resource resource = resourceLoader.getResource("file:" + filePath + " " + fileName);
+            Resource resource = resourceLoader.getResource("file:" + filePath + fileName);
 
             if (resource.exists()) {
 
