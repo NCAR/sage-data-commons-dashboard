@@ -31,7 +31,7 @@ public class JsonConverter {
             String problematicLine = extractJsonLine(json, errorLine);
 
             // TODO: logger
-            System.out.println("Problematic Line: " + problematicLine);
+            System.out.println("Problematic Line Number " + errorLine + ": " + problematicLine);
             System.out.println(json); // Because the file gets replaced every minute so we'd have no other record
 
             // Extract location details from the exception

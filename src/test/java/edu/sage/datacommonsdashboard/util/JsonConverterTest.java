@@ -86,7 +86,7 @@ class JsonConverterTest {
 
     @Test
     void convertJsonToJobData_emptyJson_throwsJsonParsingException() throws JsonProcessingException {
-        // Arrange
+
         String emptyJson = "";
 
         JsonParsingException exception = assertThrows(JsonParsingException.class, () -> {

@@ -107,11 +107,45 @@ public class JobQueueRepositoryImpl implements JobQueueRepository {
         String expectedSeparator = System.getProperty("file.separator");
         String fullPathStr = fullPath.toString();
 
-        // Ensure the file exists (or can be accessed)
-        if (Files.exists(fullPath) ) {
+        // Ensure the file exists and can be accessed
+        if (Files.exists(fullPath) && Files.isReadable(fullPath)) {
             return fullPathStr.contains(expectedSeparator + fileName);
         }
         return false;
+    }
+
+
+    protected String readFileWithPath(String fileName) throws FileNotReadableException {
+
+       // System.out.println("===JobQueueRepositoryImpl data filePath: " + filePath + ", fileName: " + fileName);
+
+        if (filePath == null) {
+            throw new FileNotReadableException("File path is not set.");
+        }
+
+        if (verifyFilePath(filePath, fileName)) {
+
+            Resource resource = resourceLoader.getResource("file:" + filePath + " " + fileName);
+
+            if (resource.exists()) {
+
+                try {
+
+                    return new String(Files.readAllBytes(Paths.get(resource.getURI())));
+
+                } catch (IOException ex) {
+
+                    logger.error("Error reading file: {}", fileName, ex);
+                    throw new FileNotReadableException("Error reading file: " + filePath + " " + fileName, ex);
+                }
+
+            } else {
+                throw new FileNotReadableException("Resource does not exist: " + filePath + " " + fileName);
+            }
+
+        } else {
+            throw new FileNotReadableException("File cannot be located: " + filePath + " " + fileName);
+        }
     }
 
     // Deprecated?
@@ -127,44 +161,12 @@ public class JobQueueRepositoryImpl implements JobQueueRepository {
             try {
                 return new String(Files.readAllBytes(Paths.get(resource.getURI())));
             } catch (IOException e) {
-                throw new RuntimeException("Error reading file: " + fileName, e);
+                throw new RuntimeException("Error reading resource file: " + fileName, e);
             }
         } else {
-            throw new FileNotReadableException("Resource does not exist: " + filePath + fileName);
+            throw new FileNotReadableException("Resource does not exist: " + filePath + "/" + fileName);
         }
     }
 
-    protected String readFileWithPath(String fileName) throws FileNotReadableException {
-
-       System.out.println("===JobQueueRepositoryImpl data filePath: " + filePath + ", fileName: " + fileName);
-
-        if (filePath == null) {
-            throw new FileNotReadableException("File path is not set.");
-        }
-
-        if (verifyFilePath(filePath, fileName)) {
-
-            Resource resource = resourceLoader.getResource("file:" + filePath + fileName);
-
-            if (resource.exists()) {
-
-                try {
-
-                    return new String(Files.readAllBytes(Paths.get(resource.getURI())));
-
-                } catch (IOException ex) {
-
-                    logger.error("Error reading file: {}", fileName, ex);
-                    throw new FileNotReadableException("Error reading file: " + fileName, ex);
-                }
-
-            } else {
-                throw new FileNotReadableException("Resource does not exist: " + filePath + fileName);
-            }
-
-        } else {
-            throw new FileNotReadableException("File cannot be located: "+ filePath + fileName);
-        }
-    }
 
 }
