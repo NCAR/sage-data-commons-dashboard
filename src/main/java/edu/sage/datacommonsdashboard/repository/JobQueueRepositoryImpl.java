@@ -39,6 +39,7 @@ public class JobQueueRepositoryImpl implements JobQueueRepository {
         this.jsonConverter = jsonConverter;
     }
 
+    // Expect trailing /
     @Value("${dashboard.queue.file.path}")
     protected String filePath;
 
@@ -51,7 +52,7 @@ public class JobQueueRepositoryImpl implements JobQueueRepository {
     @Override
     public JobData getCasperQstatJobsJson() throws FileNotReadableException {
 
-        String jsonData =  this.readFileWithPath(CASPER_QSTAT_JOBS_JSON);
+        String jsonData = this.readFileWithPath(CASPER_QSTAT_JOBS_JSON);
         return jsonConverter.convertJsonToJobData(jsonData);
     }
 
@@ -64,7 +65,7 @@ public class JobQueueRepositoryImpl implements JobQueueRepository {
     @Override
     public JobData getCasperQstatQueueJson() throws FileNotReadableException {
 
-        String jsonData =  this.readFileWithPath(CASPER_QSTAT_QUEUE_JSON);
+        String jsonData = this.readFileWithPath(CASPER_QSTAT_QUEUE_JSON);
         return jsonConverter.convertJsonToJobData(jsonData);
     }
 
@@ -94,7 +95,7 @@ public class JobQueueRepositoryImpl implements JobQueueRepository {
         return jsonConverter.convertJsonToJobData(jsonData);
     }
 
-    public boolean verifyFilePath(String filePath, String fileName) throws FileNotReadableException {
+    protected boolean verifyFilePath(String filePath, String fileName) throws FileNotReadableException {
 
         if (filePath == null || fileName == null) {
             throw new FileNotReadableException("File path or file name is null");
@@ -114,10 +115,9 @@ public class JobQueueRepositoryImpl implements JobQueueRepository {
         return false;
     }
 
-
     protected String readFileWithPath(String fileName) throws FileNotReadableException {
 
-       // System.out.println("===JobQueueRepositoryImpl data filePath: " + filePath + ", fileName: " + fileName);
+        System.out.println("===JobQueueRepositoryImpl data filePath: " + filePath + ", fileName: " + fileName);
 
         if (filePath == null) {
             throw new FileNotReadableException("File path is not set.");
@@ -136,15 +136,15 @@ public class JobQueueRepositoryImpl implements JobQueueRepository {
                 } catch (IOException ex) {
 
                     logger.error("Error reading file: {}", fileName, ex);
-                    throw new FileNotReadableException("Error reading file: " + filePath + " " + fileName, ex);
+                    throw new FileNotReadableException("Error reading file: " + filePath + fileName, ex);
                 }
 
             } else {
-                throw new FileNotReadableException("Resource does not exist: " + filePath + " " + fileName);
+                throw new FileNotReadableException("Resource does not exist: " + filePath + fileName);
             }
 
         } else {
-            throw new FileNotReadableException("File cannot be located: " + filePath + " " + fileName);
+            throw new FileNotReadableException("File cannot be located: " + filePath + fileName);
         }
     }
 
@@ -164,9 +164,8 @@ public class JobQueueRepositoryImpl implements JobQueueRepository {
                 throw new RuntimeException("Error reading resource file: " + fileName, e);
             }
         } else {
-            throw new FileNotReadableException("Resource does not exist: " + filePath + "/" + fileName);
+            throw new FileNotReadableException("Resource does not exist: " + filePath + fileName);
         }
     }
-
 
 }

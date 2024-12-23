@@ -1,6 +1,7 @@
 package edu.sage.datacommonsdashboard.repository;
 
 import edu.sage.datacommonsdashboard.exception.FileNotReadableException;
+import edu.sage.datacommonsdashboard.model.JobData;
 import edu.sage.datacommonsdashboard.util.JsonConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,8 +19,7 @@ import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class JobQueueRepositoryImplTest {
 
@@ -31,9 +31,12 @@ class JobQueueRepositoryImplTest {
 
     private static final String SAMPLE_CASPER_FILE_CONTENT = "Sample Casper file content";
     private static final String SAMPLE_DERECHO_FILE_CONTENT = "Sample Derecho file content";
-    private static final String CASPER_FILE_NAME = "casper_qstat_jobs.txt";
+    private static final String CASPER_FILE_NAME_TEXT = "casper_qstat_jobs.txt";
     private static final String DERECHO_FILE_NAME = "derecho_qstat_jobs.txt";
 
+    private static final String CASPER_FILE_NAME_JSON = "casper_qstat_jobs.json";
+
+    private Resource mockResource = mock(Resource.class);
     private JsonConverter mockJsonConverter = mock(JsonConverter.class);
     private ResourceLoader mockResourceLoader = mock(ResourceLoader.class);
 
@@ -113,12 +116,12 @@ class JobQueueRepositoryImplTest {
     public void given_text_file_resource_in_file_path__when_get_contents__then_correct_string_contents_returned() throws IOException {
 
         // Create temp file and write content
-        Resource mockResource = mock(Resource.class);
+
         Path tempFile = Files.createFile(tempDir.resolve(DERECHO_FILE_NAME));
         Files.writeString(tempFile, SAMPLE_DERECHO_FILE_CONTENT);
 
         when(mockResourceLoader.getResource(anyString())).thenReturn(mockResource);
-       // when(mockResourceLoader.getResource("file:" + tempDir.toString() + "/" + DERECHO_FILE_NAME)).thenReturn(mockResource);
+        // when(mockResourceLoader.getResource("file:" + tempDir.toString() + "/" + DERECHO_FILE_NAME)).thenReturn(mockResource);
         when(mockResource.exists()).thenReturn(true);
         when(mockResource.getURI()).thenReturn(tempFile.toUri());
 
@@ -135,7 +138,6 @@ class JobQueueRepositoryImplTest {
     void given_text_file_resource_in_file_path__when_not_found__then_file_path_error() throws IOException {
 
         // Mock resource loader behavior
-        Resource mockResource = mock(Resource.class);
         when(mockResourceLoader.getResource("file:" + tempDir.toString() + "/" + DERECHO_FILE_NAME)).thenReturn(mockResource);
         when(mockResource.exists()).thenReturn(false);
 
@@ -144,7 +146,7 @@ class JobQueueRepositoryImplTest {
             jobQueueRepositoryImpl.getDerechoQstatJobsText();
         });
 
-        assertEquals("File cannot be located: " + tempDir.toString() + "/ " + DERECHO_FILE_NAME, exception.getMessage());
+        assertEquals("File cannot be located: " + tempDir.toString() + "/" + DERECHO_FILE_NAME, exception.getMessage());
     }
 
     @Test
@@ -165,7 +167,7 @@ class JobQueueRepositoryImplTest {
         jobQueueRepositoryImpl.filePath = null;
 
         FileNotReadableException exception = assertThrows(FileNotReadableException.class, () -> {
-            jobQueueRepositoryImpl.readFileFromResources(CASPER_FILE_NAME);
+            jobQueueRepositoryImpl.readFileFromResources(CASPER_FILE_NAME_TEXT);
         });
 
         assertEquals("Resource is null for file: casper_qstat_jobs.txt", exception.getMessage());
@@ -177,46 +179,43 @@ class JobQueueRepositoryImplTest {
         jobQueueRepositoryImpl.filePath = "invalidPath";
 
         FileNotReadableException exception = assertThrows(FileNotReadableException.class, () -> {
-            jobQueueRepositoryImpl.readFileWithPath(CASPER_FILE_NAME);
+            jobQueueRepositoryImpl.readFileWithPath(CASPER_FILE_NAME_TEXT);
         });
 
-        assertEquals("File cannot be located: invalidPath casper_qstat_jobs.txt", exception.getMessage());
+        assertEquals("File cannot be located: invalidPathcasper_qstat_jobs.txt", exception.getMessage());
     }
 
     @Test
     void given_text_file_resource__when_file_path_is_invalid__then_file_path_error() throws IOException {
 
-        when(mockResourceLoader.getResource("file:" + tempDir.toString() + "/" + CASPER_FILE_NAME)).thenReturn(mock(Resource.class));
+        when(mockResourceLoader.getResource("file:" + tempDir.toString() + "/" + CASPER_FILE_NAME_TEXT)).thenReturn(mock(Resource.class));
 
         FileNotReadableException exception = assertThrows(FileNotReadableException.class, () -> {
-            jobQueueRepositoryImpl.readFileFromResources(CASPER_FILE_NAME);
+            jobQueueRepositoryImpl.readFileFromResources(CASPER_FILE_NAME_TEXT);
         });
 
-        assertEquals("Resource is null for file: " + CASPER_FILE_NAME, exception.getMessage());
+        assertEquals("Resource is null for file: " + CASPER_FILE_NAME_TEXT, exception.getMessage());
     }
 
     @Test
     void when_read_file_with_path__if_file_exists__then_success() throws IOException {
 
         // Create temp file and write content
-        Path tempFile = Files.createFile(tempDir.resolve(CASPER_FILE_NAME));
-        Files.writeString(tempFile, CASPER_FILE_NAME);
-
-        // Mock resource loader behavior
-        Resource mockResource = mock(Resource.class);
+        Path tempFile = Files.createFile(tempDir.resolve(CASPER_FILE_NAME_TEXT));
+        Files.writeString(tempFile, CASPER_FILE_NAME_TEXT);
 
         JobQueueRepositoryImpl jobQueueRepositoryImpl = new JobQueueRepositoryImpl(mockResourceLoader, mockJsonConverter);
 
         jobQueueRepositoryImpl.filePath = tempDir.toString() + "/";
 
-        //when(mockResourceLoader.getResource("file:" + tempDir.toString() + "/" + CASPER_FILE_NAME)).thenReturn(mockResource);
+        //when(mockResourceLoader.getResource("file:" + tempDir.toString() + "/" + CASPER_FILE_NAME_TEXT)).thenReturn(mockResource);
         when(mockResourceLoader.getResource(anyString())).thenReturn(mockResource);
         when(mockResource.exists()).thenReturn(true);
         when(mockResource.getURI()).thenReturn(tempFile.toUri());
 
         // Verify method output
-        String result = jobQueueRepositoryImpl.readFileWithPath(CASPER_FILE_NAME);
-        assertEquals(CASPER_FILE_NAME, result);
+        String result = jobQueueRepositoryImpl.readFileWithPath(CASPER_FILE_NAME_TEXT);
+        assertEquals(CASPER_FILE_NAME_TEXT, result);
 
         // Clean up temp file
         Files.deleteIfExists(tempFile);
@@ -231,7 +230,72 @@ class JobQueueRepositoryImplTest {
             jobQueueRepositoryImpl.readFileWithPath("nonexistent_file.txt");
         });
 
-        assertEquals("File cannot be located: " + tempDir.toString() + " nonexistent_file.txt", exception.getMessage());
+        assertEquals("File cannot be located: " + tempDir.toString() + "nonexistent_file.txt", exception.getMessage());
     }
+
+    @Test
+    void given_validJson__when_getCasperQstatJobsJson__then_return_correct_object() throws FileNotReadableException, IOException {
+
+        // setup
+        String validJsonContent = """
+    {
+        "timestamp": 123456789,
+        "pbs_version": "1.2",
+        "pbs_server": "testServer",
+        "Jobs": {}
+    }
+    """;
+        JobData expectedJobData = new JobData(); // Mock output from JsonConverter
+        expectedJobData.setTimestamp(123456789);
+        expectedJobData.setPbsVersion("1.2");
+        expectedJobData.setPbsServer("testServer");
+
+        // Create a temporary file with the required content
+        Path tempFile = Files.createTempFile(tempDir, "casper_qstat_jobs", ".json");
+        Files.writeString(tempFile, validJsonContent);
+
+        // Initialize repo
+        //jobQueueRepositoryImpl = new JobQueueRepositoryImpl(mockResourceLoader, mockJsonConverter);
+
+        // Spy on the real object to mock specific methods
+        jobQueueRepositoryImpl = Mockito.spy(new JobQueueRepositoryImpl(mockResourceLoader, mockJsonConverter));
+
+        jobQueueRepositoryImpl.filePath = tempDir.toString() + "/";
+
+        // Mock the behavior of the methods being called
+        // when(jobQueueRepositoryImpl.readFileWithPath(CASPER_FILE_NAME_JSON)).thenReturn(validJsonContent);
+
+        // Mock 'readFileWithPath' to avoid actual file system access
+        doReturn(validJsonContent).when(jobQueueRepositoryImpl).readFileWithPath(CASPER_FILE_NAME_JSON);
+
+        when(mockJsonConverter.convertJsonToJobData(validJsonContent)).thenReturn(expectedJobData);
+
+        // The test
+        JobData actualJobData = jobQueueRepositoryImpl.getCasperQstatJobsJson();
+
+        // Assert
+        assertEquals(expectedJobData, actualJobData, "The returned JobData should match the expected data.");
+
+        // Verify interactions
+        verify(jobQueueRepositoryImpl, times(1)).readFileWithPath(CASPER_FILE_NAME_JSON);
+        verify(mockJsonConverter, times(1)).convertJsonToJobData(validJsonContent);
+
+        // Clean up the file if needed
+        tempFile.toFile().deleteOnExit();
+    }
+
+
+//    @Test
+//    void testGetCasperQstatJobsJson_FileNotReadableException() throws FileNotReadableException {
+//        // Mock the behavior to throw FileNotReadableException
+//        when(jobQueueRepository.readFileWithPath(JobQueueRepositoryImpl.CASPER_QSTAT_JOBS_JSON))
+//                .thenThrow(new FileNotReadableException("File not readable"));
+//
+//        // Assert the exception is thrown
+//        assertThrows(FileNotReadableException.class, () -> jobQueueRepository.getCasperQstatJobsJson());
+//
+//        // Verify no interaction with JsonConverter
+//        verify(jsonConverter, never()).convertJsonToJobData(anyString());
+//    }
 
 }
