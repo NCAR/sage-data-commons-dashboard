@@ -9,7 +9,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String showHomePage(Model model) {
-        model.addAttribute("pageTitle", "Home Page");
+        model.addAttribute("pageTitle", "Data Commons Dashboard");
         return "index";
     }
 }

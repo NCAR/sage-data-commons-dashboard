@@ -47,7 +47,7 @@ public class DisplayJobsController {
 
         JobData jobData = jobQueueRepository.getCasperQstatJobsJson();
 
-        model.addAttribute("pageTitle", "Casper Qstat Jobs");
+        model.addAttribute("pageTitle", "Casper Qstat Jobs Full");
         model.addAttribute("jobData", jobData);
         model.addAttribute("formattedTimestamp", this.convertTimestamp(jobData.getTimestamp()));
 
@@ -59,7 +59,7 @@ public class DisplayJobsController {
 
         JobData jobData = jobQueueRepository.getDerechoQstatJobsJson();
 
-        model.addAttribute("pageTitle", "Derecho Qstat Jobs");
+        model.addAttribute("pageTitle", "Derecho Qstat Jobs Full");
         model.addAttribute("jobData", jobData);
         model.addAttribute("formattedTimestamp", this.convertTimestamp(jobData.getTimestamp()));
 
