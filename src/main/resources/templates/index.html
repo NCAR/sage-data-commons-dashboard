@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/head.html :: head}">
-    <title>Home Page</title>
+<head th:replace="~{fragments/headContent.html}">
+    <title th:text="${pageTitle ?: 'Default Title'}">Home Page</title>
 </head>
-<body>
 
+<body>
 <header>Future Site Branding and Logo</header>
 
 <h1>Sage Data Commons Dashboard</h1>
