@@ -21,7 +21,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
         // WebSocket endpoint for the client to connect
         registry.addEndpoint("/websocket") // WebSocket endpoint path
-                .setAllowedOrigins("http://localhost:8080", "https://localhost:8080") // Match subdomains under trusted-origin.com
+                .setAllowedOrigins("http://localhost:8080", "https://localhost:8080", "https://data-commons.prototype.ucar.edu") // Match subdomains under trusted-origin.com
                 .withSockJS(); // Enable SockJS fallback
     }
 
