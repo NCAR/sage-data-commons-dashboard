@@ -18,6 +18,11 @@
         #status {
             font-size: 24px;
             font-weight: bold;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            width: 200px;
+            margin: 0 auto;
         }
         .connected {
             background-color: green;
@@ -38,26 +43,60 @@
 <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
 
 <script>
-    // Initialize the SockJS WebSocket. Global vars
-    const socket = new SockJS('/websocket');
-    const stompClient = StompJs.Stomp.over(socket);
 
-    stompClient.connect({}, function () {
-        console.log('Websocket Connected!');
-        updateStatus('Connected');
-    });
+    // Global variables to keep track of WebSocket states
+    let socket;
+    let stompClient;
 
-    // Monitor WebSocket connection errors or closure
-    stompClient.onDisconnect = function() {
-        console.log('WebSocket is disconnected.');
-        updateStatus('Disconnected');
-    };
+    // Initialize the SockJS WebSocket.
+    // Function to establish a new WebSocket connection
+    function connectWebSocket() {
+        socket = new SockJS('/websocket');
+        stompClient = StompJs.Stomp.over(socket);
+
+        stompClient.connect({}, function () {
+            console.log('Websocket Connected!');
+            updateStatus('Connected');
+        }, function (error) {
+            console.error('WebSocket connection error:', error);
+            updateStatus('Disconnected'); // Update UI on error
+        });
+
+        // Monitor WebSocket connection errors or closure
+        stompClient.onDisconnect = function () {
+            console.log('WebSocket is disconnected.');
+            updateStatus('Disconnected');
+        };
+    }
+
+    // Function to gracefully disconnect the WebSocket
+    function disconnectWebSocket() {
+        if (stompClient && stompClient.connected) {
+            stompClient.deactivate(); // Properly deactivate STOMP/WebSocket
+            console.log('WebSocket Disconnected.');
+            updateStatus('Disconnected');
+        } else {
+            console.log('WebSocket is already disconnected.');
+        }
+    }
+
+    // Function to reconnect the WebSocket
+    function reconnectWebSocket() {
+        console.log('Reconnecting WebSocket...');
+        disconnectWebSocket(); // Ensure no existing connection persists
+        setTimeout(() => {
+            connectWebSocket(); // Establish a new connection
+        }, 1000); // Add a small delay before reconnection so no flood if outage
+    }
 
     function updateStatus(status) {
         const statusDiv = document.getElementById('status');
         statusDiv.textContent = `${status}`;
         statusDiv.className = status.toLowerCase(); // Set class to 'connected' or 'disconnected'
     }
+
+    // Initial connection
+    connectWebSocket();
 
 </script>
 </body>
