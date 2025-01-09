@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/headContent.html}">
+    <title></title>
+</head>
+<body>
+
+<header>Future Site Branding and Logo</header>
+
+<a th:href="@{/}" >Return to Home</a>
+
+<main>
+    <h1 th:text="${pageTitle}"></h1>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-header">
+        <tr>
+            <th>Hostname</th>
+            <th>Fully Qualified Domain Name</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody th:each="host : ${hpcHosts}">
+        <tr>
+            <td><span th:text="${host.hostname}"></span></td>
+            <td><span th:text="${host.fqdn}"></span></td>
+            <td><span th:text="${host.status}"></span></td>
+        </tr>
+        </tbody>
+    </table>
+
+</main>
+
+<footer>
+    <p>Copyright 2024 UCAR</p>
+</footer>
+
+</body>
+</html>
