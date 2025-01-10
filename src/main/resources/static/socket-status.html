@@ -107,6 +107,31 @@
         stompClient.webSocket.close();
     }
 
+    // The websocket was not detecting when Offline event happened and didn't update,
+    // so this makes it update status immediately by listening for browser offline.
+    function checkConnectionImmediately() {
+        // Check navigator.onLine for browser offline state
+        if (!navigator.onLine) {
+            console.log('Browser offline detected.');
+            updateStatus('Disconnected');
+            return;
+        }
+
+        // Check WebSocket state
+        const socket = stompClient.webSocket; // Get WebSocket directly
+        if (socket && socket.readyState !== WebSocket.OPEN) {
+            console.log('WebSocket is not open.');
+            updateStatus('Disconnected');
+        } else {
+            console.log('WebSocket appears connected.');
+            updateStatus('Connected');
+        }
+    }
+
+    // Attach to browser offline events
+    window.addEventListener('offline', checkConnectionImmediately);
+    window.addEventListener('online', checkConnectionImmediately);
+
     // Function to gracefully disconnect the WebSocket
     function disconnectWebSocket() {
         isManuallyDisconnected = true; // Mark as manual disconnection and not try to reconnect
