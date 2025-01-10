@@ -102,9 +102,14 @@
         }
     }
 
-    // Function to gracefully disconnect the WebSocket and not try to reconnect
+    // Simulate network error to see reconnect functionality
+    function demoSocketClose() {
+        stompClient.webSocket.close();
+    }
+
+    // Function to gracefully disconnect the WebSocket
     function disconnectWebSocket() {
-        isManuallyDisconnected = true; // Mark as manual disconnection
+        isManuallyDisconnected = true; // Mark as manual disconnection and not try to reconnect
 
         if (stompClient && stompClient.connected) {
             stompClient.deactivate(); // Properly deactivate STOMP/WebSocket
