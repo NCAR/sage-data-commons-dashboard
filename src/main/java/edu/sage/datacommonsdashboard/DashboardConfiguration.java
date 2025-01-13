@@ -1,10 +1,12 @@
 package edu.sage.datacommonsdashboard;
 
-import edu.sage.datacommonsdashboard.model.HpcHost;
+import edu.sage.datacommonsdashboard.repository.HpcHostRepository;
+import edu.sage.datacommonsdashboard.repository.HpcHostRepositoryImpl;
+import edu.sage.datacommonsdashboard.service.HpcHostService;
+import edu.sage.datacommonsdashboard.service.HpcHostServiceImpl;
+import edu.sage.datacommonsdashboard.service.HpcHostTransformer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.List;
 
 @Configuration
 public class DashboardConfiguration {
@@ -16,7 +18,11 @@ public class DashboardConfiguration {
     }
 
     @Bean
-    public List<HpcHost> hpcHosts() {
-        return hpcConfiguration.getHosts();
+    public HpcHostRepository hpcHostRepository() {
+        return new HpcHostRepositoryImpl(hpcConfiguration.getHosts());
+    }
+    @Bean
+    public HpcHostService hpcHostService() {
+        return new HpcHostServiceImpl(hpcHostRepository(), new HpcHostTransformer());
     }
 }

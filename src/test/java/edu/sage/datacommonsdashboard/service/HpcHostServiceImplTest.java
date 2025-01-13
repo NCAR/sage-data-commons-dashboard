@@ -1,4 +1,4 @@
-package edu.sage.datacommonsdashboard.controller;
+package edu.sage.datacommonsdashboard.service;
 
 import edu.sage.datacommonsdashboard.model.HpcHost;
 import edu.sage.datacommonsdashboard.repository.HpcHostRepository;
@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class HpcHostQueryTest {
+class HpcHostServiceImplTest {
 
     @Mock
     private HpcHostRepository repository;
@@ -26,7 +26,7 @@ class HpcHostQueryTest {
     private HpcHostTransformer transformer;
 
     @InjectMocks
-    private HpcHostQuery hpcHostQuery;
+    private HpcHostServiceImpl service;
 
     private List<HpcHost> hosts;
     private List<HpcHostModel> models = new ArrayList<>();
@@ -53,20 +53,20 @@ class HpcHostQueryTest {
     }
 
     @Test
-    void given_hosts__when_query__repository_getAll_called() {
-        hpcHostQuery.query();
+    void given_hosts__when_getHpcHosts__repository_getAll_called() {
+        service.getHpcHosts();
         verify(repository).getAll();
     }
 
     @Test
-    void given_hosts__when_query__transformer_called_on_each_host() {
-        hpcHostQuery.query();
+    void given_hosts__when_getHpcHosts__transformer_called_on_each_host() {
+        service.getHpcHosts();
         hosts.forEach(host -> verify(transformer).transform(host));
     }
 
     @Test
-    void given_hosts__when_query__transformer_models_returned() {
-        List<HpcHostModel> results = hpcHostQuery.query();
+    void given_hosts__when_getHpcHosts__transformer_models_returned() {
+        List<HpcHostModel> results = service.getHpcHosts();
         assertEquals(models.size(), results.size());
         assertTrue(models.containsAll(results));
     }

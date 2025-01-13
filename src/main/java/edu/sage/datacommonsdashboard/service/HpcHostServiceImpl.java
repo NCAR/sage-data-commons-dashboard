@@ -1,23 +1,22 @@
-package edu.sage.datacommonsdashboard.controller;
+package edu.sage.datacommonsdashboard.service;
 
 import edu.sage.datacommonsdashboard.repository.HpcHostRepository;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
-public class HpcHostQuery {
+public class HpcHostServiceImpl implements HpcHostService {
 
     private final HpcHostRepository repository;
     private final HpcHostTransformer transformer;
 
-    public HpcHostQuery(HpcHostRepository repository, HpcHostTransformer transformer) {
+    public HpcHostServiceImpl(HpcHostRepository repository, HpcHostTransformer transformer) {
         this.repository = repository;
         this.transformer = transformer;
     }
 
-    public List<HpcHostModel> query() {
+    @Override
+    public List<HpcHostModel> getHpcHosts() {
         return repository.getAll().stream()
                 .map(transformer::transform)
                 .collect(Collectors.toList());

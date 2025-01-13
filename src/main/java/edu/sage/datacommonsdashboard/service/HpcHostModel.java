@@ -1,4 +1,4 @@
-package edu.sage.datacommonsdashboard.controller;
+package edu.sage.datacommonsdashboard.service;
 
 public class HpcHostModel {
 

@@ -1,4 +1,4 @@
-package edu.sage.datacommonsdashboard.controller;
+package edu.sage.datacommonsdashboard.service;
 
 import edu.sage.datacommonsdashboard.model.HpcHost;
 import org.junit.jupiter.api.BeforeEach;

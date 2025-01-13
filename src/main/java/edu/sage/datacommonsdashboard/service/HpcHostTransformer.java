@@ -1,13 +1,8 @@
-package edu.sage.datacommonsdashboard.controller;
+package edu.sage.datacommonsdashboard.service;
 
 import edu.sage.datacommonsdashboard.model.HpcHost;
-import org.springframework.stereotype.Component;
 
-@Component
 public class HpcHostTransformer {
-
-    public HpcHostTransformer() {
-    }
 
     public HpcHostModel transform(HpcHost hpcHost) {
         HpcHostModel model = new HpcHostModel();
