@@ -2,20 +2,18 @@ package edu.sage.datacommonsdashboard.controller;
 
 import edu.sage.datacommonsdashboard.model.JobData;
 import edu.sage.datacommonsdashboard.repository.JobQueueRepository;
+import edu.sage.datacommonsdashboard.util.TimeZoneUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 
 @Controller
 public class DisplayJobsController {
 
     private final JobQueueRepository jobQueueRepository;
+    private final TimeZoneUtil timeZoneUtil = new TimeZoneUtil();
+
 
     public DisplayJobsController(JobQueueRepository jobQueueRepository) {
 
@@ -29,7 +27,7 @@ public class DisplayJobsController {
 
         model.addAttribute("pageTitle", "Casper Qstat Jobs");
         model.addAttribute("jobData", jobData);
-        model.addAttribute("formattedTimestamp", this.convertTimestamp(jobData.getTimestamp()));
+        model.addAttribute("formattedTimestamp", timeZoneUtil.convertTimestampToDateString(jobData.getTimestamp()));
 
         return "job-data-table-view";  // The thymeleaf file
     }
@@ -41,7 +39,7 @@ public class DisplayJobsController {
 
         model.addAttribute("pageTitle", "Derecho Qstat Jobs");
         model.addAttribute("jobData", jobData);
-        model.addAttribute("formattedTimestamp", this.convertTimestamp(jobData.getTimestamp()));
+        model.addAttribute("formattedTimestamp", timeZoneUtil.convertTimestampToDateString(jobData.getTimestamp()));
 
         return "job-data-table-view";  // The thymeleaf file
     }
@@ -53,7 +51,7 @@ public class DisplayJobsController {
 
         model.addAttribute("pageTitle", "Casper Qstat Jobs Full");
         model.addAttribute("jobData", jobData);
-        model.addAttribute("formattedTimestamp", this.convertTimestamp(jobData.getTimestamp()));
+        model.addAttribute("formattedTimestamp", timeZoneUtil.convertTimestampToDateString(jobData.getTimestamp()));
 
         return "job-data-table-full-view";  // The thymeleaf file
     }
@@ -65,7 +63,7 @@ public class DisplayJobsController {
 
         model.addAttribute("pageTitle", "Derecho Qstat Jobs Full");
         model.addAttribute("jobData", jobData);
-        model.addAttribute("formattedTimestamp", this.convertTimestamp(jobData.getTimestamp()));
+        model.addAttribute("formattedTimestamp", timeZoneUtil.convertTimestampToDateString(jobData.getTimestamp()));
 
         return "job-data-table-full-view";  // The thymeleaf file
     }
@@ -77,7 +75,7 @@ public class DisplayJobsController {
 
         model.addAttribute("pageTitle", "Casper Qstat Jobs");
         model.addAttribute("jobData", jobData);
-        model.addAttribute("formattedTimestamp", this.convertTimestamp(jobData.getTimestamp()));
+        model.addAttribute("formattedTimestamp", timeZoneUtil.convertTimestampToDateString(jobData.getTimestamp()));
 
         return "job-data-view";  // The thymeleaf file
     }
@@ -89,27 +87,9 @@ public class DisplayJobsController {
 
         model.addAttribute("pageTitle", "Derecho Qstat Jobs");
         model.addAttribute("jobData", jobData);
-        model.addAttribute("formattedTimestamp", this.convertTimestamp(jobData.getTimestamp()));
+        model.addAttribute("formattedTimestamp", timeZoneUtil.convertTimestampToDateString(jobData.getTimestamp()));
 
         return "job-data-view";  // The thymeleaf file
-    }
-
-    protected String convertTimestamp (Integer timestamp) {
-
-        // Timestamp is in seconds, needs convering to millis
-        Instant instant = Instant.ofEpochMilli(timestamp * 1000L);
-
-        // Specify the Mountain Time Zone (America/Denver handles MST/MDT)
-        ZoneId mountainTimeZone = ZoneId.of("America/Denver");
-
-        // Convert the Instant to a ZonedDateTime in the Mountain Time Zone
-        ZonedDateTime mountainTime = ZonedDateTime.ofInstant(instant, mountainTimeZone);
-
-        // Format the ZonedDateTime for readability
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
-
-        return formatter.format(mountainTime);
-
     }
 
 }
