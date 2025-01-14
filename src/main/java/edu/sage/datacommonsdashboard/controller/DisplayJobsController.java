@@ -6,12 +6,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.Date;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 @Controller
 public class DisplayJobsController {
 
-    private JobQueueRepository jobQueueRepository;
+    private final JobQueueRepository jobQueueRepository;
 
     public DisplayJobsController(JobQueueRepository jobQueueRepository) {
 
@@ -73,6 +77,7 @@ public class DisplayJobsController {
 
         model.addAttribute("pageTitle", "Casper Qstat Jobs");
         model.addAttribute("jobData", jobData);
+        model.addAttribute("formattedTimestamp", this.convertTimestamp(jobData.getTimestamp()));
 
         return "job-data-view";  // The thymeleaf file
     }
@@ -84,12 +89,27 @@ public class DisplayJobsController {
 
         model.addAttribute("pageTitle", "Derecho Qstat Jobs");
         model.addAttribute("jobData", jobData);
+        model.addAttribute("formattedTimestamp", this.convertTimestamp(jobData.getTimestamp()));
 
         return "job-data-view";  // The thymeleaf file
     }
 
-    protected Date convertTimestamp (Integer timestamp) {
-        return new Date (timestamp * 1000L);
+    protected String convertTimestamp (Integer timestamp) {
+
+        // Timestamp is in seconds, needs convering to millis
+        Instant instant = Instant.ofEpochMilli(timestamp * 1000L);
+
+        // Specify the Mountain Time Zone (America/Denver handles MST/MDT)
+        ZoneId mountainTimeZone = ZoneId.of("America/Denver");
+
+        // Convert the Instant to a ZonedDateTime in the Mountain Time Zone
+        ZonedDateTime mountainTime = ZonedDateTime.ofInstant(instant, mountainTimeZone);
+
+        // Format the ZonedDateTime for readability
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
+
+        return formatter.format(mountainTime);
+
     }
 
 }
