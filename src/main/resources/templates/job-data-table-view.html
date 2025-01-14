@@ -12,7 +12,8 @@
 <main>
     <h1 th:text="${pageTitle}"></h1>
 
-    <p><strong>Timestamp:</strong> <span th:text="${#dates.format(formattedTimestamp, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+    <p><strong>Report Time:</strong> <span th:text="${formattedTimestamp}"></span></p>
+    <p><strong>Timestamp:</strong> <span th:text="${jobData.timestamp}"></span></p>
     <p><strong>Pbs Version:</strong> <span th:text="${jobData.pbsVersion}"></span></p>
     <p><strong>Pbs Server:</strong> <span th:text="${jobData.pbsServer}"></span></p>
 
