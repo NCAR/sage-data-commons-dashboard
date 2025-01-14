@@ -45,4 +45,18 @@ public class HpcHost {
     public void setStatus(Status status) {
         this.status = status;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        HpcHost hpcHost = (HpcHost) o;
+        return id.equals(hpcHost.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }

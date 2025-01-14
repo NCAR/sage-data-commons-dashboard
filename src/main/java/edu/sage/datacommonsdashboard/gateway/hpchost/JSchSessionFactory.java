@@ -1,0 +1,36 @@
+package edu.sage.datacommonsdashboard.gateway.hpchost;
+
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.Session;
+
+public class JSchSessionFactory {
+
+    private final String host;
+    private final int port;
+    private final String user;
+
+    public JSchSessionFactory(String host, int port, String user) {
+        this.host = host;
+        this.port = port;
+        this.user = user;
+    }
+
+    public Session create() {
+        try {
+            JSch jSch = new JSch();
+            Session session = jSch.getSession(user, host, port);
+            session.setConfig("StrictHostKeyChecking", "no");
+            return session;
+        } catch (JSchException e) {
+            throw new JSchSessionCreationFailure(e);
+        }
+    }
+
+    public static class JSchSessionCreationFailure extends RuntimeException {
+
+        public JSchSessionCreationFailure(Throwable cause) {
+            super(cause);
+        }
+    }
+}
