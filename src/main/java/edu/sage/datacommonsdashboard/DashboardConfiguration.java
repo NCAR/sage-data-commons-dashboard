@@ -2,9 +2,9 @@ package edu.sage.datacommonsdashboard;
 
 import edu.sage.datacommonsdashboard.repository.HpcHostRepository;
 import edu.sage.datacommonsdashboard.repository.HpcHostRepositoryImpl;
-import edu.sage.datacommonsdashboard.service.HpcHostService;
-import edu.sage.datacommonsdashboard.service.HpcHostServiceImpl;
-import edu.sage.datacommonsdashboard.service.HpcHostTransformer;
+import edu.sage.datacommonsdashboard.query.HpcHostQuery;
+import edu.sage.datacommonsdashboard.query.HpcHostQueryImpl;
+import edu.sage.datacommonsdashboard.query.HpcHostTransformer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,8 +21,9 @@ public class DashboardConfiguration {
     public HpcHostRepository hpcHostRepository() {
         return new HpcHostRepositoryImpl(hpcConfiguration.getHosts());
     }
+
     @Bean
-    public HpcHostService hpcHostService() {
-        return new HpcHostServiceImpl(hpcHostRepository(), new HpcHostTransformer());
+    public HpcHostQuery hpcHostQuery() {
+        return new HpcHostQueryImpl(hpcHostRepository(), new HpcHostTransformer());
     }
 }
