@@ -72,16 +72,16 @@
             <td><span th:text="${job.server}"></span></td>
             <td><span th:text="${job.accountName}"></span></td>
             <td><span th:text="${job.checkpoint}"></span></td>
-            <td><span th:text="${job.ctime}"></span></td>
+            <td><span th:text="${job.ctime}"></span> <span class="timezone-column"></span></td>
             <td><span th:text="${job.errorPath}"></span></td>
             <td><span th:text="${job.holdTypes}"></span></td>
             <td><span th:text="${job.joinPath}"></span></td>
             <td><span th:text="${job.keepFiles}"></span></td>
             <td><span th:text="${job.mailPoints}"></span></td>
-            <td><span th:text="${job.mtime}"></span></td>
+            <td><span th:text="${job.mtime}"></span> <span class="timezone-column"></span></td>
             <td><span th:text="${job.outputPath}"></span></td>
             <td><span th:text="${job.priority}"></span></td>
-            <td><span th:text="${job.qtime}"></span></td>
+            <td><span th:text="${job.qtime}"></span> <span class="timezone-column"></span></td>
             <td><span th:text="${job.rerunable}"></span></td>
             <!--            <td><span th:text="${job.resourceList}"></span></td>-->
             <td>
@@ -118,8 +118,8 @@
                     </li>
                 </ul>
             </td>
-            <td><span th:text="${job.stime}"></span></td>
-            <td><span th:text="${job.obittime}"></span></td>
+            <td><span th:text="${job.stime}"></span> <span class="timezone-column"></span></td>
+            <td><span th:text="${job.obittime}"></span> <span class="timezone-column"></span></td>
             <td><span th:text="${job.shellPathList}"></span></td>
             <td><span th:text="${job.jobdir}"></span></td>
             <td><span th:text="${job.substate}"></span></td>
@@ -160,7 +160,7 @@
             </td>
 
             <td><span th:text="${job.comment}"></span></td>
-            <td><span th:text="${job.etime}"></span></td>
+            <td><span th:text="${job.etime}"></span> <span class="timezone-column"></span></td>
             <td><span th:text="${job.umask}"></span></td>
             <td><span th:text="${job.runCount}"></span></td>
             <td><span th:text="${job.eligibleTime}"></span></td>
@@ -179,6 +179,26 @@
 <footer>
     <p>Copyright 2024 UCAR</p>
 </footer>
+
+<script th:src="@{/js/dateTimeUtils.js}"></script>
+
+<script>
+
+    // Function to update all targeted columns with the time zone abbreviation
+    function updateTableWithTimeZone() {
+
+        const timeZoneAbbr = getCurrentTimeZoneAbbreviation(); // Fetch timezone abbreviation
+        const elements = document.querySelectorAll('.timezone-column'); // Select all target columns
+
+        elements.forEach(column => {
+            column.innerText = timeZoneAbbr; // Update each column
+        });
+    }
+
+    // Call the function to update all relevant table columns
+    updateTableWithTimeZone();
+
+</script>
 
 </body>
 </html>
