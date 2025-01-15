@@ -95,7 +95,7 @@ public class TimeZoneUtilTest {
         String expectedAbbreviation = nowInDenver.getZone().getRules().isDaylightSavings(nowInDenver.toInstant()) ? "MDT" : "MST";
 
         // Call the method to get the actual abbreviation
-        String actualAbbreviation = timeZoneUtil.getNowInDenverTimeZoneAbbreviation();
+        String actualAbbreviation = timeZoneUtil.getAbbreviationNowInDenverTimeZone();
 
         // Assert that the abbreviation matches the expected value
         assertEquals(expectedAbbreviation, actualAbbreviation, "The time zone abbreviation should match Denver's current time zone.");
@@ -111,11 +111,29 @@ public class TimeZoneUtilTest {
         // Determine the expected abbreviation based on whether it's daylight saving time
         String expectedAbbreviation = "MST";
 
-        String actualAbbreviation = timeZoneUtil.getTimeZoneAbbreviation(specificDateInDenver, ZoneId.of("America/Denver"));
+        String actualAbbreviation = timeZoneUtil.getAbbreviationForZonedDateTime(specificDateInDenver);
 
         // Assert that the abbreviation matches the expected value
         assertEquals(expectedAbbreviation, actualAbbreviation, "The time zone abbreviation for the specific date should match Denver's current time zone.");
     }
 
 
+    @Test
+    public void testGetAbbreviationForZonedDateTime() {
+
+        // Create a ZonedDateTime with a specific time zone and time
+        ZonedDateTime dateTimeInNewYork = ZonedDateTime.of(2024, 7, 15, 12, 0, 0, 0, ZoneId.of("America/New_York"));
+
+        // Call the method to get the time zone abbreviation
+        String abbreviation = timeZoneUtil.getAbbreviationForZonedDateTime(dateTimeInNewYork);
+
+        // Ensure the abbreviation is correct
+        assertEquals("EDT", abbreviation, "Abbreviation should be 'EDT' for Eastern Daylight Time in July");
+
+        // Additional check for a different time zone (e.g., London)
+        ZonedDateTime dateTimeInLondon = ZonedDateTime.of(2024, 1, 15, 12, 0, 0, 0, ZoneId.of("Europe/London"));
+        String londonAbbreviation = timeZoneUtil.getAbbreviationForZonedDateTime(dateTimeInLondon);
+
+        assertEquals("GMT", londonAbbreviation, "Abbreviation should be 'GMT' for London in Standard Time (January)");
+    }
 }
