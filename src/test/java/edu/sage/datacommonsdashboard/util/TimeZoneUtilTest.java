@@ -88,7 +88,7 @@ public class TimeZoneUtilTest {
     }
 
     @Test
-    public void testGetNowInDenverTimeZoneAbbreviation() {
+    public void givenZoneDenver__whenGetAbbreviationForNow__abbreviationIsCorrect() {
 
         // Get the expected abbreviation based on the current time in Denver
         ZonedDateTime nowInDenver = ZonedDateTime.now(ZoneId.of("America/Denver"));
@@ -102,10 +102,10 @@ public class TimeZoneUtilTest {
     }
 
     @Test
-    public void testGetTimeZoneAbbreviationForSpecificDate() {
+    public void givenZoneDenver__whenGetAbbreviationForSomeDate__abbreviationIsCorrect() {
 
-        // Define a specific date and time in Denver's time zone for testing
-        ZonedDateTime specificDateInDenver = ZonedDateTime.of(2024, 11, 13, 12, 0, 0, 0,
+        // Define a specific date and time in Denver's time zone for testing Winter=MST
+        ZonedDateTime specificDateInDenver = ZonedDateTime.of(2024, 12, 13, 12, 0, 0, 0,
                 ZoneId.of("America/Denver"));
 
         // Determine the expected abbreviation based on whether it's daylight saving time
@@ -117,9 +117,8 @@ public class TimeZoneUtilTest {
         assertEquals(expectedAbbreviation, actualAbbreviation, "The time zone abbreviation for the specific date should match Denver's current time zone.");
     }
 
-
     @Test
-    public void testGetAbbreviationForZonedDateTime() {
+    public void givenZoneNotDenver__whenGetAbbreviationForSomeDate__abbreviationIsCorrect() {
 
         // Create a ZonedDateTime with a specific time zone and time
         ZonedDateTime dateTimeInNewYork = ZonedDateTime.of(2024, 7, 15, 12, 0, 0, 0, ZoneId.of("America/New_York"));
@@ -136,4 +135,53 @@ public class TimeZoneUtilTest {
 
         assertEquals("GMT", londonAbbreviation, "Abbreviation should be 'GMT' for London in Standard Time (January)");
     }
+
+    @Test
+    void givenZoneNotDenver__whenSpecificSummerDate__expectedAbbreviationIsCorrect() {
+
+        ZoneId zoneId = ZoneId.of("America/New_York"); // Example: Eastern Time (ET)
+
+        // Use a fixed time, summer
+        ZonedDateTime fixedTime = ZonedDateTime.of(2023, 07, 21, 12, 0, 0, 0, zoneId);
+
+        // Format the expected abbreviation (summer should be Daylight savings time)
+       // String expectedAbbreviation = fixedTime.getZone().getRules().isDaylightSavings(fixedTime.toInstant()) ? "EDT" : "EST";
+        String expectedAbbreviation = "EDT";
+
+        // Test the method's output
+        String actualAbbreviation = timeZoneUtil.getAbbreviationForZonedDateTime(fixedTime);
+
+        assertEquals(expectedAbbreviation, actualAbbreviation, "The time zone abbreviation should match New York's current time zone.");
+    }
+
+    @Test
+    void givenZoneDenver__whenNow__expectedAbbreviationIsCorrect() {
+        // Use a known ZoneId for testing
+        ZoneId testZone = ZoneId.of("America/Denver");
+
+        // Manually compute the expected abbreviation using current date/time
+        String expectedAbbreviation = ZonedDateTime.now(testZone).format(DateTimeFormatter.ofPattern("z"));
+
+        // Call the method and get the actual abbreviation MST or MDT
+        String actualAbbreviation = timeZoneUtil.getAbbreviationInTimeZone(testZone);
+
+        // Assert that the abbreviations match
+        assertEquals(expectedAbbreviation, actualAbbreviation, "Expected and actual time zone abbreviations should match.");
+    }
+
+    @Test
+    void givenZoneEurope__whenNow__expectedAbbreviationIsCorrect() {
+        // Use a known ZoneId for testing
+        ZoneId testZone = ZoneId.of("Europe/Paris");
+
+        // Manually compute the expected abbreviation using current date/time
+        String expectedAbbreviation = ZonedDateTime.now(testZone).format(DateTimeFormatter.ofPattern("z"));
+
+        // Call the method and get the actual abbreviation CET
+        String actualAbbreviation = timeZoneUtil.getAbbreviationInTimeZone(testZone);
+
+        // Assert that the abbreviations match
+        assertEquals(expectedAbbreviation, actualAbbreviation, "Expected and actual time zone abbreviations should match.");
+    }
+
 }

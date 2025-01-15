@@ -24,15 +24,14 @@ public class TimeZoneUtil {
         return abbreviation;
     }
 
-    // E.g. MST vs MDT
-    public String getAbbreviationNowInCurrentTimeZone() {
+    // E.g. MST vs MDT current system
+    public String getAbbreviationInTimeZone(ZoneId zoneId) {
 
-        // Get the current date and time in Denver's time zone
-        ZonedDateTime hereAndNow = ZonedDateTime.now(getCurrentServerZoneId());
+        // Get the current date and time in server's time zone
+        ZonedDateTime zonedDateTime = ZonedDateTime.now(zoneId);
 
         /// Use the DateTimeFormatter with the z pattern to get the abbreviation
-        // String timeZoneName = nowInDenver.getZone().getId();  // Always "America/Denver"
-        String abbreviation = hereAndNow.format(java.time.format.DateTimeFormatter.ofPattern("z"));
+        String abbreviation = zonedDateTime.format(java.time.format.DateTimeFormatter.ofPattern("z"));
 
         return abbreviation;
     }
@@ -50,7 +49,7 @@ public class TimeZoneUtil {
        // ZoneId denverZone = ZoneId.of("America/Denver");
         ZoneId currentZone = getCurrentServerZoneId();
 
-        // Timestamp is in seconds, needs convering to millis
+        // Timestamp is in seconds, needs converting to millis
         Instant instant = Instant.ofEpochMilli(timestamp * 1000L);
 
         // Convert the Instant to a ZonedDateTime in the Mountain Time Zone
