@@ -62,14 +62,16 @@ public class TimeZoneUtilTest {
 
         Integer timestamp = -86400; // -1 day in seconds (Dec 31, 1969, 00:00:00 UTC)
         long millisTimestamp = timestamp * 1000L;
+        ZoneId testZoneId = ZoneId.of("America/Denver"); // Explicitly use ZoneId for Mountain Time
 
         // Convert to Mountain Time
         ZonedDateTime expectedDateTime = ZonedDateTime.ofInstant(
-                Instant.ofEpochMilli(millisTimestamp), ZoneId.of("America/Denver"));
+                Instant.ofEpochMilli(millisTimestamp),testZoneId);
 
         // Format the expected result
         String expected = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z").format(expectedDateTime);
 
+        // This uses the current server zone, which may not be Denver (as with github actions)
         String result = timeZoneUtil.convertTimestampToDateString(timestamp);
 
         assertEquals(expected, result, "The converted date for a negative timestamp should match the expected date");
