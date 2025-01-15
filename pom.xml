@@ -185,6 +185,9 @@
                             <filter>
                                 <regex>th:href</regex>
                             </filter>
+                            <filter>
+                                <regex>th:src</regex>
+                            </filter>
                         </filters>
                     </validator>
                 </configuration>
