@@ -6,6 +6,8 @@ import edu.sage.datacommonsdashboard.util.TimeZoneUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.ui.Model;
 
+import java.time.ZoneId;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -29,7 +31,7 @@ public class DisplayJobsControllerTest {
         when (mockJobData.getTimestamp()).thenReturn(timestamp); // Dec 31, 2022
 
         // Mock the util to return a formatted timestamp
-        when(timeZoneUtil.convertTimestampToDateString(1625481600)).thenReturn("2021-07-05 12:00:00 MDT");
+        when(timeZoneUtil.convertTimestampToDateString(1625481600, ZoneId.of("America/Denver"))).thenReturn("2021-07-05 12:00:00 MDT");
 
         when(mockJobQueueRepository.getCasperQstatJobsJson()).thenReturn(mockJobData);
 

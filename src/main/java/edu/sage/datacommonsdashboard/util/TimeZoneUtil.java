@@ -44,20 +44,20 @@ public class TimeZoneUtil {
         return abbreviation;
     }
 
-    public String convertTimestampToDateString(Integer timestamp) {
+    public String convertTimestampToDateString(Integer timestamp, ZoneId zoneId) {
 
-       // ZoneId denverZone = ZoneId.of("America/Denver");
-        ZoneId currentZone = getCurrentServerZoneId();
+        //ZoneId denverZone = ZoneId.of("America/Denver");
+       // ZoneId currentZone = getCurrentServerZoneId();
 
         // Timestamp is in seconds, needs converting to millis
         Instant instant = Instant.ofEpochMilli(timestamp * 1000L);
 
-        // Convert the Instant to a ZonedDateTime in the Mountain Time Zone
-        ZonedDateTime mountainTime = ZonedDateTime.ofInstant(instant, currentZone);
+        // Convert the Instant to a ZonedDateTime in the Time Zone
+        ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(instant, zoneId);
 
-        // Format the ZonedDateTime for readability
+        // Format the ZonedDateTime
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
 
-        return formatter.format(mountainTime);
+        return formatter.format(zonedDateTime);
     }
 }

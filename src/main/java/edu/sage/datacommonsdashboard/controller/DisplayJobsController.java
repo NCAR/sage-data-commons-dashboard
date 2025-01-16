@@ -7,13 +7,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.time.ZoneId;
+
 
 @Controller
 public class DisplayJobsController {
 
     private final JobQueueRepository jobQueueRepository;
     private final TimeZoneUtil timeZoneUtil = new TimeZoneUtil();
-
 
     public DisplayJobsController(JobQueueRepository jobQueueRepository) {
 
@@ -27,7 +28,7 @@ public class DisplayJobsController {
 
         model.addAttribute("pageTitle", "Casper Qstat Jobs");
         model.addAttribute("jobData", jobData);
-        model.addAttribute("formattedTimestamp", timeZoneUtil.convertTimestampToDateString(jobData.getTimestamp()));
+        model.addAttribute("formattedTimestamp", timeZoneUtil.convertTimestampToDateString(jobData.getTimestamp(), ZoneId.of("America/Denver")));
 
         return "job-data-table-view";  // The thymeleaf file
     }
@@ -39,7 +40,7 @@ public class DisplayJobsController {
 
         model.addAttribute("pageTitle", "Derecho Qstat Jobs");
         model.addAttribute("jobData", jobData);
-        model.addAttribute("formattedTimestamp", timeZoneUtil.convertTimestampToDateString(jobData.getTimestamp()));
+        model.addAttribute("formattedTimestamp", timeZoneUtil.convertTimestampToDateString(jobData.getTimestamp(), ZoneId.of("America/Denver")));
 
         return "job-data-table-view";  // The thymeleaf file
     }
@@ -51,7 +52,7 @@ public class DisplayJobsController {
 
         model.addAttribute("pageTitle", "Casper Qstat Jobs Full");
         model.addAttribute("jobData", jobData);
-        model.addAttribute("formattedTimestamp", timeZoneUtil.convertTimestampToDateString(jobData.getTimestamp()));
+        model.addAttribute("formattedTimestamp", timeZoneUtil.convertTimestampToDateString(jobData.getTimestamp(), ZoneId.of("America/Denver")));
 
         return "job-data-table-full-view";  // The thymeleaf file
     }
@@ -63,7 +64,7 @@ public class DisplayJobsController {
 
         model.addAttribute("pageTitle", "Derecho Qstat Jobs Full");
         model.addAttribute("jobData", jobData);
-        model.addAttribute("formattedTimestamp", timeZoneUtil.convertTimestampToDateString(jobData.getTimestamp()));
+        model.addAttribute("formattedTimestamp", timeZoneUtil.convertTimestampToDateString(jobData.getTimestamp(), ZoneId.of("America/Denver")));
 
         return "job-data-table-full-view";  // The thymeleaf file
     }
@@ -75,7 +76,7 @@ public class DisplayJobsController {
 
         model.addAttribute("pageTitle", "Casper Qstat Jobs");
         model.addAttribute("jobData", jobData);
-        model.addAttribute("formattedTimestamp", timeZoneUtil.convertTimestampToDateString(jobData.getTimestamp()));
+        model.addAttribute("formattedTimestamp",  timeZoneUtil.convertTimestampToDateString(jobData.getTimestamp(), ZoneId.of("America/Denver")));
 
         return "job-data-view";  // The thymeleaf file
     }
@@ -87,7 +88,7 @@ public class DisplayJobsController {
 
         model.addAttribute("pageTitle", "Derecho Qstat Jobs");
         model.addAttribute("jobData", jobData);
-        model.addAttribute("formattedTimestamp", timeZoneUtil.convertTimestampToDateString(jobData.getTimestamp()));
+        model.addAttribute("formattedTimestamp",  timeZoneUtil.convertTimestampToDateString(jobData.getTimestamp(), ZoneId.of("America/Denver")));
 
         return "job-data-view";  // The thymeleaf file
     }

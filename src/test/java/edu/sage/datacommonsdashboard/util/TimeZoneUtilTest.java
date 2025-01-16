@@ -17,11 +17,10 @@ public class TimeZoneUtilTest {
 
     @BeforeEach
     void setUp() {
-
         timeZoneUtil = new TimeZoneUtil();
     }
 
-    //@Test
+    @Test
     void testConvertTimestamp_validTimestampToDateString() {
 
         Integer timestamp = 1672531200; // Example: Dec 31, 2022, 00:00:00 UTC
@@ -34,12 +33,12 @@ public class TimeZoneUtilTest {
         // Format the expected result
         String expected = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z").format(expectedDateTime);
 
-        String result = timeZoneUtil.convertTimestampToDateString(timestamp);
+        String result = timeZoneUtil.convertTimestampToDateString(timestamp, ZoneId.of("America/Denver"));
 
         assertEquals(expected, result, "The converted date should match the expected date");
     }
 
-    //@Test
+    @Test
     void testConvertTimestamp_zeroTimestampToDateString() {
 
         Integer timestamp = 0; // Epoch time: Jan 1, 1970, 00:00:00 UTC
@@ -52,12 +51,12 @@ public class TimeZoneUtilTest {
         // Format the expected result
         String expected = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z").format(expectedDateTime);
 
-        String result = timeZoneUtil.convertTimestampToDateString(timestamp);
+        String result = timeZoneUtil.convertTimestampToDateString(timestamp, ZoneId.of("America/Denver"));
 
         assertEquals(expected, result, "The converted date for zero timestamp should be the epoch date");
     }
 
-    //@Test
+    @Test
     void testConvertTimestamp_negativeTimestampToDateString() {
 
         Integer timestamp = -86400; // -1 day in seconds (Dec 31, 1969, 00:00:00 UTC)
@@ -72,7 +71,7 @@ public class TimeZoneUtilTest {
         String expected = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z").format(expectedDateTime);
 
         // This uses the current server zone, which may not be Denver (as with github actions)
-        String result = timeZoneUtil.convertTimestampToDateString(timestamp);
+        String result = timeZoneUtil.convertTimestampToDateString(timestamp, ZoneId.of("America/Denver"));
 
         assertEquals(expected, result, "The converted date for a negative timestamp should match the expected date");
     }
@@ -83,7 +82,7 @@ public class TimeZoneUtilTest {
         Integer timestamp = null;
 
         Exception exception = assertThrows(NullPointerException.class, () -> {
-            timeZoneUtil.convertTimestampToDateString(timestamp);
+            timeZoneUtil.convertTimestampToDateString(timestamp, ZoneId.of("America/Denver"));
         });
 
         assertEquals("Cannot invoke \"java.lang.Integer.intValue()\" because \"timestamp\" is null", exception.getMessage(), "Expected NullPointerException with the correct message");
