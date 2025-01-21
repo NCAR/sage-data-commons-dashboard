@@ -1,9 +1,10 @@
 package edu.sage.datacommonsdashboard.gateway.hpchost;
 
-import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UIKeyboardInteractive;
 import com.jcraft.jsch.UserInfo;
+
+import java.util.Arrays;
 
 public class JSchHpcHostGateway implements HpcHostGateway {
 
@@ -21,9 +22,8 @@ public class JSchHpcHostGateway implements HpcHostGateway {
             session = sessionFactory.create();
             session.setUserInfo(new MyUserInfo());
             session.connect();
-        } catch (JSchException e) {
-            return e.getMessage().contains("Auth fail for methods") ||
-                    e.getMessage().contains("Too many authentication failures");
+        } catch (HpcHostRequestsSshAuthentication e) {
+            return true;
         } catch (Exception e) {
             return false;
         } finally {
@@ -39,9 +39,7 @@ public class JSchHpcHostGateway implements HpcHostGateway {
 
         @Override
         public String[] promptKeyboardInteractive(String destination, String name, String instruction, String[] prompt, boolean[] echo) {
-            String[] str = new String[1];
-            str[0] = "password";
-            return str;
+            throw new HpcHostRequestsSshAuthentication("prompt is: " + Arrays.toString(prompt));
         }
 
         @Override
@@ -71,7 +69,13 @@ public class JSchHpcHostGateway implements HpcHostGateway {
 
         @Override
         public void showMessage(String message) {
-            System.out.println(message);
+        }
+    }
+
+    public static class HpcHostRequestsSshAuthentication extends RuntimeException {
+
+        public HpcHostRequestsSshAuthentication(String message) {
+            super(message);
         }
     }
 }

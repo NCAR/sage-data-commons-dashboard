@@ -50,16 +50,9 @@ public class JSchHpcHostGatewayTest {
     }
 
     @Test
-    void given_known_authn_jSchException_from_session_too_many_authn___when_isSshAccessible__then_accessible() throws JSchException {
-        JSchException jSchException = new JSchException("SSH_MSG_DISCONNECT: 2 Too many authentication failures");
-        doThrow(jSchException).when(session).connect();
-        assertTrue(gateway.isSshAccessible());
-    }
-
-    @Test
-    void given_known_authn_jSchException_from_session_keyboard_interactive__when_isSshAccessible__then_accessible() throws JSchException {
-        JSchException jSchException = new JSchException("Auth fail for methods 'keyboard-interactive'");
-        doThrow(jSchException).when(session).connect();
+    void given_HpcHostRequestsSshAuthentication_exception_from_session__when_isSshAccessible__then_accessible() throws JSchException {
+        JSchHpcHostGateway.HpcHostRequestsSshAuthentication exception = new JSchHpcHostGateway.HpcHostRequestsSshAuthentication("password:");
+        doThrow(exception).when(session).connect();
         assertTrue(gateway.isSshAccessible());
     }
 }
