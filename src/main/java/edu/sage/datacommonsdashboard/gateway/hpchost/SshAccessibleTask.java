@@ -16,7 +16,7 @@ public class SshAccessibleTask {
         this.hpcHostGatewayRepository = hpcHostGatewayRepository;
     }
 
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelayString = "${scheduler.fixedDelay:60000}")
     public void execute() {
         hpcHostRepository.getAll().forEach(this::setAvailabilityStatus);
     }
