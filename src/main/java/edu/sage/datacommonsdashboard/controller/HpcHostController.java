@@ -1,6 +1,7 @@
 package edu.sage.datacommonsdashboard.controller;
 
 import edu.sage.datacommonsdashboard.repository.HpcHostRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,10 @@ public class HpcHostController {
     private final HpcHostRepository repository;
     private final HpcHostTransformer transformer;
 
+    // Inject the property value from application.properties
+    @Value("${hpc.page.refresh.interval}")
+    private int refreshInterval;
+
     public HpcHostController(HpcHostRepository repository, HpcHostTransformer transformer) {
         this.repository = repository;
         this.transformer = transformer;
@@ -23,6 +28,8 @@ public class HpcHostController {
     public String showHpcHosts(Model model) {
         model.addAttribute("pageTitle", "HPC Hosts");
         model.addAttribute("hpcHosts", getHpcHosts());
+        model.addAttribute("refreshInterval", refreshInterval); // Refresh every 60 seconds
+
         return "hpc-host";
     }
 
