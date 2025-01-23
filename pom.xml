@@ -195,6 +195,9 @@
                             <filter>
                                 <regex>th:src</regex>
                             </filter>
+                            <filter>
+                                <regex>th:attr</regex>
+                            </filter>
                         </filters>
                     </validator>
                 </configuration>
