@@ -1,7 +1,7 @@
 #!/bin/bash
 
 srcdir=/home/jcunning/qstat/store
-desdir=/data/service/data-commons/data
+desdir=/data/service/data-commons-dashboard/data
 tmpdir=/tmp/qstat.$$.$(date +%s)
 
 mkdir $tmpdir
