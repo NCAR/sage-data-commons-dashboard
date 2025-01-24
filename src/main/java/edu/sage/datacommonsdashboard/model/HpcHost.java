@@ -7,7 +7,9 @@ public class HpcHost {
     private UUID id;
     private String hostname;
     private String fqdn;
-    private Status status = Status.ONLINE;
+    private String username;
+    private String expectedPrompt;
+    private Status status = Status.OFFLINE;
 
     public enum Status {
         ONLINE,
@@ -36,6 +38,22 @@ public class HpcHost {
 
     public void setFqdn(String fqdn) {
         this.fqdn = fqdn;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getExpectedPrompt() {
+        return expectedPrompt;
+    }
+
+    public void setExpectedPrompt(String expectedPrompt) {
+        this.expectedPrompt = expectedPrompt;
     }
 
     public Status getStatus() {

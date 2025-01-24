@@ -35,6 +35,30 @@ public class JSchHpcHostGateway implements HpcHostGateway {
         return true;
     }
 
+    @Override
+    public boolean isSshAccessible(SshAvailableDetails request) {
+
+        Session session = null;
+
+        try {
+            session = sessionFactory.create(request.getUsername(),
+                    request.getHostname(),
+                    request.getPort());
+            session.setUserInfo(new InnerUserInfo(request.getExpectedPrompt()));
+            session.connect();
+        } catch (HpcHostRequestsSshAuthentication e) {
+            return true;
+        } catch (Exception e) {
+            return false;
+        } finally {
+            if (session != null) {
+                session.disconnect();
+            }
+        }
+
+        return true;
+    }
+
     public static class MyUserInfo implements UserInfo, UIKeyboardInteractive {
 
         @Override
@@ -72,9 +96,65 @@ public class JSchHpcHostGateway implements HpcHostGateway {
         }
     }
 
+    public static class InnerUserInfo implements UserInfo, UIKeyboardInteractive {
+
+        private final String expectedPrompt;
+
+        public InnerUserInfo(String expectedPrompt) {
+            this.expectedPrompt = expectedPrompt;
+        }
+
+        @Override
+        public String[] promptKeyboardInteractive(String destination, String name, String instruction, String[] prompt, boolean[] echo) {
+
+            if (prompt.length > 0 && prompt[0].trim().equals(this.expectedPrompt.trim())) {
+                throw new HpcHostRequestsSshAuthentication("prompt is: " + Arrays.toString(prompt));
+            } else {
+                throw new HpcHostGatewayPromptException("prompt is: " + Arrays.toString(prompt) + "expected: " + this.expectedPrompt);
+            }
+        }
+
+        @Override
+        public String getPassphrase() {
+            return "";
+        }
+
+        @Override
+        public String getPassword() {
+            return "";
+        }
+
+        @Override
+        public boolean promptPassword(String message) {
+            return false;
+        }
+
+        @Override
+        public boolean promptPassphrase(String message) {
+            return false;
+        }
+
+        @Override
+        public boolean promptYesNo(String message) {
+            return false;
+        }
+
+        @Override
+        public void showMessage(String message) {
+        }
+    }
+
+
     public static class HpcHostRequestsSshAuthentication extends RuntimeException {
 
         public HpcHostRequestsSshAuthentication(String message) {
+            super(message);
+        }
+    }
+
+    public static class HpcHostGatewayPromptException extends RuntimeException {
+
+        public HpcHostGatewayPromptException(String message) {
             super(message);
         }
     }

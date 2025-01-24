@@ -10,6 +10,13 @@ public class JSchSessionFactory {
     private final int port;
     private final String user;
 
+    public JSchSessionFactory() {
+
+        this.host = null;
+        this.port = 22;
+        this.user = null;
+    }
+
     public JSchSessionFactory(String host, int port, String user) {
         this.host = host;
         this.port = port;
@@ -18,11 +25,27 @@ public class JSchSessionFactory {
 
     public Session create() {
         try {
+            // JSch is most likely NOT THREAD SAFE.  Create a new instance every request.
             JSch jSch = new JSch();
             Session session = jSch.getSession(user, host, port);
             session.setConfig("StrictHostKeyChecking", "no");
             return session;
         } catch (JSchException e) {
+            throw new JSchSessionCreationFailure(e);
+        }
+    }
+
+    public Session create(String username, String host, int port) {
+
+        try {
+
+            JSch jSch = new JSch();
+            Session session = jSch.getSession(username, host, port);
+            session.setConfig("StrictHostKeyChecking", "no");
+            return session;
+
+        } catch (JSchException e) {
+
             throw new JSchSessionCreationFailure(e);
         }
     }

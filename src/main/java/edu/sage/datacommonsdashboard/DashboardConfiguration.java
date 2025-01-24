@@ -1,8 +1,11 @@
 package edu.sage.datacommonsdashboard;
 
+import edu.sage.datacommonsdashboard.gateway.hpchost.HpcHostGateway;
 import edu.sage.datacommonsdashboard.gateway.hpchost.HpcHostGatewayFactory;
 import edu.sage.datacommonsdashboard.gateway.hpchost.HpcHostGatewayRepository;
+import edu.sage.datacommonsdashboard.gateway.hpchost.JSchHpcHostGateway;
 import edu.sage.datacommonsdashboard.gateway.hpchost.JSchHpcHostGatewayFactory;
+import edu.sage.datacommonsdashboard.gateway.hpchost.JSchSessionFactory;
 import edu.sage.datacommonsdashboard.repository.HpcHostRepository;
 import edu.sage.datacommonsdashboard.repository.HpcHostRepositoryImpl;
 import edu.sage.datacommonsdashboard.controller.HpcHostTransformer;
@@ -34,6 +37,14 @@ public class DashboardConfiguration {
     @Bean
     public HpcHostGatewayRepository hpcHostGatewayRepository() {
         return new HpcHostGatewayRepository(hpcHostGatewayFactory());
+    }
+
+    @Bean
+    public HpcHostGateway HpcHostGateway() {
+
+        JSchSessionFactory sessionFactory = new JSchSessionFactory();
+
+        return new JSchHpcHostGateway(sessionFactory);
     }
 
     @Bean
