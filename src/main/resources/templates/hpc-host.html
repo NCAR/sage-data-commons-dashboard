@@ -4,6 +4,12 @@
     <meta http-equiv="refresh" content="0" th:attr="content=${refreshInterval}">
 
     <title>HPC Hosts</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+
 </head>
 <body>
 
@@ -13,6 +19,9 @@
 
 <main>
     <h1 th:text="${pageTitle}"></h1>
+
+    <p><strong>Report Time:</strong> <span th:text="${formattedTimestamp}"></span></p>
+    <p><strong>Timestamp:</strong> <span th:text="${timestamp}"></span></p>
 
     <table class="table table-bordered table-striped">
         <thead class="table-header">
