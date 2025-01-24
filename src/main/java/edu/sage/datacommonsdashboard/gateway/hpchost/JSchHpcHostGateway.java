@@ -1,10 +1,12 @@
 package edu.sage.datacommonsdashboard.gateway.hpchost;
 
+import com.jcraft.jsch.HostKey;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UIKeyboardInteractive;
 import com.jcraft.jsch.UserInfo;
 
 import java.util.Arrays;
+import java.util.Base64;
 
 public class JSchHpcHostGateway implements HpcHostGateway {
 
@@ -45,6 +47,13 @@ public class JSchHpcHostGateway implements HpcHostGateway {
                     request.getHostname(),
                     request.getPort());
             session.setUserInfo(new InnerUserInfo(request.getExpectedPrompt()));
+
+            // https://dentrassi.de/2015/07/13/programmatically-adding-a-host-key-with-jsch/
+            // Adding host key/fingerprint check.
+            byte [] key = Base64.getDecoder().decode(request.getHostKey());
+            HostKey hostKey = new HostKey(request.getHostname(), key);
+            session.getHostKeyRepository().add(hostKey, null);
+
             session.connect();
         } catch (HpcHostRequestsSshAuthentication e) {
             return true;

@@ -41,7 +41,7 @@ public class JSchSessionFactory {
 
             JSch jSch = new JSch();
             Session session = jSch.getSession(username, host, port);
-            session.setConfig("StrictHostKeyChecking", "no");
+            //session.setConfig("StrictHostKeyChecking", "no");
             return session;
 
         } catch (JSchException e) {

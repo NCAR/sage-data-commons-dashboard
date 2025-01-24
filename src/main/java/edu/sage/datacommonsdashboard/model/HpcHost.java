@@ -7,6 +7,7 @@ public class HpcHost {
     private UUID id;
     private String hostname;
     private String fqdn;
+    private String hostKey;
     private String username;
     private String expectedPrompt;
     private Status status = Status.OFFLINE;
@@ -38,6 +39,14 @@ public class HpcHost {
 
     public void setFqdn(String fqdn) {
         this.fqdn = fqdn;
+    }
+
+    public String getHostKey() {
+        return hostKey;
+    }
+
+    public void setHostKey(String hostKey) {
+        this.hostKey = hostKey;
     }
 
     public String getUsername() {

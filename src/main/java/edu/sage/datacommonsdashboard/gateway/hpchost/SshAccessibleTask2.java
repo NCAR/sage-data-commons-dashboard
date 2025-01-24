@@ -32,6 +32,7 @@ public class SshAccessibleTask2 {
         // TokenResponse:
         SshAvailableDetails details = SshAvailableDetails.of(b -> b.setHostname(host.getFqdn())
                 .setUsername(host.getUsername())
+                .setHostKey(host.getHostKey())
                 .setExpectedPrompt(host.getExpectedPrompt()));
 
         if (this.hpcHostGateway.isSshAccessible(details)) {

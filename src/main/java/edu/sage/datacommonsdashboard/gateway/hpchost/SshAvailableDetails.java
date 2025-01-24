@@ -12,6 +12,8 @@ public interface SshAvailableDetails {
 
     int getPort();
 
+    String getHostKey();
+
     String getExpectedPrompt();
 
     static SshAvailableDetails of(Function<SshAvailableDetails.Builder, SshAvailableDetails.Builder> f) {
@@ -23,6 +25,7 @@ public interface SshAvailableDetails {
         private String hostname;
         private String username;
         private int port = 22;
+        private String hostKey;
         private String expectedPrompt;
 
         public Builder setHostname(String hostname) {
@@ -43,6 +46,12 @@ public interface SshAvailableDetails {
             return this;
         }
 
+        public Builder setHostKey(String hostKey) {
+
+            this.hostKey = hostKey;
+            return this;
+        }
+
         public Builder setExpectedPrompt(String expectedPrompt) {
 
             this.expectedPrompt = expectedPrompt;
@@ -54,6 +63,7 @@ public interface SshAvailableDetails {
             return new SshAvailableDetailsImpl(this.hostname,
                     this.username,
                     this.port,
+                    this.hostKey,
                     this.expectedPrompt);
         }
     }
