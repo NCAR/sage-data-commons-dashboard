@@ -5,7 +5,7 @@ import edu.sage.datacommonsdashboard.repository.HpcHostRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class SshAccessibleTask {
 
     private final HpcHostRepository hpcHostRepository;
@@ -16,7 +16,7 @@ public class SshAccessibleTask {
         this.hpcHostGatewayRepository = hpcHostGatewayRepository;
     }
 
-    @Scheduled(fixedDelayString = "${scheduler.fixedDelay:60000}")
+//    @Scheduled(fixedDelayString = "${scheduler.fixedDelay:60000}")
     public void execute() {
         hpcHostRepository.getAll().forEach(this::setAvailabilityStatus);
     }
