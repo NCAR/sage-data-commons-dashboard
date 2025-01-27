@@ -40,6 +40,8 @@ public class JSchHpcHostGateway implements HpcHostGateway {
     @Override
     public boolean isSshAccessible(SshAvailableDetails request) {
 
+        boolean isAvailable = false;
+
         Session session = null;
 
         try {
@@ -55,17 +57,22 @@ public class JSchHpcHostGateway implements HpcHostGateway {
             session.getHostKeyRepository().add(hostKey, null);
 
             session.connect();
+
         } catch (HpcHostRequestsSshAuthentication e) {
-            return true;
-        } catch (Exception e) {
-            return false;
+
+            isAvailable = true;
+
+        } catch (Exception ignored) {
+
         } finally {
+
             if (session != null) {
+
                 session.disconnect();
             }
         }
 
-        return true;
+        return isAvailable;
     }
 
     public static class MyUserInfo implements UserInfo, UIKeyboardInteractive {
