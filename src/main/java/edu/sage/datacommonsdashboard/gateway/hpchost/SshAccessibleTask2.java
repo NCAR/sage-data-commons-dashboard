@@ -29,7 +29,6 @@ public class SshAccessibleTask2 {
 
         HpcHost.Status status = HpcHost.Status.OFFLINE;
 
-        // TokenResponse:
         SshAvailableDetails details = SshAvailableDetails.of(b -> b.setHostname(host.getFqdn())
                 .setUsername(host.getUsername())
                 .setHostKey(host.getHostKey())

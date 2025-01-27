@@ -60,6 +60,16 @@ public interface SshAvailableDetails {
 
         public SshAvailableDetails build() {
 
+            if (this.hostname == null) {
+                throw new IllegalStateException("hostname cannot be null.");
+            }
+            if (this.username == null) {
+                throw new IllegalStateException("username cannot be null.");
+            }
+            if (this.hostKey == null) {
+                throw new IllegalStateException("hostKey cannot be null.");
+            }
+
             return new SshAvailableDetailsImpl(this.hostname,
                     this.username,
                     this.port,
