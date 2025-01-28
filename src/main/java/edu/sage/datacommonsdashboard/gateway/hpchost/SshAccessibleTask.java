@@ -29,14 +29,19 @@ public class SshAccessibleTask {
 
         HpcHost.Status status = HpcHost.Status.OFFLINE;
 
-        SshAvailableDetails details = SshAvailableDetails.of(b -> b.setHostname(host.getFqdn())
-                .setUsername(host.getUsername())
-                .setHostKey(host.getHostKey())
-                .setExpectedPrompt(host.getExpectedPrompt()));
+        try {
 
-        if (this.hpcHostGateway.isSshAccessible(details)) {
+            SshAvailableDetails details = SshAvailableDetails.of(b -> b.setHostname(host.getFqdn())
+                    .setUsername(host.getUsername())
+                    .setHostKey(host.getHostKey())
+                    .setExpectedPrompt(host.getExpectedPrompt()));
 
-            status = HpcHost.Status.ONLINE;
+            if (this.hpcHostGateway.isSshAccessible(details)) {
+
+                status = HpcHost.Status.ONLINE;
+            }
+        } catch (Exception ignored) {
+
         }
 
         return status;
