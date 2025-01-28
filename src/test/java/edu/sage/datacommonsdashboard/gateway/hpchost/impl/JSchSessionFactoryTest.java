@@ -1,4 +1,4 @@
-package edu.sage.datacommonsdashboard.gateway.hpchost;
+package edu.sage.datacommonsdashboard.gateway.hpchost.impl;
 
 import com.jcraft.jsch.Session;
 import org.junit.jupiter.api.Test;

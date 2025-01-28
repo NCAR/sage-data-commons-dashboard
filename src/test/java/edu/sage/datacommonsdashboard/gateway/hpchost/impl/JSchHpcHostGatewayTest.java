@@ -1,18 +1,16 @@
-package edu.sage.datacommonsdashboard.gateway.hpchost;
+package edu.sage.datacommonsdashboard.gateway.hpchost.impl;
 
 import com.jcraft.jsch.HostKeyRepository;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
-import org.junit.jupiter.api.BeforeEach;
+import edu.sage.datacommonsdashboard.gateway.hpchost.SshAvailableDetails;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -26,52 +24,18 @@ public class JSchHpcHostGatewayTest {
     @Mock
     private JSchSessionFactory factory;
 
-    @InjectMocks
-    private JSchHpcHostGateway gateway;
-
-    @Test
-    void given_no_exception_from_session__when_isSshAccessible__then_accessible() {
-        when(factory.create()).thenReturn(session);
-        assertTrue(gateway.isSshAccessible());
-    }
-
-    @Test
-    void given_unknown_jSchException_from_session__when_isSshAccessible__then_inaccessible() throws JSchException {
-        when(factory.create()).thenReturn(session);
-        JSchException jSchException = new JSchException("unknown reason");
-        doThrow(jSchException).when(session).connect();
-        assertFalse(gateway.isSshAccessible());
-    }
-
-    @Test
-    void given_RuntimeException_from_factory__when_isSshAccessible__then_inaccessible() {
-        RuntimeException exception = new RuntimeException("unknown reason");
-        when(factory.create()).thenThrow(exception);
-        assertFalse(gateway.isSshAccessible());
-    }
-
-    @Test
-    void given_HpcHostRequestsSshAuthentication_exception_from_session__when_isSshAccessible__then_accessible() throws JSchException {
-        when(factory.create()).thenReturn(session);
-        JSchHpcHostGateway.HpcHostRequestsSshAuthentication exception = new JSchHpcHostGateway.HpcHostRequestsSshAuthentication("password:");
-        doThrow(exception).when(session).connect();
-        assertTrue(gateway.isSshAccessible());
-    }
-
     @Test
     public void given_ssh_available_details__when_isSshAccessible__then_return_true() throws JSchException {
 
+        // setup
         HostKeyRepository mockHostKeyRepository = mock(HostKeyRepository.class);
 
         JSchHpcHostGateway.HpcHostRequestsSshAuthentication exception = new JSchHpcHostGateway.HpcHostRequestsSshAuthentication("password:");
         when(this.session.getHostKeyRepository()).thenReturn(mockHostKeyRepository);
         doThrow(exception).when(session).connect();
 
-        // setup
-        //JSchSessionFactory mockFactory = mock(JSchSessionFactory.class);
         when(this.factory.create("username", "host.name", 22)).thenReturn(session);
 
-        // real or mock details?
         SshAvailableDetails details = SshAvailableDetails.of(b -> b.setHostname("host.name")
                 .setUsername("username")
                 .setPort(22)

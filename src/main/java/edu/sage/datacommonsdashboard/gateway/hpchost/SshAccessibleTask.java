@@ -5,28 +5,40 @@ import edu.sage.datacommonsdashboard.repository.HpcHostRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-//@Component
+@Component
 public class SshAccessibleTask {
 
     private final HpcHostRepository hpcHostRepository;
-    private final HpcHostGatewayRepository hpcHostGatewayRepository;
+    private final HpcHostGateway hpcHostGateway;
 
-    public SshAccessibleTask(HpcHostRepository hpcHostRepository, HpcHostGatewayRepository hpcHostGatewayRepository) {
+    public SshAccessibleTask(HpcHostRepository hpcHostRepository,
+                             HpcHostGateway hpcHostGateway) {
+
         this.hpcHostRepository = hpcHostRepository;
-        this.hpcHostGatewayRepository = hpcHostGatewayRepository;
+        this.hpcHostGateway = hpcHostGateway;
     }
 
-//    @Scheduled(fixedDelayString = "${scheduler.fixedDelay:60000}")
+    @Scheduled(fixedDelayString = "${scheduler.fixedDelay:60000}")
     public void execute() {
-        hpcHostRepository.getAll().forEach(this::setAvailabilityStatus);
+
+        this.hpcHostRepository.getAll()
+                .forEach(host -> host.setStatus(getStatus(host)));
     }
 
-    private void setAvailabilityStatus(HpcHost hpcHost) {
-        hpcHost.setStatus(isHpcHostSshAccessible(hpcHost) ? HpcHost.Status.ONLINE : HpcHost.Status.OFFLINE);
-    }
+    private HpcHost.Status getStatus(HpcHost host) {
 
-    private Boolean isHpcHostSshAccessible(HpcHost hpcHost) {
-        HpcHostGateway hpcHostGateway = hpcHostGatewayRepository.get(hpcHost);
-        return hpcHostGateway.isSshAccessible();
+        HpcHost.Status status = HpcHost.Status.OFFLINE;
+
+        SshAvailableDetails details = SshAvailableDetails.of(b -> b.setHostname(host.getFqdn())
+                .setUsername(host.getUsername())
+                .setHostKey(host.getHostKey())
+                .setExpectedPrompt(host.getExpectedPrompt()));
+
+        if (this.hpcHostGateway.isSshAccessible(details)) {
+
+            status = HpcHost.Status.ONLINE;
+        }
+
+        return status;
     }
 }

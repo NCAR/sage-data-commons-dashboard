@@ -1,11 +1,8 @@
 package edu.sage.datacommonsdashboard;
 
 import edu.sage.datacommonsdashboard.gateway.hpchost.HpcHostGateway;
-import edu.sage.datacommonsdashboard.gateway.hpchost.HpcHostGatewayFactory;
-import edu.sage.datacommonsdashboard.gateway.hpchost.HpcHostGatewayRepository;
-import edu.sage.datacommonsdashboard.gateway.hpchost.JSchHpcHostGateway;
-import edu.sage.datacommonsdashboard.gateway.hpchost.JSchHpcHostGatewayFactory;
-import edu.sage.datacommonsdashboard.gateway.hpchost.JSchSessionFactory;
+import edu.sage.datacommonsdashboard.gateway.hpchost.impl.JSchHpcHostGateway;
+import edu.sage.datacommonsdashboard.gateway.hpchost.impl.JSchSessionFactory;
 import edu.sage.datacommonsdashboard.repository.HpcHostRepository;
 import edu.sage.datacommonsdashboard.repository.HpcHostRepositoryImpl;
 import edu.sage.datacommonsdashboard.controller.HpcHostTransformer;
@@ -24,19 +21,6 @@ public class DashboardConfiguration {
     @Bean
     public HpcHostRepository hpcHostRepository() {
         return new HpcHostRepositoryImpl(hpcConfiguration.getHosts());
-    }
-
-    @Bean
-    public HpcHostGatewayFactory hpcHostGatewayFactory() {
-        return new JSchHpcHostGatewayFactory(
-                hpcConfiguration.getSsh().getPort(),
-                hpcConfiguration.getSsh().getUsername()
-        );
-    }
-
-    @Bean
-    public HpcHostGatewayRepository hpcHostGatewayRepository() {
-        return new HpcHostGatewayRepository(hpcHostGatewayFactory());
     }
 
     @Bean
