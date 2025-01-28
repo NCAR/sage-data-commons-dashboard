@@ -33,7 +33,6 @@ public class ServerStatusController {
     public String showServers(Model model) {
 
         model.addAttribute("pageTitle", "HPC Hosts WS");
-        // model.addAttribute("hpcHosts", getHpcHosts());
 
         ServerStatus serverStatus = new ServerStatus();
 
@@ -47,8 +46,9 @@ public class ServerStatusController {
 
     // Update every 10 seconds
     @Scheduled(fixedRate = 10000)
-   // @SendTo("/topic/status")
     public void updateServerStatus() {
+
+        System.out.println("Update server status");
 
         ServerStatus serverStatus = new ServerStatus();
 
@@ -56,7 +56,7 @@ public class ServerStatusController {
         serverStatus.setTimestamp( Math.toIntExact(Instant.now().getEpochSecond()));
 
         // Send updated server status to all subscribers
-        messagingTemplate.convertAndSend("/topic/server-status", buildJson(serverStatus));
+        messagingTemplate.convertAndSend("/topic/status", buildJson(serverStatus));
     }
 
     // Convert object to json

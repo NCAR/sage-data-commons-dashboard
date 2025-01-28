@@ -52,15 +52,9 @@
 
     function updateStatus(status) {
 
-        console.log('Update status.');
-
-        document.addEventListener("DOMContentLoaded", function ()  {
-
-            const serverStatus = document.getElementById("server-status");
-
-            serverStatus.innerHTML = JSON.stringify(status, null, 2);
-        });
-
+        console.log('Updating status....');
+        const serverStatus = document.getElementById("server-status");
+        serverStatus.textContent = JSON.stringify(status, null, 2);
     }
 
     connect();
