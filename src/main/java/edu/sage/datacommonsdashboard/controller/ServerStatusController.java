@@ -2,7 +2,9 @@ package edu.sage.datacommonsdashboard.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.sage.datacommonsdashboard.model.ServerStatus;
+import edu.sage.datacommonsdashboard.model.FilteredHpcHost;
+import edu.sage.datacommonsdashboard.model.HpcHost;
+import edu.sage.datacommonsdashboard.model.ServerStatusResponse;
 import edu.sage.datacommonsdashboard.repository.HpcHostRepository;
 import edu.sage.datacommonsdashboard.util.TimeZoneUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class ServerStatusController {
@@ -34,12 +38,9 @@ public class ServerStatusController {
 
         model.addAttribute("pageTitle", "HPC Hosts WS");
 
-        ServerStatus serverStatus = new ServerStatus();
+        ServerStatusResponse serverStatusResponse = getServerStatusResponse();
 
-        serverStatus.setHosts(repository.getAll());
-        serverStatus.setTimestamp( Math.toIntExact(Instant.now().getEpochSecond()));
-
-        model.addAttribute("serverStatus", buildJson(serverStatus));
+        model.addAttribute("serverStatus", buildJson(serverStatusResponse));
 
         return "hpc-host-ws"; // html page
     }
@@ -48,32 +49,50 @@ public class ServerStatusController {
     @Scheduled(fixedRate = 10000)
     public void updateServerStatus() {
 
-        System.out.println("Update server status");
-
-        ServerStatus serverStatus = new ServerStatus();
-
-        serverStatus.setHosts(repository.getAll());
-        serverStatus.setTimestamp( Math.toIntExact(Instant.now().getEpochSecond()));
+        ServerStatusResponse serverStatusResponse = getServerStatusResponse();
 
         // Send updated server status to all subscribers
-        messagingTemplate.convertAndSend("/topic/status", buildJson(serverStatus));
+        messagingTemplate.convertAndSend("/topic/status", buildJson(serverStatusResponse));
+    }
+
+    // Method to return filtered list of hosts
+    public List<FilteredHpcHost> getFilteredHosts(List<HpcHost> hosts) {
+
+        // Transform the original host list to filtered list
+        return hosts.stream()
+                .map(host -> new FilteredHpcHost(
+                        host.getHostname(),
+                        host.getFqdn(),
+                        host.getUsername(),
+                        host.getStatus()
+                ))
+                .collect(Collectors.toList());
+    }
+
+    private ServerStatusResponse getServerStatusResponse() {
+
+        Long timestamp = Instant.now().getEpochSecond();
+        List<HpcHost> hosts = repository.getAll();
+
+        ServerStatusResponse serverStatusResponse = new ServerStatusResponse(timestamp, this.getFilteredHosts(hosts) );
+        return serverStatusResponse;
     }
 
     // Convert object to json
-    String buildJson(ServerStatus serverStatus) {
+    String buildJson(ServerStatusResponse serverStatusResponse) {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
         String jsonOutput = null;
 
         try {
-            jsonOutput = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(serverStatus);
+            jsonOutput = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(serverStatusResponse);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
 
         // Print the JSON string
-        System.out.println(jsonOutput);
+       // System.out.println(jsonOutput);
 
         return jsonOutput;
     }
