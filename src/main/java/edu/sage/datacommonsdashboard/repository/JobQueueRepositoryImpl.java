@@ -117,7 +117,7 @@ public class JobQueueRepositoryImpl implements JobQueueRepository {
 
     protected String readFileWithPath(String fileName) throws FileNotReadableException {
 
-        System.out.println("===JobQueueRepositoryImpl data filePath: " + filePath + ", fileName: " + fileName);
+       // System.out.println("===JobQueueRepositoryImpl data filePath: " + filePath + ", fileName: " + fileName);
 
         if (filePath == null) {
             throw new FileNotReadableException("File path is not set.");
