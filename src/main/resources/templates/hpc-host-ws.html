@@ -86,7 +86,13 @@
                     connectWebSocket(); // Retry connection
                 }, reconnectDelay);
             } else {
-                console.error('Maximum reconnection attempts reached. Giving up.');
+                console.error('Maximum reconnection attempts reached. Reloading the page...');
+                updateStatus('Unable to reconnect after several attempts. Reloading...');
+                // Automatically reload the page to refresh once the server is back
+                setTimeout(() => {
+                    window.location.reload();
+                }, reconnectDelay); // Optional: Add small delay before reload
+
             }
         }
     }
@@ -138,7 +144,7 @@
     function reconnectWebSocket() {
         console.log('Reconnecting WebSocket...');
         disconnectWebSocket(); // Ensure no existing connection persists
-        updateStatus('Reconnecting...');
+        updateStatus('Reconnecting....');
         setTimeout(() => {
             connectWebSocket(); // Establish a new connection
         }, 2000); // Add a small delay before reconnection so no flood if outage
