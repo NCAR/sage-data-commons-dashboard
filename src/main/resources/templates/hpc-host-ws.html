@@ -38,101 +38,112 @@
 
     let reconnectAttempts = 0; // How many times reconnection was attempted
     const maxReconnectAttempts = 10; // Max number of reconnection attempts
-    const reconnectDelay = 2000; // 2 seconds delay between attempts
+    const reconnectDelay = 4000; // 4 seconds delay between attempts
     let isManuallyDisconnected = false; // If the disconnection was manual
+    let isReconnecting = false; // Tracks ongoing reconnection attempts
 
+    // establish WebSocket connection
     function connectWebSocket() {
+
+        cleanupOldConnection();
+
         socket = new SockJS('/websocket');
         stompClient = StompJs.Stomp.over(socket);
 
         stompClient.connect({}, function () {
             console.log('Websocket Connected!');
             reconnectAttempts = 0; // Reset reconnection attempts if success
+            isReconnecting = false; // Clear reconnection flag
 
-            // Subscribe to server status updates
-            stompClient.subscribe('/topic/status', function (message) {
-                const serverStatus = JSON.parse(message.body);
+            resubscribeToTopics(); // Ensure subscriptions are re-established
 
-                updateStatus(serverStatus);
-            });
+        }, function (error) {
+            console.error('WebSocket connection error:', error);
+            updateStatus('Disconnected');
+            attemptReconnect();
         });
 
-        // Monitor WebSocket connection errors or closure
-        stompClient.onDisconnect = function () {
-            console.log('WebSocket is disconnected.');
-            updateStatus('Disconnected');
-        };
 
-        // If WebSocket closure try to Reconnect
-        stompClient.onWebSocketClose = function () {
-            console.log('WebSocket connection lost.');
-            updateStatus('Disconnected');
-            if (!isManuallyDisconnected) {
-                scheduleReconnect(); // Attempt to reconnect automatically
+        // Monitor unexpected WebSocket errors and closure
+        stompClient.onStompError = handleError;
+        stompClient.onWebSocketError = handleError;
+
+    } // end connect
+
+    // Cleanup old connection before reconnecting
+    function cleanupOldConnection() {
+        if (stompClient) {
+            try {
+                stompClient.deactivate(); // Ensure clean deactivation
+            } catch (error) {
+                console.error('Error cleaning up old connection:', error);
             }
-        };
-
-    }
-
-    // Function to schedule automatic reconnection
-    function scheduleReconnect() {
-        if (!isManuallyDisconnected) {
-            // Don't retry forever
-            if (reconnectAttempts < maxReconnectAttempts) {
-                reconnectAttempts++;
-                console.log(`Reconnection attempt ${reconnectAttempts}/${maxReconnectAttempts} scheduled in ${reconnectDelay / 1000} seconds...`);
-                updateStatus('Reconnecting...');
-                setTimeout(() => {
-                    connectWebSocket(); // Retry connection
-                }, reconnectDelay);
-            } else {
-                console.error('Maximum reconnection attempts reached. Reloading the page...');
-                updateStatus('Unable to reconnect after several attempts. Reloading...');
-                // Automatically reload the page to refresh once the server is back
-                setTimeout(() => {
-                    window.location.reload();
-                }, reconnectDelay); // Optional: Add small delay before reload
-
-            }
+            stompClient = null;
         }
     }
 
-    // Simulate network error to see reconnect functionality
-    function demoSocketClose() {
-        stompClient.webSocket.close();
+    // Handle WebSocket errors
+    function handleError(error) {
+        console.error('WebSocket error:', error);
+        updateStatus('Disconnected');
+        attemptReconnect();
     }
 
-    // The websocket was not detecting when Offline event happened and didn't update,
-    // so this makes it update status immediately by listening for browser offline.
-    function checkConnectionImmediately() {
-        // Check navigator.onLine for browser offline state
-        if (!navigator.onLine) {
-            console.log('Browser offline detected.');
-            updateStatus('Disconnected');
+    // Handle WebSocket closure
+    function handleClose() {
+        console.log('WebSocket connection lost.');
+        updateStatus('Disconnected');
+        if (!isManuallyDisconnected) {
+            attemptReconnect();
+        }
+    }
+
+    // Schedule automatic reconnection
+    function attemptReconnect() {
+
+        if (isReconnecting || isManuallyDisconnected) {
+            return; // Prevent multiple reconnection attempts
+        }
+
+        if (reconnectAttempts < maxReconnectAttempts) {
+            isReconnecting = true;
+            reconnectAttempts++;
+            console.log(`Reconnecting... Attempt ${reconnectAttempts}/${maxReconnectAttempts}`);
+            updateStatus(`Reconnecting... (${reconnectAttempts}/${maxReconnectAttempts})`);
+            setTimeout(() => {
+                connectWebSocket(); // Retry connection
+            }, reconnectDelay);
+        } else {
+            console.error('Max reconnection attempts reached. Reloading page...');
+            updateStatus('Max reconnection attempts reached. Reloading...');
+            setTimeout(() => {
+                window.location.reload();
+            }, reconnectDelay);
+        }
+    }
+
+    // Subscribe to the WebSocket topic(s)
+    function resubscribeToTopics() {
+        console.log('Subscribing to topics...');
+        if (!stompClient) {
+            console.error('Cannot subscribe. STOMP client is not initialized.');
             return;
         }
 
-        // Check WebSocket state
-        const socket = stompClient.webSocket; // Get WebSocket directly
-        if (socket && socket.readyState !== WebSocket.OPEN) {
-            console.log('WebSocket is not open.');
-            updateStatus('Disconnected');
-        } else {
-            console.log('WebSocket appears connected.');
-            updateStatus('Connected');
-        }
+        // Subscribe to server status updates
+        stompClient.subscribe('/topic/status', function (message) {
+            console.log('Received message from /topic/status:', message.body);
+            const serverStatus = JSON.parse(message.body);
+            updateStatus(serverStatus); // Update page content with the JSON payload
+        });
     }
 
-    // Attach to browser offline events
-    window.addEventListener('offline', checkConnectionImmediately);
-    window.addEventListener('online', checkConnectionImmediately);
 
-    // Function to gracefully disconnect the WebSocket
+    // Manually disconnect WebSocket
     function disconnectWebSocket() {
-        isManuallyDisconnected = true; // Mark as manual disconnection and not try to reconnect
-
+        isManuallyDisconnected = true; // Prevent automatic reconnection
         if (stompClient && stompClient.connected) {
-            stompClient.deactivate(); // Properly deactivate STOMP/WebSocket
+            stompClient.deactivate();
             console.log('WebSocket manually disconnected.');
             updateStatus('Disconnected');
         } else {
@@ -140,20 +151,25 @@
         }
     }
 
-    // Function to reconnect the WebSocket
+    // Manually reconnect WebSocket
     function reconnectWebSocket() {
-        console.log('Reconnecting WebSocket...');
-        disconnectWebSocket(); // Ensure no existing connection persists
-        updateStatus('Reconnecting....');
+        console.log('Manually reconnecting WebSocket...');
+        disconnectWebSocket(); // Ensure connection is properly closed
+        updateStatus('Reconnecting...');
         setTimeout(() => {
             connectWebSocket(); // Establish a new connection
-        }, 2000); // Add a small delay before reconnection so no flood if outage
+        }, reconnectDelay);
     }
 
     function updateStatus(status) {
         console.log('Updating status....');
         const serverStatus = document.getElementById("server-status");
         serverStatus.textContent = JSON.stringify(status, null, 2);
+    }
+
+    // Simulate network error to see reconnect functionality
+    function demoSocketClose() {
+        stompClient.webSocket.close();
     }
 
     connectWebSocket();
