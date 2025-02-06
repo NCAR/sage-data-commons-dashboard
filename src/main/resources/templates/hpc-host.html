@@ -1,15 +1,27 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+
     <meta http-equiv="refresh" content="0" th:attr="content=${refreshInterval}">
 
     <title>HPC Hosts</title>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Include Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 
+    <!-- Include DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+    <!-- jQuery must come before Datatables -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" ></script>
+
+    <!-- Include DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 </head>
 <body>
 
@@ -23,19 +35,19 @@
     <p><strong>Report Time:</strong> <span th:text="${formattedTimestamp}"></span></p>
     <p><strong>Timestamp:</strong> <span th:text="${timestamp}"></span></p>
 
-    <table class="table table-bordered table-striped">
-        <thead class="table-header">
+    <table id="hpcHosts" class="display">
+        <thead>
         <tr>
             <th>Hostname</th>
             <th>Fully Qualified Domain Name</th>
             <th>Status</th>
         </tr>
         </thead>
-        <tbody th:each="host : ${hpcHosts}">
-        <tr>
-            <td><span th:text="${host.hostname}"></span></td>
-            <td><span th:text="${host.fqdn}"></span></td>
-            <td><span th:text="${host.status}"></span></td>
+        <tbody>
+        <tr th:each="host : ${hpcHosts}">
+            <td th:text="${host.hostname}"></td>
+            <td th:text="${host.fqdn}"></td>
+            <td th:text="${host.status}"></td>
         </tr>
         </tbody>
     </table>
@@ -45,6 +57,15 @@
 <footer>
     <p>Copyright 2025 UCAR</p>
 </footer>
+
+<script>
+
+    $(document).ready(function () {
+
+        $('#hpcHosts').DataTable();
+    });
+
+</script>
 
 </body>
 </html>
