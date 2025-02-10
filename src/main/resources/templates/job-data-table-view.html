@@ -13,9 +13,9 @@
     <h1 th:text="${pageTitle}"></h1>
 
     <p><strong>Report Time:</strong> <span th:text="${formattedTimestamp}"></span></p>
-    <p><strong>Timestamp:</strong> <span th:text="${jobData.timestamp}"></span></p>
-    <p><strong>Pbs Version:</strong> <span th:text="${jobData.pbsVersion}"></span></p>
-    <p><strong>Pbs Server:</strong> <span th:text="${jobData.pbsServer}"></span></p>
+    <p><strong>Timestamp:</strong> <span th:text="${timestamp}"></span></p>
+    <p><strong>Pbs Version:</strong> <span th:text="${pbsVersion}"></span></p>
+    <p><strong>Pbs Server:</strong> <span th:text="${pbsServer}"></span></p>
 
     <table id="jobTable" class="table table-bordered table-striped">
         <thead class="table-header">
@@ -37,7 +37,7 @@
             <th>Priority</th>
             <th>Queue Time</th>
             <th>Rerunable</th>
-            <th>Resource List</th>
+
             <th>Start Time</th>
             <th>Obit Time</th>
             <th>Shell Path List</th>
@@ -53,11 +53,22 @@
             <th>Project</th>
             <th>Submit Host</th>
             <th>Server Instance ID</th>
+
+            <th>mem</th>
+            <th>mpiprocs</th>
+            <th>mps</th>
+            <th>ncpus</th>
+            <th>ngpus</th>
+            <th>nodect</th>
+
+            <th>place</th>
+            <th>select</th>
+            <th>walltime</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="entry : ${jobData.jobs}" th:with="job=${entry.value}">
-            <td><span th:text="${entry.key}"></span></td>
+        <tr th:each="job : ${jobs}">
+            <td><span th:text="${job.jobId}"></span></td>
             <td><span th:text="${job.jobName}"></span></td>
             <td><span th:text="${job.jobOwner}"></span></td>
             <td><span th:text="${job.jobState}"></span></td>
@@ -74,40 +85,7 @@
             <td><span th:text="${job.priority}"></span></td>
             <td><span th:text="${job.qtime}"></span> <span class="timezone-column" th:if="${job.qtime != null}"></span></td>
             <td><span th:text="${job.rerunable}"></span></td>
-            <td>
-                <ul th:each="resourceList : ${job.resourceList}">
-                    <li>
-                        <strong>mem:</strong> <span th:text="${resourceList.mem}"></span>
-                    </li>
-                    <li>
-                        <strong>miprocs:</strong> <span th:text="${resourceList.mpiprocs}"></span>
-                    </li>
-                    <li>
-                        <strong>mps:</strong> <span th:text="${resourceList.mps}"></span>
-                    </li>
-                    <li>
-                        <strong>ncpus:</strong> <span th:text="${resourceList.ncpus}"></span>
-                    </li>
-                    <li>
-                        <strong>ngpus:</strong> <span th:text="${resourceList.ngpus}"></span>
-                    </li>
-                    <li>
-                        <strong>nodect:</strong> <span th:text="${resourceList.nodect}"></span>
-                    </li>
-                    <li>
-                        <strong>nvpus:</strong> <span th:text="${resourceList.nvpus}"></span>
-                    </li>
-                    <li>
-                        <strong>place:</strong> <span th:text="${resourceList.place}"></span>
-                    </li>
-                    <li>
-                        <strong>select:</strong> <span th:text="${resourceList.select}"></span>
-                    </li>
-                    <li>
-                        <strong>walltime:</strong> <span th:text="${resourceList.walltime}"></span>
-                    </li>
-                </ul>
-            </td>
+
             <td><span th:text="${job.stime}"></span> <span class="timezone-column" th:if="${job.stime != null}"></span></td>
             <td><span th:text="${job.obittime}"></span> <span class="timezone-column" th:if="${job.obittime != null}"></span></td>
             <td><span th:text="${job.shellPathList}"></span></td>
@@ -124,6 +102,16 @@
             <td><span th:text="${job.submitHost}"></span></td>
             <td><span th:text="${job.serverInstanceId}"></span></td>
 
+            <td th:text="${job.mem}"></td>
+            <td th:text="${job.mpiprocs}"></td>
+            <td th:text="${job.mps}"></td>
+            <td th:text="${job.ncpus}"></td>
+            <td th:text="${job.ngpus}"></td>
+            <td th:text="${job.nodect}"></td>
+
+            <td th:text="${job.place}"></td>
+            <td th:text="${job.select}"></td>
+            <td th:text="${job.walltime}"></td>
         </tr>
         </tbody>
     </table>
@@ -143,6 +131,7 @@
         // Put # rows displayed/total at top of table also.
         $('#jobTable').DataTable({
             paging: false,
+            deferRender: true, // Enable deferred rendering
             dom: '<"top"if>rt<"bottom"i><"clear">', // f for search/filter box
             language: {
                 info: "Showing _START_ to _END_ of _TOTAL_ entries",
