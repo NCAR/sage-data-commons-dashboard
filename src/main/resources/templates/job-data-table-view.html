@@ -90,37 +90,37 @@
             <td><span th:text="${job.accountName}"></span></td>
             <td><span th:text="${job.checkpoint}"></span></td>
 
-            <td><span th:text="${#dates.format(job.ctime, 'yyyy-MM-dd HH:mm:ss')}" ></span></td>
-            <td><span th:text="${job.ctime}"></span> <span class="timezone-column" th:if="${job.ctime != null}"></span></td>
+            <td><span th:text="${#dates.format(job.ctime, 'yyyy-MM-dd HH:mm:ss')}" ></span> <span class="timezone-column" th:if="${job.ctime != null}"></span></td>
+            <td><span th:text="${job.ctime}"></span> </td>
 
             <td><span th:text="${job.holdTypes}"></span></td>
             <td><span th:text="${job.joinPath}"></span></td>
             <td><span th:text="${job.keepFiles}"></span></td>
             <td><span th:text="${job.mailPoints}"></span></td>
 
-            <td><span th:text="${#dates.format(job.mtime, 'yyyy-dd-MM HH:mm:ss')}" ></span></td>
-            <td><span th:text="${job.mtime}"></span> <span class="timezone-column" th:if="${job.mtime != null}"></span></td>
+            <td><span th:text="${#dates.format(job.mtime, 'yyyy-dd-MM HH:mm:ss')}"></span> <span class="timezone-column" th:if="${job.mtime != null}"></span></td>
+            <td><span th:text="${job.mtime}"></span> </td>
 
             <td><span th:text="${job.priority}"></span></td>
 
-            <td><span th:text="${#dates.format(job.qtime, 'EEE MMM dd HH:mm:ss yyyy')}" ></span></td>
-            <td><span th:text="${job.qtime}"></span> <span class="timezone-column" th:if="${job.qtime != null}"></span></td>
+            <td><span th:text="${#dates.format(job.qtime, 'EEE MMM dd HH:mm:ss yyyy')}"></span> <span class="timezone-column" th:if="${job.qtime != null}"></span></td>
+            <td><span th:text="${job.qtime}"></span> </td>
 
             <td><span th:text="${job.rerunable}"></span></td>
 
-            <td><span th:text="${#dates.format(job.stime, 'MMM dd HH:mm:ss yyyy')}" ></span></td>
-            <td><span th:text="${job.stime}"></span> <span class="timezone-column" th:if="${job.stime != null}"></span></td>
+            <td><span th:text="${#dates.format(job.stime, 'MMM dd HH:mm:ss yyyy')}"></span> <span class="timezone-column" th:if="${job.stime != null}"></span></td>
+            <td><span th:text="${job.stime}"></span> </td>
 
-            <td><span th:text="${#dates.format(job.obittime, 'dd-MM-yyyy HH:mm:ss')}" ></span></td>
-            <td><span th:text="${job.obittime}"></span> <span class="timezone-column" th:if="${job.obittime != null}"></span></td>
+            <td><span th:text="${#dates.format(job.obittime, 'dd-MM-yyyy HH:mm:ss')}"></span> <span class="timezone-column" th:if="${job.obittime != null}"></span></td>
+            <td><span th:text="${job.obittime}"></span> </td>
 
             <td><span th:text="${job.shellPathList}"></span></td>
             <td><span th:text="${job.jobdir}"></span></td>
             <td><span th:text="${job.substate}"></span></td>
             <td><span th:text="${job.comment}"></span></td>
 
-            <td><span th:text="${#dates.format(job.etime, 'yyyy/MM/dd HH:mm:ss')}" ></span></td>
-            <td><span th:text="${job.etime}"></span> <span class="timezone-column" th:if="${job.etime != null}"></span></td>
+            <td><span th:text="${#dates.format(job.etime, 'yyyy/MM/dd HH:mm:ss')}"></span> <span class="timezone-column" th:if="${job.etime != null}"></span></td>
+            <td><span th:text="${job.etime}"></span> </td>
 
             <td><span th:text="${job.umask}"></span></td>
             <td><span th:text="${job.runCount}"></span></td>
