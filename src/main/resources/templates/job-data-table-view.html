@@ -28,23 +28,37 @@
             <th>Server</th>
             <th>Account Name</th>
             <th>Checkpoint</th>
-            <th>Creation Time</th>
+
+            <th>Creation Time String yyyy-MM-dd HH:mm:ss</th>
+            <th>Creation Time epoch</th>
+
             <th>Hold Types</th>
             <th>Join Path</th>
             <th>Keep Files</th>
             <th>Mail Points</th>
-            <th>Modification Time</th>
+            <th>Modification Time String yyyy-dd-MM HH:mm:ss</th>
+            <th>Modification Time Epoch</th>
+
             <th>Priority</th>
-            <th>Queue Time</th>
+            <th>Queue Time String EEE MMM dd HH:mm:ss yyyy</th>
+            <th>Queue Time Epoch</th>
+
             <th>Rerunable</th>
 
-            <th>Start Time</th>
-            <th>Obit Time</th>
+            <th>Start Time String MMM dd HH:mm:ss yyyy</th>
+            <th>Start Time Epoch</th>
+
+            <th>Obit Time String dd-MM-yyyy HH:mm:ss</th>
+            <th>Obit Time Epoch</th>
+
             <th>Shell Path List</th>
             <th>Job Directory</th>
             <th>Substate</th>
             <th>Comment</th>
-            <th>Elapsed Time</th>
+
+            <th>Elapsed Time String yyyy/MM/dd HH:mm:ss</th>
+            <th>Elapsed Time Epoch</th>
+
             <th>Umask</th>
             <th>Run Count</th>
             <th>Eligible Time</th>
@@ -53,14 +67,13 @@
             <th>Project</th>
             <th>Submit Host</th>
             <th>Server Instance ID</th>
-
+            <!--Resource Columns -->
             <th>mem</th>
             <th>mpiprocs</th>
             <th>mps</th>
             <th>ncpus</th>
             <th>ngpus</th>
             <th>nodect</th>
-
             <th>place</th>
             <th>select</th>
             <th>walltime</th>
@@ -76,23 +89,39 @@
             <td><span th:text="${job.server}"></span></td>
             <td><span th:text="${job.accountName}"></span></td>
             <td><span th:text="${job.checkpoint}"></span></td>
+
+            <td><span th:text="${#dates.format(job.ctime, 'yyyy-MM-dd HH:mm:ss')}" ></span></td>
             <td><span th:text="${job.ctime}"></span> <span class="timezone-column" th:if="${job.ctime != null}"></span></td>
+
             <td><span th:text="${job.holdTypes}"></span></td>
             <td><span th:text="${job.joinPath}"></span></td>
             <td><span th:text="${job.keepFiles}"></span></td>
             <td><span th:text="${job.mailPoints}"></span></td>
+
+            <td><span th:text="${#dates.format(job.mtime, 'yyyy-dd-MM HH:mm:ss')}" ></span></td>
             <td><span th:text="${job.mtime}"></span> <span class="timezone-column" th:if="${job.mtime != null}"></span></td>
+
             <td><span th:text="${job.priority}"></span></td>
+
+            <td><span th:text="${#dates.format(job.qtime, 'EEE MMM dd HH:mm:ss yyyy')}" ></span></td>
             <td><span th:text="${job.qtime}"></span> <span class="timezone-column" th:if="${job.qtime != null}"></span></td>
+
             <td><span th:text="${job.rerunable}"></span></td>
 
+            <td><span th:text="${#dates.format(job.stime, 'MMM dd HH:mm:ss yyyy')}" ></span></td>
             <td><span th:text="${job.stime}"></span> <span class="timezone-column" th:if="${job.stime != null}"></span></td>
+
+            <td><span th:text="${#dates.format(job.obittime, 'dd-MM-yyyy HH:mm:ss')}" ></span></td>
             <td><span th:text="${job.obittime}"></span> <span class="timezone-column" th:if="${job.obittime != null}"></span></td>
+
             <td><span th:text="${job.shellPathList}"></span></td>
             <td><span th:text="${job.jobdir}"></span></td>
             <td><span th:text="${job.substate}"></span></td>
             <td><span th:text="${job.comment}"></span></td>
+
+            <td><span th:text="${#dates.format(job.etime, 'yyyy/MM/dd HH:mm:ss')}" ></span></td>
             <td><span th:text="${job.etime}"></span> <span class="timezone-column" th:if="${job.etime != null}"></span></td>
+
             <td><span th:text="${job.umask}"></span></td>
             <td><span th:text="${job.runCount}"></span></td>
             <td><span th:text="${job.eligibleTime}"></span></td>

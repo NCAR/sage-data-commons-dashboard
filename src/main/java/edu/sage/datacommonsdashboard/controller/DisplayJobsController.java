@@ -1,16 +1,21 @@
 package edu.sage.datacommonsdashboard.controller;
 
+import edu.sage.datacommonsdashboard.exception.DateParseException;
 import edu.sage.datacommonsdashboard.model.JobData;
 import edu.sage.datacommonsdashboard.model.ResourceList;
 import edu.sage.datacommonsdashboard.repository.JobQueueRepository;
+import edu.sage.datacommonsdashboard.util.DateToEpochConverter;
 import edu.sage.datacommonsdashboard.util.TimeZoneUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.text.ParseException;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+
+import static edu.sage.datacommonsdashboard.util.DateToEpochConverter.convertDateStringToEpoch;
 
 
 @Controller
@@ -18,6 +23,7 @@ public class DisplayJobsController {
 
     private final JobQueueRepository jobQueueRepository;
     private final TimeZoneUtil timeZoneUtil = new TimeZoneUtil();
+    private final DateToEpochConverter dateToEpochConverter = new DateToEpochConverter();
 
     public DisplayJobsController(JobQueueRepository jobQueueRepository) {
 
@@ -52,8 +58,12 @@ public class DisplayJobsController {
         model.addAttribute("pbsServer", jobData.getPbsServer());
         model.addAttribute("timestamp", jobData.getTimestamp());
 
-        // Add the list to the model
-        model.addAttribute("jobs", getJobViewModels(jobData));
+        // Add the list to the model if parseable. Else, ignore
+        try {
+            model.addAttribute("jobs", getJobViewModels(jobData));
+        } catch (RuntimeException e) {
+            // Do nothing (don't update page)
+        }
 
         return "job-data-table-view";  // The thymeleaf file
     }
@@ -66,6 +76,26 @@ public class DisplayJobsController {
         jobData.getJobs().forEach((jobId, job) -> {
             ResourceList resources = job.getResourceList();
 
+            // Convert String date/times safely using a utility method
+
+            Long ctimeEpoch = null;
+            Long mtimeEpoch = null;
+            Long qtimeEpoch = null;
+            Long stimeEpoch = null;
+            Long obittimeEpoch = null;
+            Long etimeEpoch = null;
+            try {
+                ctimeEpoch = convertDateStringToEpoch(job.getCtime());
+                mtimeEpoch = convertDateStringToEpoch(job.getMtime());
+                qtimeEpoch = convertDateStringToEpoch(job.getEtime());
+                stimeEpoch = convertDateStringToEpoch(job.getStime());
+                obittimeEpoch = convertDateStringToEpoch(job.getObittime());
+                etimeEpoch = convertDateStringToEpoch(job.getEtime());
+
+            } catch (ParseException e) {
+                throw new DateParseException(e);
+            }
+
             // Create a JobViewModel for each job
             JobViewModel viewModel = new JobViewModel(
                     jobId,
@@ -76,22 +106,22 @@ public class DisplayJobsController {
                     job.getServer(),
                     job.getAccountName(),
                     job.getCheckpoint(),
-                    job.getCtime(),
+                    ctimeEpoch,
                     job.getHoldTypes(),
                     job.getJoinPath(),
                     job.getKeepFiles(),
                     job.getMailPoints(),
-                    job.getMtime(),
+                    mtimeEpoch,
                     job.getPriority(),
-                    job.getQtime(),
+                    qtimeEpoch,
                     job.getRerunable(),
-                    job.getStime(),
-                    job.getObittime(),
+                    stimeEpoch,
+                    obittimeEpoch,
                     job.getShellPathList(),
                     job.getJobdir(),
                     job.getSubstate(),
                     job.getComment(),
-                    job.getEtime(),
+                    etimeEpoch,
                     job.getUmask(),
                     job.getRunCount(),
                     job.getEligibleTime(),
@@ -117,8 +147,6 @@ public class DisplayJobsController {
 
         return jobViewModels;
     }
-
-
 
     @GetMapping(value = "/hpc/dashboard/casper/jobs/tablefull")
     public String showCasperJobsTableFull(Model model)  {

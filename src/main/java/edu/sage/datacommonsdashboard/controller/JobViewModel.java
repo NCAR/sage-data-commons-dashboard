@@ -17,22 +17,22 @@ public class JobViewModel {
     private String server;
     private String accountName;
     private String checkpoint;
-    private String ctime;
+     private Long ctime;
     private String holdTypes;
     private String joinPath;
     private String keepFiles;
     private String mailPoints;
-    private String mtime;
+    private Long mtime;
     private Integer priority;
-    private String qtime;
+    private Long qtime;
     private String rerunable;
-    private String stime;
-    private String obittime;
+    private Long stime;
+    private Long obittime;
     private String shellPathList;
     private String jobdir;
     private Integer substate;
     private String comment;
-    private String etime;
+    private Long etime;
     private Integer umask;
     private Integer runCount;
     private String eligibleTime;
@@ -60,10 +60,10 @@ public class JobViewModel {
 
     // Constructor
     public JobViewModel(String jobId, String jobName, String jobOwner, String jobState, String queue, String server,
-                        String accountName, String checkpoint, String ctime, String holdTypes, String joinPath,
-                        String keepFiles, String mailPoints, String mtime, Integer priority, String qtime, String rerunable,
-                        String stime, String obittime, String shellPathList, String jobdir, Integer substate, String comment,
-                        String etime, Integer umask, Integer runCount, String eligibleTime, Integer exitStatus,
+                        String accountName, String checkpoint, Long ctime, String holdTypes, String joinPath,
+                        String keepFiles, String mailPoints, Long mtime, Integer priority, Long qtime, String rerunable,
+                        Long stime, Long obittime, String shellPathList, String jobdir, Integer substate, String comment,
+                        Long etime, Integer umask, Integer runCount, String eligibleTime, Integer exitStatus,
                         String submitArguments, String project, String submitHost, String serverInstanceId,
                         String mem, Integer mpiprocs, Integer mps, Integer ncpus, Integer ngpus, Integer nodect,
                         Integer nvpus, String place, String select, String walltime) {
@@ -202,11 +202,11 @@ public class JobViewModel {
         this.checkpoint = checkpoint;
     }
 
-    public String getCtime() {
+    public Long getCtime() {
         return ctime;
     }
 
-    public void setCtime(String ctime) {
+    public void setCtime(Long ctime) {
         this.ctime = ctime;
     }
 
@@ -242,11 +242,11 @@ public class JobViewModel {
         this.mailPoints = mailPoints;
     }
 
-    public String getMtime() {
+    public Long getMtime() {
         return mtime;
     }
 
-    public void setMtime(String mtime) {
+    public void setMtime(Long mtime) {
         this.mtime = mtime;
     }
 
@@ -258,11 +258,11 @@ public class JobViewModel {
         this.priority = priority;
     }
 
-    public String getQtime() {
+    public Long getQtime() {
         return qtime;
     }
 
-    public void setQtime(String qtime) {
+    public void setQtime(Long qtime) {
         this.qtime = qtime;
     }
 
@@ -274,19 +274,19 @@ public class JobViewModel {
         this.rerunable = rerunable;
     }
 
-    public String getStime() {
+    public Long getStime() {
         return stime;
     }
 
-    public void setStime(String stime) {
+    public void setStime(Long stime) {
         this.stime = stime;
     }
 
-    public String getObittime() {
+    public Long getObittime() {
         return obittime;
     }
 
-    public void setObittime(String obittime) {
+    public void setObittime(Long obittime) {
         this.obittime = obittime;
     }
 
@@ -322,11 +322,11 @@ public class JobViewModel {
         this.comment = comment;
     }
 
-    public String getEtime() {
+    public Long getEtime() {
         return etime;
     }
 
-    public void setEtime(String etime) {
+    public void setEtime(Long etime) {
         this.etime = etime;
     }
 
