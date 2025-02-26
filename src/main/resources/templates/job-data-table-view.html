@@ -171,17 +171,6 @@
             }
         });
 
-        // Function to update all targeted columns with the time zone abbreviation
-        function updateTableWithTimeZone() {
-
-            const timeZoneAbbr = getCurrentTimeZoneAbbreviation(); // Fetch timezone abbreviation
-            const elements = document.querySelectorAll('.timezone-column'); // Select all target columns
-
-            elements.forEach(column => {
-                column.innerText = timeZoneAbbr; // Update each column
-            });
-        }
-
         function updateTableWithFormattedEpochs() {
 
             const elements = document.querySelectorAll('.epoch-column'); // Select all target columns
@@ -222,8 +211,19 @@
 
         }
 
+        // Function to update all targeted columns with the time zone abbreviation
+        // function updateTableWithTimeZone() {
+        //
+        //     const timeZoneAbbr = getCurrentTimeZoneAbbreviation(); // Fetch timezone abbreviation
+        //     const elements = document.querySelectorAll('.timezone-column'); // Select all target columns
+        //
+        //     elements.forEach(column => {
+        //         column.innerText = timeZoneAbbr; // Update each column
+        //     });
+        // }
+
         // Call the function to update all relevant table columns
-        updateTableWithTimeZone();
+       // updateTableWithTimeZone();
 
         updateTableWithFormattedEpochs();
     });
