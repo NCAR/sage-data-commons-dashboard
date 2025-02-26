@@ -17,9 +17,6 @@
     <p><strong>Pbs Version:</strong> <span th:text="${pbsVersion}"></span></p>
     <p><strong>Pbs Server:</strong> <span th:text="${pbsServer}"></span></p>
 
-   <p> Server Time: <span>${#dates.format(#dates.createNow(), 'yyyy-MM-dd HH:mm:ss', 'America/Denver')}</span></p>
-
-
     <table id="jobTable" class="table table-bordered table-striped">
         <thead class="table-header">
         <tr>
@@ -32,26 +29,26 @@
             <th>Account Name</th>
             <th>Checkpoint</th>
 
-            <th>Creation Time String yyyy-MM-dd HH:mm:ss</th>
+            <th>Creation Time String</th>
             <th>Creation Time epoch</th>
 
             <th>Hold Types</th>
             <th>Join Path</th>
             <th>Keep Files</th>
             <th>Mail Points</th>
-            <th>Modification Time String yyyy-dd-MM HH:mm:ss</th>
+            <th>Modification Time String </th>
             <th>Modification Time Epoch</th>
 
             <th>Priority</th>
-            <th>Queue Time String EEE MMM dd HH:mm:ss yyyy</th>
+            <th>Queue Time String</th>
             <th>Queue Time Epoch</th>
 
             <th>Rerunable</th>
 
-            <th>Start Time String MMM dd HH:mm:ss yyyy</th>
+            <th>Start Time String</th>
             <th>Start Time Epoch</th>
 
-            <th>Obit Time String dd-MM-yyyy HH:mm:ss</th>
+            <th>Obit Time String</th>
             <th>Obit Time Epoch</th>
 
             <th>Shell Path List</th>
@@ -59,7 +56,7 @@
             <th>Substate</th>
             <th>Comment</th>
 
-            <th>Elapsed Time String yyyy/MM/dd HH:mm:ss</th>
+            <th>Elapsed Time String</th>
             <th>Elapsed Time Epoch</th>
 
             <th>Umask</th>
