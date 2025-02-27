@@ -29,26 +29,28 @@
             <th>Account Name</th>
             <th>Checkpoint</th>
 
-            <th>Creation Time String</th>
+            <!--            <th>Creation Time String</th>-->
             <th>Creation Time epoch</th>
 
             <th>Hold Types</th>
             <th>Join Path</th>
             <th>Keep Files</th>
             <th>Mail Points</th>
-            <th>Modification Time String </th>
+
+            <!--            <th>Modification Time String </th>-->
             <th>Modification Time Epoch</th>
 
             <th>Priority</th>
-            <th>Queue Time String</th>
+
+            <!--            <th>Queue Time String</th>-->
             <th>Queue Time Epoch</th>
 
             <th>Rerunable</th>
 
-            <th>Start Time String</th>
+            <!--            <th>Start Time String</th>-->
             <th>Start Time Epoch</th>
 
-            <th>Obit Time String</th>
+            <!--            <th>Obit Time String</th>-->
             <th>Obit Time Epoch</th>
 
             <th>Shell Path List</th>
@@ -56,7 +58,7 @@
             <th>Substate</th>
             <th>Comment</th>
 
-            <th>Elapsed Time String</th>
+            <!--            <th>Elapsed Time String</th>-->
             <th>Elapsed Time Epoch</th>
 
             <th>Umask</th>
@@ -68,7 +70,7 @@
             <th>Submit Host</th>
             <th>Server Instance ID</th>
             <!--Resource Columns -->
-            <th>mem</th>
+            <th class="memory">Memory</th>
             <th>mpiprocs</th>
             <th>mps</th>
             <th>ncpus</th>
@@ -90,7 +92,7 @@
             <td><span th:text="${job.accountName}"></span></td>
             <td><span th:text="${job.checkpoint}"></span></td>
 
-            <td><span class="epoch-column" th:if="${job.ctime != null}" th:text="${job.ctime}"></span></td>
+            <!--            <td><span class="epoch-column" th:if="${job.ctime != null}" th:text="${job.ctime}"></span></td>-->
             <td><span th:text="${job.ctime}"></span> </td>
 
             <td><span th:text="${job.holdTypes}"></span></td>
@@ -98,20 +100,20 @@
             <td><span th:text="${job.keepFiles}"></span></td>
             <td><span th:text="${job.mailPoints}"></span></td>
 
-            <td><span class="epoch-column" th:if="${job.mtime != null}" th:text="${job.mtime}"></span></td>
+            <!--            <td><span class="epoch-column" th:if="${job.mtime != null}" th:text="${job.mtime}"></span></td>-->
             <td><span th:text="${job.mtime}"></span> </td>
 
             <td><span th:text="${job.priority}"></span></td>
 
-            <td><span class="epoch-column" th:if="${job.qtime != null}" th:text="${job.qtime}"></span></td>
+            <!--            <td><span class="epoch-column" th:if="${job.qtime != null}" th:text="${job.qtime}"></span></td>-->
             <td><span th:text="${job.qtime}"></span> </td>
 
             <td><span th:text="${job.rerunable}"></span></td>
 
-            <td><span class="epoch-column" th:if="${job.stime != null}" th:text="${job.stime}"></span></td>
+            <!--            <td><span class="epoch-column" th:if="${job.stime != null}" th:text="${job.stime}"></span></td>-->
             <td><span th:text="${job.stime}"></span> </td>
 
-            <td><span class="epoch-column" th:if="${job.obittime != null}" th:text="${job.obittime}"></span></td>
+            <!--            <td><span class="epoch-column" th:if="${job.obittime != null}" th:text="${job.obittime}"></span></td>-->
             <td><span th:text="${job.obittime}"></span> </td>
 
             <td><span th:text="${job.shellPathList}"></span></td>
@@ -119,7 +121,7 @@
             <td><span th:text="${job.substate}"></span></td>
             <td><span th:text="${job.comment}"></span></td>
 
-            <td><span class="epoch-column" th:if="${job.etime != null}" th:text="${job.etime}"></span></td>
+            <!--            <td><span class="epoch-column" th:if="${job.etime != null}" th:text="${job.etime}"></span></td>-->
             <td><span th:text="${job.etime}"></span> </td>
 
             <td><span th:text="${job.umask}"></span></td>
@@ -131,7 +133,9 @@
             <td><span th:text="${job.submitHost}"></span></td>
             <td><span th:text="${job.serverInstanceId}"></span></td>
 
-            <td th:text="${job.mem}"></td>
+            <!--            <td th:text="${job.mem}" data-order="${job.memNumeric}"></td>-->
+            <td class="memory" th:text="${job.mem}"></td>
+
             <td th:text="${job.mpiprocs}"></td>
             <td th:text="${job.mps}"></td>
             <td th:text="${job.ncpus}"></td>
@@ -151,22 +155,95 @@
     <p>Copyright 2025 UCAR</p>
 </footer>
 
-<script th:src="@{/js/dateTimeUtils.js}"></script>
+<!--<script th:src="@{/js/dateTimeUtils.js}"></script>-->
 
 <script>
 
     $(document).ready(function () {
 
+        console.log("Initializing DataTable...");
+
         // Put # rows displayed/total at top of table also.
         $('#jobTable').DataTable({
             paging: false,
-            deferRender: true, // Enable deferred rendering
+            // deferRender: true, // Enable deferred rendering
             dom: '<"top"if>rt<"bottom"i><"clear">', // f for search/filter box
             language: {
                 info: "Showing _START_ to _END_ of _TOTAL_ entries",
                 infoFiltered: "(filtered from _MAX_ total entries)"
+            },
+            columnDefs: [
+                {
+                    // targets: 32,   // Index of the 'mem' column, index starts at 0
+                    targets: 'memory',  // Target using class name; make sure <th> has class "memory"
+                    render: function(data, type, row) {
+                        console.log("Raw Data: ", data);
+
+                        if (type === "display" || type === "filter") {
+                            // Render display values in the format "<value> GB"
+                            return formatMemToGB(data);
+                        } else if (type === "sort" || type === "type") {
+                            // For sorting, convert to numeric GB value
+                            return convertMemToGB(data);
+                        }
+                        return data; // Default render
+                    }
+                }
+            ]
+        }); // End DataTable
+
+        console.log("DataTable initialized:");
+
+        /**
+         * Convert memory string (e.g., "2tb", "500gb") to numeric GB value.
+         */
+        function convertMemToGB(mem) {
+            console.log("Converting to GB:", mem);
+
+            const pattern = /^(\d+(?:\.\d+)?)\s*(kb|mb|gb|tb)$/i;
+            const match = mem.match(pattern);
+
+            if (match) {
+                let value = parseFloat(match[1]);
+                const unit = match[2].toLowerCase();
+
+                switch (unit) {
+                    case "tb":
+                        value *= 1024; // 1 TB = 1024 GB
+                        break;
+                    case "mb":
+                        value /= 1024; // 1 MB = 1/1024 GB
+                        break;
+                    case "kb":
+                        value /= (1024 * 1024); // 1 KB = 1/(1024*1024) GB
+                        break;
+                    case "gb":
+                    default:
+                        break; // Already in GB
+                }
+                return value; // Numeric GB value
             }
-        });
+            return 0; // Fallback value if parsing fails
+        }
+
+        /**
+         * Format memory values to display as "<value> GB".
+         */
+        function formatMemToGB(mem) {
+            const valueInGB = convertMemToGB(mem);
+
+            // Check if the value is a whole number
+            if (Number.isInteger(valueInGB)) {
+                return `${valueInGB} GB`; // No decimal if whole number
+            } else {
+                return `${valueInGB.toFixed(2)} GB`; // Keep 2 decimal places if not
+            }
+
+            console.log("Formatted Memory:", formatted);
+            return formatted;
+
+        }
+
 
         function updateTableWithFormattedEpochs() {
 
@@ -175,7 +252,7 @@
             elements.forEach(column => {
 
                 // Get the span's text content (assuming the span contains the epoch value)
-               // const span = column.querySelector('span'); // Select the span inside the column
+                // const span = column.querySelector('span'); // Select the span inside the column
                 const epoch = parseInt(column.innerText, 10); // Convert text to integer (epoch time)
 
                 if (!isNaN(epoch)) { // Check that the epoch is a valid number
@@ -192,10 +269,10 @@
             // Convert the epoch time (in milliseconds) to a JavaScript Date object
             const date = new Date(epoch);
 
-          //  return date.toLocaleString(); // Format the date as per browser language setting, browser time zone
+            //  return date.toLocaleString(); // Format the date as per browser language setting, browser time zone
 
-           // Use Intl.DateTimeFormat to format the date in the browser's local time zone
-           // return formattedEpoch = new Intl.DateTimeFormat('en-US', {
+            // Use Intl.DateTimeFormat to format the date in the browser's local time zone
+            // return formattedEpoch = new Intl.DateTimeFormat('en-US', {
             return formattedEpoch = new Intl.DateTimeFormat(undefined, {
                 year: 'numeric',
                 month: '2-digit',
@@ -220,9 +297,9 @@
         // }
 
         // Call the function to update all relevant table columns
-       // updateTableWithTimeZone();
+        // updateTableWithTimeZone();
 
-        updateTableWithFormattedEpochs();
+        //updateTableWithFormattedEpochs();
     });
 
 
