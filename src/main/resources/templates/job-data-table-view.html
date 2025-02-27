@@ -2,6 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/headContent.html}">
     <title th:text="${pageTitle ?: 'Default Title'}">Job Details</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+
 </head>
 <body>
 
@@ -29,7 +32,7 @@
             <th>Account Name</th>
             <th>Checkpoint</th>
 
-            <!--            <th>Creation Time String</th>-->
+            <th class="formatEpoch">Creation Time String</th>
             <th>Creation Time epoch</th>
 
             <th>Hold Types</th>
@@ -37,20 +40,20 @@
             <th>Keep Files</th>
             <th>Mail Points</th>
 
-            <!--            <th>Modification Time String </th>-->
+            <th class="formatEpoch">Modification Time String </th>
             <th>Modification Time Epoch</th>
 
             <th>Priority</th>
 
-            <!--            <th>Queue Time String</th>-->
+            <th class="formatEpoch">Queue Time String</th>
             <th>Queue Time Epoch</th>
 
             <th>Rerunable</th>
 
-            <!--            <th>Start Time String</th>-->
+            <th class="formatEpoch">Start Time String</th>
             <th>Start Time Epoch</th>
 
-            <!--            <th>Obit Time String</th>-->
+            <th class="formatEpoch">Obit Time String</th>
             <th>Obit Time Epoch</th>
 
             <th>Shell Path List</th>
@@ -58,7 +61,7 @@
             <th>Substate</th>
             <th>Comment</th>
 
-            <!--            <th>Elapsed Time String</th>-->
+            <th class="formatEpoch">Elapsed Time String</th>
             <th>Elapsed Time Epoch</th>
 
             <th>Umask</th>
@@ -92,7 +95,7 @@
             <td><span th:text="${job.accountName}"></span></td>
             <td><span th:text="${job.checkpoint}"></span></td>
 
-            <!--            <td><span class="epoch-column" th:if="${job.ctime != null}" th:text="${job.ctime}"></span></td>-->
+            <td class="formatEpoch" th:text="${job.ctime != null ? job.ctime : ''}"></td>
             <td><span th:text="${job.ctime}"></span> </td>
 
             <td><span th:text="${job.holdTypes}"></span></td>
@@ -100,20 +103,20 @@
             <td><span th:text="${job.keepFiles}"></span></td>
             <td><span th:text="${job.mailPoints}"></span></td>
 
-            <!--            <td><span class="epoch-column" th:if="${job.mtime != null}" th:text="${job.mtime}"></span></td>-->
+            <td class="formatEpoch" th:text="${job.mtime != null ? job.mtime : ''}"></td>
             <td><span th:text="${job.mtime}"></span> </td>
 
             <td><span th:text="${job.priority}"></span></td>
 
-            <!--            <td><span class="epoch-column" th:if="${job.qtime != null}" th:text="${job.qtime}"></span></td>-->
-            <td><span th:text="${job.qtime}"></span> </td>
+            <td class="formatEpoch" th:text="${job.qtime != null ? job.qtime : ''}"></td>
+            <td><span th:text="${job.qtime}"></span></td>
 
             <td><span th:text="${job.rerunable}"></span></td>
 
-            <!--            <td><span class="epoch-column" th:if="${job.stime != null}" th:text="${job.stime}"></span></td>-->
-            <td><span th:text="${job.stime}"></span> </td>
+            <td class="formatEpoch" th:text="${job.stime != null ? job.stime : ''}"></td>
+            <td><span th:text="${job.stime}"></span></td>
 
-            <!--            <td><span class="epoch-column" th:if="${job.obittime != null}" th:text="${job.obittime}"></span></td>-->
+            <td class="formatEpoch" th:text="${job.obittime != null ? job.obittime : ''}"></td>
             <td><span th:text="${job.obittime}"></span> </td>
 
             <td><span th:text="${job.shellPathList}"></span></td>
@@ -121,7 +124,7 @@
             <td><span th:text="${job.substate}"></span></td>
             <td><span th:text="${job.comment}"></span></td>
 
-            <!--            <td><span class="epoch-column" th:if="${job.etime != null}" th:text="${job.etime}"></span></td>-->
+            <td class="formatEpoch" th:text="${job.etime != null ? job.etime : ''}"></td>
             <td><span th:text="${job.etime}"></span> </td>
 
             <td><span th:text="${job.umask}"></span></td>
@@ -133,7 +136,6 @@
             <td><span th:text="${job.submitHost}"></span></td>
             <td><span th:text="${job.serverInstanceId}"></span></td>
 
-            <!--            <td th:text="${job.mem}" data-order="${job.memNumeric}"></td>-->
             <td class="memory" th:text="${job.mem}"></td>
 
             <td th:text="${job.mpiprocs}"></td>
@@ -156,12 +158,15 @@
 </footer>
 
 <!--<script th:src="@{/js/dateTimeUtils.js}"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 
 <script>
 
     $(document).ready(function () {
 
-        console.log("Initializing DataTable...");
+       // console.log("Initializing DataTable...");
+        console.log(moment);
+
 
         // Put # rows displayed/total at top of table also.
         $('#jobTable').DataTable({
@@ -175,9 +180,9 @@
             columnDefs: [
                 {
                     // targets: 32,   // Index of the 'mem' column, index starts at 0
-                    targets: 'memory',  // Target using class name; make sure <th> has class "memory"
+                    targets: 'memory',  // Target using class name; make sure th has class "memory"
                     render: function(data, type, row) {
-                        console.log("Raw Data: ", data);
+                       // console.log("Raw Data: ", data);
 
                         if (type === "display" || type === "filter") {
                             // Render display values in the format "<value> GB"
@@ -188,17 +193,27 @@
                         }
                         return data; // Default render
                     }
+                },
+                {
+                    // Format ctime epoch data to a human-readable date
+                    targets: 'formatEpoch',  // Target using class name for 'ctime', etc <th class="formatEpoch">
+                    render: function (data, type, row) {
+                        console.log("Incoming data to render:", data); // Debug incoming row data for this column
+                        return DataTable.render.datetime('x', 'LLL')(data);
+                    }
                 }
             ]
-        }); // End DataTable
+        }
 
-        console.log("DataTable initialized:");
+        ); // End DataTable
+
+       // console.log("DataTable initialized:");
 
         /**
          * Convert memory string (e.g., "2tb", "500gb") to numeric GB value.
          */
         function convertMemToGB(mem) {
-            console.log("Converting to GB:", mem);
+            //console.log("Converting to GB:", mem);
 
             const pattern = /^(\d+(?:\.\d+)?)\s*(kb|mb|gb|tb)$/i;
             const match = mem.match(pattern);
@@ -241,10 +256,31 @@
 
             console.log("Formatted Memory:", formatted);
             return formatted;
-
         }
 
+        function renderEpochColumn(data, type) {
 
+            console.log("---Raw column epoch Data: ", data);
+            // Convert the raw data to a number
+            const epoch = parseInt(data, 10);
+
+            // Handle invalid or empty data
+            if (isNaN(epoch) || !data) {
+                return type === "display" || type === "filter" ? "Invalid Date" : data;
+            }
+            console.log("---Epoch: ", epoch);
+
+            // if (type === "display" || type === "filter") {
+                formattedEpoch = moment(epoch).toLocaleString(); // Use browser locale
+                console.log("---Formatted Epoch: ", formattedEpoch);
+                return formattedEpoch;
+            // } else if (type === "sort" || type === "type") {
+            //     return epoch; // Raw epoch for sorting
+            // }
+            // return data; // Default raw data
+        }
+
+        // too slow
         function updateTableWithFormattedEpochs() {
 
             const elements = document.querySelectorAll('.epoch-column'); // Select all target columns
