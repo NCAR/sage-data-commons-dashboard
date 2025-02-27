@@ -44,6 +44,7 @@ public class JobViewModel {
 
     // Fields from ResourceList
     private String mem;
+    private Double memoryBytes;
     private Integer mpiprocs;
     private Integer mps;
     private Integer ncpus;
@@ -65,7 +66,7 @@ public class JobViewModel {
                         Long stime, Long obittime, String shellPathList, String jobdir, Integer substate, String comment,
                         Long etime, Integer umask, Integer runCount, String eligibleTime, Integer exitStatus,
                         String submitArguments, String project, String submitHost, String serverInstanceId,
-                        String mem, Integer mpiprocs, Integer mps, Integer ncpus, Integer ngpus, Integer nodect,
+                        String mem, Double memoryBytes, Integer mpiprocs, Integer mps, Integer ncpus, Integer ngpus, Integer nodect,
                         Integer nvpus, String place, String select, String walltime) {
         this.jobId = jobId;
         this.jobName = jobName;
@@ -103,6 +104,7 @@ public class JobViewModel {
 
         // ResourceList fields
         this.mem = mem;
+        this.memoryBytes = memoryBytes;
         this.mpiprocs = mpiprocs;
         this.mps = mps;
         this.ncpus = ncpus;
@@ -400,6 +402,14 @@ public class JobViewModel {
 
     public void setMem(String mem) {
         this.mem = mem;
+    }
+
+    public Double getMemoryBytes() {
+        return memoryBytes;
+    }
+
+    public void setMemoryBytes(Double memoryBytes) {
+        this.memoryBytes = memoryBytes;
     }
 
     public Integer getMpiprocs() {
