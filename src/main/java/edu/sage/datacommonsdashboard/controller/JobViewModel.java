@@ -44,7 +44,8 @@ public class JobViewModel {
 
     // Fields from ResourceList
     private String mem;
-    private Double memoryBytes;
+    private Long memoryBytes;
+    private String formattedMemory;
     private Integer mpiprocs;
     private Integer mps;
     private Integer ncpus;
@@ -66,7 +67,7 @@ public class JobViewModel {
                         Long stime, Long obittime, String shellPathList, String jobdir, Integer substate, String comment,
                         Long etime, Integer umask, Integer runCount, String eligibleTime, Integer exitStatus,
                         String submitArguments, String project, String submitHost, String serverInstanceId,
-                        String mem, Double memoryBytes, Integer mpiprocs, Integer mps, Integer ncpus, Integer ngpus, Integer nodect,
+                        String mem, Long memoryBytes, String formattedMemory, Integer mpiprocs, Integer mps, Integer ncpus, Integer ngpus, Integer nodect,
                         Integer nvpus, String place, String select, String walltime) {
         this.jobId = jobId;
         this.jobName = jobName;
@@ -105,6 +106,7 @@ public class JobViewModel {
         // ResourceList fields
         this.mem = mem;
         this.memoryBytes = memoryBytes;
+        this.formattedMemory = formattedMemory;
         this.mpiprocs = mpiprocs;
         this.mps = mps;
         this.ncpus = ncpus;
@@ -404,12 +406,20 @@ public class JobViewModel {
         this.mem = mem;
     }
 
-    public Double getMemoryBytes() {
+    public Long getMemoryBytes() {
         return memoryBytes;
     }
 
-    public void setMemoryBytes(Double memoryBytes) {
+    public void setMemoryBytes(Long memoryBytes) {
         this.memoryBytes = memoryBytes;
+    }
+
+    public String getFormattedMemory() {
+        return formattedMemory;
+    }
+
+    public void setFormattedMemory(String formattedMemory) {
+        this.formattedMemory = formattedMemory;
     }
 
     public Integer getMpiprocs() {

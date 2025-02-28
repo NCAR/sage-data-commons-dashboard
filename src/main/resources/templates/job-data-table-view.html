@@ -3,7 +3,8 @@
 <head th:replace="~{fragments/headContent.html}">
     <title th:text="${pageTitle ?: 'Default Title'}">Job Details</title>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+
+
 
 </head>
 <body>
@@ -72,8 +73,11 @@
             <th>Project</th>
             <th>Submit Host</th>
             <th>Server Instance ID</th>
+
             <!--Resource Columns -->
-            <th class="memory">Memory</th>
+            <th class="memoryBytes">Memory Bytes</th>
+            <th class="formattedMemory">Formatted Memory</th>
+
             <th>mpiprocs</th>
             <th>mps</th>
             <th>ncpus</th>
@@ -136,7 +140,8 @@
             <td><span th:text="${job.submitHost}"></span></td>
             <td><span th:text="${job.serverInstanceId}"></span></td>
 
-            <td class="memory" th:text="${job.mem}"></td>
+              <td th:text="${job.memoryBytes}"></td>
+                <td th:text="${job.formattedMemory}"></td>
 
             <td th:text="${job.mpiprocs}"></td>
             <td th:text="${job.mps}"></td>
@@ -159,6 +164,7 @@
 
 <!--<script th:src="@{/js/dateTimeUtils.js}"></script>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+<script src="https://cdn.datatables.net/datetime/1.1.2/dataTables.dateTime.min.js"></script>
 
 <script>
 
@@ -167,9 +173,8 @@
        // console.log("Initializing DataTable...");
         console.log(moment);
 
-
         // Put # rows displayed/total at top of table also.
-        $('#jobTable').DataTable({
+        var table = $('#jobTable').DataTable({
             paging: false,
             // deferRender: true, // Enable deferred rendering
             dom: '<"top"if>rt<"bottom"i><"clear">', // f for search/filter box
@@ -177,23 +182,19 @@
                 info: "Showing _START_ to _END_ of _TOTAL_ entries",
                 infoFiltered: "(filtered from _MAX_ total entries)"
             },
-            columnDefs: [
+                columnDefs: [
                 {
-                    // targets: 32,   // Index of the 'mem' column, index starts at 0
-                    targets: 'memory',  // Target using class name; make sure th has class "memory"
-                    render: function(data, type, row) {
-                       // console.log("Raw Data: ", data);
-
-                        if (type === "display" || type === "filter") {
-                            // Render display values in the format "<value> GB"
-                            return formatMemToGB(data);
-                        } else if (type === "sort" || type === "type") {
-                            // For sorting, convert to numeric GB value
-                            return convertMemToGB(data);
-                        }
-                        return data; // Default render
-                    }
+                     targets: 38,   // Index of the 'mem' column, index starts at 0
+                    //targets: "memoryBytes",  // Target using class name (th)
+                    visible: false // Hide raw bytes
                 },
+                {
+                    // Enable sorting on the hidden column for formatted memory
+                    //targets: "formattedMemory",
+                    targets: 39,
+                    orderData: 38 // Sort the formattedMemory column using the hidden memoryBytes column
+                },
+
                 {
                     // Format ctime epoch data to a human-readable date
                     targets: 'formatEpoch',  // Target using class name for 'ctime', etc <th class="formatEpoch">
@@ -203,7 +204,8 @@
                     }
                 }
             ]
-        }
+
+            }
 
         ); // End DataTable
 

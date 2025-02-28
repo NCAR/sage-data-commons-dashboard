@@ -4,7 +4,6 @@ import edu.sage.datacommonsdashboard.exception.DateParseException;
 import edu.sage.datacommonsdashboard.model.JobData;
 import edu.sage.datacommonsdashboard.model.ResourceList;
 import edu.sage.datacommonsdashboard.repository.JobQueueRepository;
-import edu.sage.datacommonsdashboard.util.DateToEpochConverter;
 import edu.sage.datacommonsdashboard.util.TimeZoneUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +14,9 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
+import static edu.sage.datacommonsdashboard.util.ByteFormatter.formatBytes;
 import static edu.sage.datacommonsdashboard.util.DateToEpochConverter.convertDateStringToEpoch;
+import static edu.sage.datacommonsdashboard.util.MemParser.parseMemToBytes;
 
 
 @Controller
@@ -23,7 +24,6 @@ public class DisplayJobsController {
 
     private final JobQueueRepository jobQueueRepository;
     private final TimeZoneUtil timeZoneUtil = new TimeZoneUtil();
-    private final DateToEpochConverter dateToEpochConverter = new DateToEpochConverter();
 
     public DisplayJobsController(JobQueueRepository jobQueueRepository) {
 
@@ -96,6 +96,9 @@ public class DisplayJobsController {
                 throw new DateParseException(e);
             }
 
+            long memoryBytes = parseMemToBytes(resources.getMem());
+            String formattedMem = formatBytes(memoryBytes);
+
             // Create a JobViewModel for each job
             JobViewModel viewModel = new JobViewModel(
                     jobId,
@@ -131,6 +134,8 @@ public class DisplayJobsController {
                     job.getSubmitHost(),
                     job.getServerInstanceId(),
                     resources.getMem(),
+                    memoryBytes,
+                    formattedMem,
                     resources.getMpiprocs(),
                     resources.getMps(),
                     resources.getNcpus(),
