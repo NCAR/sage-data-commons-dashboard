@@ -75,7 +75,6 @@
             <th>Server Instance ID</th>
 
             <!--Resource Columns -->
-            <th class="memoryBytes">Memory Bytes</th>
             <th class="formattedMemory">Formatted Memory</th>
 
             <th>mpiprocs</th>
@@ -140,7 +139,6 @@
             <td><span th:text="${job.submitHost}"></span></td>
             <td><span th:text="${job.serverInstanceId}"></span></td>
 
-              <td th:text="${job.memoryBytes}"></td>
                 <td th:text="${job.formattedMemory}"></td>
 
             <td th:text="${job.mpiprocs}"></td> <!-- index 40-->
@@ -164,8 +162,9 @@
 
 <!--<script th:src="@{/js/dateTimeUtils.js}"></script>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-<script src="https://cdn.datatables.net/datetime/1.1.2/dataTables.dateTime.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.43/moment-timezone-with-data.min.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/2.2.2/sorting/file-size.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.13.5/sorting/datetime-moment.js"></script>
 
 
 <script>
@@ -173,10 +172,10 @@
     $(document).ready(function () {
 
        // console.log("Initializing DataTable...");
-        console.log(moment);
+       // console.log(moment);
 
         // Put # rows displayed/total at top of table also.
-        var table = $('#jobTable').DataTable({
+        $('#jobTable').DataTable({
             paging: false,
             // deferRender: true, // Enable deferred rendering
             dom: '<"top"if>rt<"bottom"i><"clear">', // f for search/filter box
@@ -186,20 +185,15 @@
             },
                 columnDefs: [
                 {
-                     targets: 38,   // Index of the 'mem' column, index starts at 0
-                    //targets: "memoryBytes",  // Target using class name (th)
-                    visible: false // Hide raw bytes
+                    // targets: 38,   // Index of the 'mem' column, index starts at 0
+                    targets: 'formattedMemory',
+                    type: 'file-size' // Use file-size plugin for visible column
                 },
-                {
-                    // Enable sorting on the hidden column for formatted memory
-                    //targets: "formattedMemory",
-                    targets: 39,
-                    orderData: 38 // Sort the formattedMemory column using the hidden memoryBytes column
-                },
+
                     {
                         // Format epoch data to a human-readable date
-                        //   targets: 'formatEpoch',  // Target using class name for 'ctime', etc <th class="formatEpoch">
-                        targets: [8, 14, 17, 20, 22, 28],
+                           targets: 'formatEpoch',  // Target using class name for 'ctime', etc <th class="formatEpoch">
+                       // targets: [8, 14, 17, 20, 22, 28],
                         render: function (data, type, row) {
                             //console.log("Incoming data to render:", data); // Debug incoming row data for this column
                             //  return DataTable.render.datetime('x', 'YYYY-MM-DDTHH:mm:ssZ')(data);
@@ -210,10 +204,9 @@
                             if (type === 'display' || type === 'filter') {
                                 return moment(parseInt(data))
                                     .tz(Intl.DateTimeFormat().resolvedOptions().timeZone) // Automatically use browser's time zone
-                                    .format('YYYY-MM-DDTHH:mm:ss z'); // 'z' for abbreviation like MST or PST
+                                    .format('YYYY-MM-DD HH:mm:ss z'); // 'z' for abbreviation like MST or PST
                             }
                             return data; // Raw data for sorting
-
                         }
                     }
             ]
