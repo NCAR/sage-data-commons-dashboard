@@ -33,7 +33,7 @@
             <th>Account Name</th>
             <th>Checkpoint</th>
 
-            <th class="formatEpoch">Creation Time String</th>
+            <th class="formatEpoch">Creation Time</th>
             <th>Creation Time epoch</th>
 
             <th>Hold Types</th>
@@ -41,20 +41,20 @@
             <th>Keep Files</th>
             <th>Mail Points</th>
 
-            <th class="formatEpoch">Modification Time String </th>
+            <th class="formatEpoch">Modification Time</th>
             <th>Modification Time Epoch</th>
 
             <th>Priority</th>
 
-            <th class="formatEpoch">Queue Time String</th>
+            <th class="formatEpoch">Queue Time</th>
             <th>Queue Time Epoch</th>
 
             <th>Rerunable</th>
 
-            <th class="formatEpoch">Start Time String</th>
+            <th class="formatEpoch">Start Time</th>
             <th>Start Time Epoch</th>
 
-            <th class="formatEpoch">Obit Time String</th>
+            <th class="formatEpoch">Obit Time</th>
             <th>Obit Time Epoch</th>
 
             <th>Shell Path List</th>
@@ -62,7 +62,7 @@
             <th>Substate</th>
             <th>Comment</th>
 
-            <th class="formatEpoch">Elapsed Time String</th>
+            <th class="formatEpoch">Elapsed Time</th>
             <th>Elapsed Time Epoch</th>
 
             <th>Umask</th>
@@ -184,16 +184,15 @@
                 infoFiltered: "(filtered from _MAX_ total entries)"
             },
                 columnDefs: [
-                {
-                    // targets: 38,   // Index of the 'mem' column, index starts at 0
-                    targets: 'formattedMemory',
-                    type: 'file-size' // Use file-size plugin for visible column
-                },
-
+                    {
+                        // targets: 38,   // Index of the 'mem' column, index starts at 0
+                        targets: 'formattedMemory',
+                        type: 'file-size' // Use file-size plugin for visible column
+                    },
                     {
                         // Format epoch data to a human-readable date
-                           targets: 'formatEpoch',  // Target using class name for 'ctime', etc <th class="formatEpoch">
-                       // targets: [8, 14, 17, 20, 22, 28],
+                        targets: 'formatEpoch',  // Target using class name for 'ctime', etc <th class="formatEpoch">
+                        // targets: [8, 14, 17, 20, 22, 28],
                         render: function (data, type, row) {
                             //console.log("Incoming data to render:", data); // Debug incoming row data for this column
                             //  return DataTable.render.datetime('x', 'YYYY-MM-DDTHH:mm:ssZ')(data);
@@ -209,143 +208,14 @@
                             return data; // Raw data for sorting
                         }
                     }
-            ]
+                ]
 
             }
 
         ); // End DataTable
 
-       // console.log("DataTable initialized:");
 
-        /**
-         * Convert memory string (e.g., "2tb", "500gb") to numeric GB value.
-         */
-        function convertMemToGB(mem) {
-            //console.log("Converting to GB:", mem);
-
-            const pattern = /^(\d+(?:\.\d+)?)\s*(kb|mb|gb|tb)$/i;
-            const match = mem.match(pattern);
-
-            if (match) {
-                let value = parseFloat(match[1]);
-                const unit = match[2].toLowerCase();
-
-                switch (unit) {
-                    case "tb":
-                        value *= 1024; // 1 TB = 1024 GB
-                        break;
-                    case "mb":
-                        value /= 1024; // 1 MB = 1/1024 GB
-                        break;
-                    case "kb":
-                        value /= (1024 * 1024); // 1 KB = 1/(1024*1024) GB
-                        break;
-                    case "gb":
-                    default:
-                        break; // Already in GB
-                }
-                return value; // Numeric GB value
-            }
-            return 0; // Fallback value if parsing fails
-        }
-
-        /**
-         * Format memory values to display as "<value> GB".
-         */
-        function formatMemToGB(mem) {
-            const valueInGB = convertMemToGB(mem);
-
-            // Check if the value is a whole number
-            if (Number.isInteger(valueInGB)) {
-                return `${valueInGB} GB`; // No decimal if whole number
-            } else {
-                return `${valueInGB.toFixed(2)} GB`; // Keep 2 decimal places if not
-            }
-
-            console.log("Formatted Memory:", formatted);
-            return formatted;
-        }
-
-        function renderEpochColumn(data, type) {
-
-            console.log("---Raw column epoch Data: ", data);
-            // Convert the raw data to a number
-            const epoch = parseInt(data, 10);
-
-            // Handle invalid or empty data
-            if (isNaN(epoch) || !data) {
-                return type === "display" || type === "filter" ? "Invalid Date" : data;
-            }
-            console.log("---Epoch: ", epoch);
-
-            // if (type === "display" || type === "filter") {
-                formattedEpoch = moment(epoch).toLocaleString(); // Use browser locale
-                console.log("---Formatted Epoch: ", formattedEpoch);
-                return formattedEpoch;
-            // } else if (type === "sort" || type === "type") {
-            //     return epoch; // Raw epoch for sorting
-            // }
-            // return data; // Default raw data
-        }
-
-        // too slow
-        function updateTableWithFormattedEpochs() {
-
-            const elements = document.querySelectorAll('.epoch-column'); // Select all target columns
-
-            elements.forEach(column => {
-
-                // Get the span's text content (assuming the span contains the epoch value)
-                // const span = column.querySelector('span'); // Select the span inside the column
-                const epoch = parseInt(column.innerText, 10); // Convert text to integer (epoch time)
-
-                if (!isNaN(epoch)) { // Check that the epoch is a valid number
-
-                    // Format the epoch value and update the column's content
-                    const formattedDate = formatEpoch(epoch); // Call your function with the epoch value
-                    column.innerText = formattedDate; // Update the column with the formatted date
-                }
-            });
-        }
-
-        function formatEpoch(epoch) {
-
-            // Convert the epoch time (in milliseconds) to a JavaScript Date object
-            const date = new Date(epoch);
-
-            //  return date.toLocaleString(); // Format the date as per browser language setting, browser time zone
-
-            // Use Intl.DateTimeFormat to format the date in the browser's local time zone
-            // return formattedEpoch = new Intl.DateTimeFormat('en-US', {
-            return formattedEpoch = new Intl.DateTimeFormat(undefined, {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                timeZoneName: 'short' // Includes the time zone abbreviation (e.g., PST, EDT)
-            }).format(date);
-
-        }
-
-        // Function to update all targeted columns with the time zone abbreviation
-        // function updateTableWithTimeZone() {
-        //
-        //     const timeZoneAbbr = getCurrentTimeZoneAbbreviation(); // Fetch timezone abbreviation
-        //     const elements = document.querySelectorAll('.timezone-column'); // Select all target columns
-        //
-        //     elements.forEach(column => {
-        //         column.innerText = timeZoneAbbr; // Update each column
-        //     });
-        // }
-
-        // Call the function to update all relevant table columns
-        // updateTableWithTimeZone();
-
-        //updateTableWithFormattedEpochs();
     });
-
 
 
 </script>
