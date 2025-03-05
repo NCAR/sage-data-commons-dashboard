@@ -3,9 +3,6 @@
 <head th:replace="~{fragments/headContent.html}">
     <title th:text="${pageTitle ?: 'Default Title'}">Job Details</title>
 
-
-
-
 </head>
 <body>
 
@@ -32,33 +29,22 @@
             <th>Server</th>
             <th>Account Name</th>
             <th>Checkpoint</th>
-
             <th class="formatEpoch">Creation Time</th>
-
             <th>Hold Types</th>
             <th>Join Path</th>
             <th>Keep Files</th>
             <th>Mail Points</th>
-
             <th class="formatEpoch">Modification Time</th>
-
             <th>Priority</th>
-
             <th class="formatEpoch">Queue Time</th>
-
             <th>Rerunable</th>
-
             <th class="formatEpoch">Start Time</th>
-
             <th class="formatEpoch">Obit Time</th>
-
             <th>Shell Path List</th>
             <th>Job Directory</th>
             <th>Substate</th>
             <th>Comment</th>
-
             <th class="formatEpoch">Elapsed Time</th>
-
             <th>Umask</th>
             <th>Run Count</th>
             <th>Eligible Time</th>
@@ -67,10 +53,8 @@
             <th>Project</th>
             <th>Submit Host</th>
             <th>Server Instance ID</th>
-
             <!--Resource Columns -->
             <th class="formattedMemory">Formatted Memory</th>
-
             <th>mpiprocs</th>
             <th>mps</th>
             <th>ncpus</th>
@@ -91,34 +75,23 @@
             <td><span th:text="${job.server}"></span></td>
             <td><span th:text="${job.accountName}"></span></td>
             <td><span th:text="${job.checkpoint}"></span></td>
-
-            <td class="formatEpoch" th:text="${job.ctime != null ? job.ctime : ''}"></td>
-
-            <td><span th:text="${job.holdTypes}"></span></td> <!-- index 10-->
+            <td th:text="${job.ctime != null ? job.ctime : ''}"></td>
+            <td><span th:text="${job.holdTypes}"></span></td>
             <td><span th:text="${job.joinPath}"></span></td>
             <td><span th:text="${job.keepFiles}"></span></td>
             <td><span th:text="${job.mailPoints}"></span></td>
-
-            <td class="formatEpoch" th:text="${job.mtime != null ? job.mtime : ''}"></td>
-
+            <td th:text="${job.mtime != null ? job.mtime : ''}"></td>
             <td><span th:text="${job.priority}"></span></td>
-
-            <td class="formatEpoch" th:text="${job.qtime != null ? job.qtime : ''}"></td>
-
+            <td th:text="${job.qtime != null ? job.qtime : ''}"></td>
             <td><span th:text="${job.rerunable}"></span></td>
-
-            <td class="formatEpoch" th:text="${job.stime != null ? job.stime : ''}"></td> <!-- index 20-->
-
-            <td class="formatEpoch" th:text="${job.obittime != null ? job.obittime : ''}"></td>
-
+            <td th:text="${job.stime != null ? job.stime : ''}"></td>
+            <td th:text="${job.obittime != null ? job.obittime : ''}"></td>
             <td><span th:text="${job.shellPathList}"></span></td>
             <td><span th:text="${job.jobdir}"></span></td>
             <td><span th:text="${job.substate}"></span></td>
             <td><span th:text="${job.comment}"></span></td>
-
-            <td class="formatEpoch" th:text="${job.etime != null ? job.etime : ''}"></td>
-
-            <td><span th:text="${job.umask}"></span></td> <!-- index 30-->
+            <td th:text="${job.etime != null ? job.etime : ''}"></td>
+            <td><span th:text="${job.umask}"></span></td>
             <td><span th:text="${job.runCount}"></span></td>
             <td><span th:text="${job.eligibleTime}"></span></td>
             <td><span th:text="${job.exitStatus}"></span></td>
@@ -126,15 +99,12 @@
             <td><span th:text="${job.project}"></span></td>
             <td><span th:text="${job.submitHost}"></span></td>
             <td><span th:text="${job.serverInstanceId}"></span></td>
-
             <td th:text="${job.formattedMemory}"></td>
-
-            <td th:text="${job.mpiprocs}"></td> <!-- index 40-->
+            <td th:text="${job.mpiprocs}"></td>
             <td th:text="${job.mps}"></td>
             <td th:text="${job.ncpus}"></td>
             <td th:text="${job.ngpus}"></td>
             <td th:text="${job.nodect}"></td>
-
             <td th:text="${job.place}"></td>
             <td th:text="${job.select}"></td>
             <td th:text="${job.walltime}"></td>
@@ -154,18 +124,13 @@
 <script src="https://cdn.datatables.net/plug-ins/2.2.2/sorting/file-size.js"></script>
 <script src="https://cdn.datatables.net/plug-ins/1.13.5/sorting/datetime-moment.js"></script>
 
-
 <script>
 
     $(document).ready(function () {
 
-       // console.log("Initializing DataTable...");
-       // console.log(moment);
-
         // Put # rows displayed/total at top of table also.
         $('#jobTable').DataTable({
             paging: false,
-            // deferRender: true, // Enable deferred rendering
             dom: '<"top"if>rt<"bottom"i><"clear">', // f for search/filter box
             language: {
                 info: "Showing _START_ to _END_ of _TOTAL_ entries",
@@ -173,7 +138,7 @@
             },
             columnDefs: [
                 {
-                    // targets: 38,   // Index of the 'mem' column, index starts at 0
+                    // Format memory from raw bytes to size with units
                     targets: 'formattedMemory',
                     type: 'file-size' // Use file-size plugin for visible column
                 },
@@ -191,6 +156,7 @@
                         // Get the browser's local time zone
                         var timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
+                        // Make the data look user-friendly/readable and for search/filter, not sort, which needs raw data
                         if (type === 'display' || type === 'filter') {
                             return moment(epochMillis)
                                 .tz(timezone) //  use browser's time zone
@@ -206,10 +172,7 @@
 
         ); // End DataTable
 
-
     });
-
-
 </script>
 
 </body>
