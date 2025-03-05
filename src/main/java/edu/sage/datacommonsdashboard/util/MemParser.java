@@ -53,7 +53,7 @@ public class MemParser {
             }
 
             // Log the value to the console
-            System.out.println("Computed Bytes: " + bytes);
+            //System.out.println("Computed Bytes: " + bytes);
 
             return bytes;
         } else {
