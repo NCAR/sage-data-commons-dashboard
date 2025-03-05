@@ -34,7 +34,6 @@
             <th>Checkpoint</th>
 
             <th class="formatEpoch">Creation Time</th>
-            <th>Creation Time epoch</th>
 
             <th>Hold Types</th>
             <th>Join Path</th>
@@ -42,20 +41,16 @@
             <th>Mail Points</th>
 
             <th class="formatEpoch">Modification Time</th>
-            <th>Modification Time Epoch</th>
 
             <th>Priority</th>
 
             <th class="formatEpoch">Queue Time</th>
-            <th>Queue Time Epoch</th>
 
             <th>Rerunable</th>
 
             <th class="formatEpoch">Start Time</th>
-            <th>Start Time Epoch</th>
 
             <th class="formatEpoch">Obit Time</th>
-            <th>Obit Time Epoch</th>
 
             <th>Shell Path List</th>
             <th>Job Directory</th>
@@ -63,7 +58,6 @@
             <th>Comment</th>
 
             <th class="formatEpoch">Elapsed Time</th>
-            <th>Elapsed Time Epoch</th>
 
             <th>Umask</th>
             <th>Run Count</th>
@@ -99,7 +93,6 @@
             <td><span th:text="${job.checkpoint}"></span></td>
 
             <td class="formatEpoch" th:text="${job.ctime != null ? job.ctime : ''}"></td>
-            <td><span th:text="${job.ctime}"></span> </td>
 
             <td><span th:text="${job.holdTypes}"></span></td> <!-- index 10-->
             <td><span th:text="${job.joinPath}"></span></td>
@@ -107,20 +100,16 @@
             <td><span th:text="${job.mailPoints}"></span></td>
 
             <td class="formatEpoch" th:text="${job.mtime != null ? job.mtime : ''}"></td>
-            <td><span th:text="${job.mtime}"></span> </td>
 
             <td><span th:text="${job.priority}"></span></td>
 
             <td class="formatEpoch" th:text="${job.qtime != null ? job.qtime : ''}"></td>
-            <td><span th:text="${job.qtime}"></span></td>
 
             <td><span th:text="${job.rerunable}"></span></td>
 
             <td class="formatEpoch" th:text="${job.stime != null ? job.stime : ''}"></td> <!-- index 20-->
-            <td><span th:text="${job.stime}"></span></td>
 
             <td class="formatEpoch" th:text="${job.obittime != null ? job.obittime : ''}"></td>
-            <td><span th:text="${job.obittime}"></span> </td>
 
             <td><span th:text="${job.shellPathList}"></span></td>
             <td><span th:text="${job.jobdir}"></span></td>
@@ -128,7 +117,6 @@
             <td><span th:text="${job.comment}"></span></td>
 
             <td class="formatEpoch" th:text="${job.etime != null ? job.etime : ''}"></td>
-            <td><span th:text="${job.etime}"></span> </td>
 
             <td><span th:text="${job.umask}"></span></td> <!-- index 30-->
             <td><span th:text="${job.runCount}"></span></td>
@@ -139,7 +127,7 @@
             <td><span th:text="${job.submitHost}"></span></td>
             <td><span th:text="${job.serverInstanceId}"></span></td>
 
-                <td th:text="${job.formattedMemory}"></td>
+            <td th:text="${job.formattedMemory}"></td>
 
             <td th:text="${job.mpiprocs}"></td> <!-- index 40-->
             <td th:text="${job.mps}"></td>
@@ -183,29 +171,33 @@
                 info: "Showing _START_ to _END_ of _TOTAL_ entries",
                 infoFiltered: "(filtered from _MAX_ total entries)"
             },
-                columnDefs: [
-                    {
-                        // targets: 38,   // Index of the 'mem' column, index starts at 0
-                        targets: 'formattedMemory',
-                        type: 'file-size' // Use file-size plugin for visible column
-                    },
-                    {
-                        // Format epoch data to a human-readable date
-                        targets: 'formatEpoch',  // Target using class name for 'ctime', etc <th class="formatEpoch">
-                        // targets: [8, 14, 17, 20, 22, 28],
-                        render: function (data, type, row) {
-                            //console.log("Incoming data to render:", data); // Debug incoming row data for this column
-                            //  return DataTable.render.datetime('x', 'YYYY-MM-DDTHH:mm:ssZ')(data);
-                            if (!data) { // Check if the data is null, undefined
-                                return ''; // Return an empty string for display
-                            }
+            columnDefs: [
+                {
+                    // targets: 38,   // Index of the 'mem' column, index starts at 0
+                    targets: 'formattedMemory',
+                    type: 'file-size' // Use file-size plugin for visible column
+                },
+                {
+                    // Format epoch data to a human-readable date
+                    targets: 'formatEpoch',  // Target using class name for 'ctime', etc <th class="formatEpoch">
+                    render: function (data, type, row) {
+                        //console.log("Incoming data to render:", data); // Debug incoming row data for this column
+                        //  return DataTable.render.datetime('x', 'YYYY-MM-DDTHH:mm:ssZ')(data);
+                        if (!data) { // Check if the data is null, undefined
+                            return ''; // Return an empty string for display
+                        }
 
-                            if (type === 'display' || type === 'filter') {
-                                return moment(parseInt(data))
-                                    .tz(Intl.DateTimeFormat().resolvedOptions().timeZone) // Automatically use browser's time zone
-                                    .format('YYYY-MM-DD HH:mm:ss z'); // 'z' for abbreviation like MST or PST
-                            }
-                            return data; // Raw data for sorting
+                        var epochMillis = parseInt(data);
+                        // Get the browser's local time zone
+                        var timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+                        if (type === 'display' || type === 'filter') {
+                            return moment(epochMillis)
+                                .tz(timezone) //  use browser's time zone
+                                .format('YYYY-MM-DD HH:mm:ss z'); // 'z' for abbreviation like MST or PST
+                        }
+
+                        return data; // Raw data for sorting
                         }
                     }
                 ]
