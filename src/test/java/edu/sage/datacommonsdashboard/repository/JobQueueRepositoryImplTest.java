@@ -2,7 +2,7 @@ package edu.sage.datacommonsdashboard.repository;
 
 import edu.sage.datacommonsdashboard.exception.FileNotReadableException;
 import edu.sage.datacommonsdashboard.model.JobData;
-import edu.sage.datacommonsdashboard.util.JsonConverter;
+import edu.sage.datacommonsdashboard.util.JobDataJsonConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -41,14 +41,15 @@ class JobQueueRepositoryImplTest {
     private static final String SAMPLE_DERECHO_FILE_CONTENT = "Sample Derecho file content";
 
     private Resource mockResource = mock(Resource.class);
-    private JsonConverter mockJsonConverter = mock(JsonConverter.class);
+    private JobDataJsonConverter mockJobDataJsonConverter = mock(JobDataJsonConverter.class);
     private ResourceLoader mockResourceLoader = mock(ResourceLoader.class);
+
 
     @BeforeEach
     void setUp() {
-
-        jobQueueRepositoryImplTest = new JobQueueRepositoryImpl(mockResourceLoader, mockJsonConverter);
         PATH_WITH_TRAILING_SLASH = tempDir.toString() + "/";
+        jobQueueRepositoryImplTest = new JobQueueRepositoryImpl(mockResourceLoader, mockJobDataJsonConverter, PATH_WITH_TRAILING_SLASH);
+
         jobQueueRepositoryImplTest.filePath = PATH_WITH_TRAILING_SLASH;
     }
 
@@ -246,7 +247,7 @@ class JobQueueRepositoryImplTest {
         "Jobs": {}
     }
     """;
-        JobData expectedJobData = new JobData(); // Mock output from JsonConverter
+        JobData expectedJobData = new JobData(); // Mock output from JobDataJsonConverter
         expectedJobData.setTimestamp(123456789);
         expectedJobData.setPbsVersion("1.2");
         expectedJobData.setPbsServer("testServer");
@@ -256,10 +257,10 @@ class JobQueueRepositoryImplTest {
         Files.writeString(tempFile, validJsonContent);
 
         // Initialize repo
-        //jobQueueRepositoryImplTest = new JobQueueRepositoryImpl(mockResourceLoader, mockJsonConverter);
+        //jobQueueRepositoryImplTest = new JobQueueRepositoryImpl(mockResourceLoader, mockJobDataJsonConverter);
 
         // Spy on the real object to mock specific methods
-        jobQueueRepositoryImplTest = Mockito.spy(new JobQueueRepositoryImpl(mockResourceLoader, mockJsonConverter));
+        jobQueueRepositoryImplTest = Mockito.spy(new JobQueueRepositoryImpl(mockResourceLoader, mockJobDataJsonConverter, PATH_WITH_TRAILING_SLASH));
 
         jobQueueRepositoryImplTest.filePath = tempDir.toString() + "/";
 
@@ -269,7 +270,7 @@ class JobQueueRepositoryImplTest {
         // Mock 'readFileWithPath' to avoid actual file system access
         doReturn(validJsonContent).when(jobQueueRepositoryImplTest).readFileWithPath(CASPER_FILE_NAME_JSON);
 
-        when(mockJsonConverter.convertJsonToJobData(validJsonContent)).thenReturn(expectedJobData);
+        when(mockJobDataJsonConverter.convertJsonToJobData(validJsonContent)).thenReturn(expectedJobData);
 
         // The test
         JobData actualJobData = jobQueueRepositoryImplTest.getCasperQstatJobsJson();
@@ -279,7 +280,7 @@ class JobQueueRepositoryImplTest {
 
         // Verify interactions
         verify(jobQueueRepositoryImplTest, times(1)).readFileWithPath(CASPER_FILE_NAME_JSON);
-        verify(mockJsonConverter, times(1)).convertJsonToJobData(validJsonContent);
+        verify(mockJobDataJsonConverter, times(1)).convertJsonToJobData(validJsonContent);
 
         // Clean up the file if needed
         tempFile.toFile().deleteOnExit();
@@ -297,7 +298,7 @@ class JobQueueRepositoryImplTest {
         "Jobs": {}
     }
     """;
-        JobData expectedJobData = new JobData(); // Mock output from JsonConverter
+        JobData expectedJobData = new JobData(); // Mock output from JobDataJsonConverter
         expectedJobData.setTimestamp(123456789);
         expectedJobData.setPbsVersion("1.2");
         expectedJobData.setPbsServer("testServer");
@@ -307,10 +308,10 @@ class JobQueueRepositoryImplTest {
         Files.writeString(tempFile, validJsonContent);
 
         // Initialize repo
-        //jobQueueRepositoryImplTest = new JobQueueRepositoryImpl(mockResourceLoader, mockJsonConverter);
+        //jobQueueRepositoryImplTest = new JobQueueRepositoryImpl(mockResourceLoader, mockJobDataJsonConverter);
 
         // Spy on the real object to mock specific methods
-        jobQueueRepositoryImplTest = Mockito.spy(new JobQueueRepositoryImpl(mockResourceLoader, mockJsonConverter));
+        jobQueueRepositoryImplTest = Mockito.spy(new JobQueueRepositoryImpl(mockResourceLoader, mockJobDataJsonConverter, PATH_WITH_TRAILING_SLASH));
 
         jobQueueRepositoryImplTest.filePath = tempDir.toString() + "/";
 
@@ -320,7 +321,7 @@ class JobQueueRepositoryImplTest {
         // Mock 'readFileWithPath' to avoid actual file system access
         doReturn(validJsonContent).when(jobQueueRepositoryImplTest).readFileWithPath(DERECHO_FILE_NAME_JSON);
 
-        when(mockJsonConverter.convertJsonToJobData(validJsonContent)).thenReturn(expectedJobData);
+        when(mockJobDataJsonConverter.convertJsonToJobData(validJsonContent)).thenReturn(expectedJobData);
 
         // The test
         JobData actualJobData = jobQueueRepositoryImplTest.getDerechoQstatJobsJson();
@@ -330,7 +331,7 @@ class JobQueueRepositoryImplTest {
 
         // Verify interactions
         verify(jobQueueRepositoryImplTest, times(1)).readFileWithPath(DERECHO_FILE_NAME_JSON);
-        verify(mockJsonConverter, times(1)).convertJsonToJobData(validJsonContent);
+        verify(mockJobDataJsonConverter, times(1)).convertJsonToJobData(validJsonContent);
 
         // Clean up the file if needed
         tempFile.toFile().deleteOnExit();
@@ -346,7 +347,7 @@ class JobQueueRepositoryImplTest {
 //        // Assert the exception is thrown
 //        assertThrows(FileNotReadableException.class, () -> jobQueueRepository.getCasperQstatJobsJson());
 //
-//        // Verify no interaction with JsonConverter
+//        // Verify no interaction with JobDataJsonConverter
 //        verify(jsonConverter, never()).convertJsonToJobData(anyString());
 //    }
 

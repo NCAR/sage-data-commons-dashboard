@@ -31,7 +31,7 @@ public class DisplayJobsControllerTest {
     @BeforeEach
     void setUp() {
 
-        controller = new DisplayJobsController(mockJobQueueRepository);
+        controller = new DisplayJobsController(mockJobQueueRepository, mockTimeZoneUtil);
 
         // Fake JobData setup
         fakeJobData = new JobData();

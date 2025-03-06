@@ -13,15 +13,15 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class JsonConverterTest {
+class JobDataJsonConverterTest {
 
     private ObjectMapper objectMapper;
-    private JsonConverter jsonConverter;
+    private JobDataJsonConverter jobDataJsonConverter;
 
     @BeforeEach
     void setUp() {
         objectMapper = mock(ObjectMapper.class);
-        jsonConverter = new JsonConverter();
+        jobDataJsonConverter = new JobDataJsonConverter();
     }
 
     @Test
@@ -53,7 +53,7 @@ class JsonConverterTest {
 
         when(objectMapper.readValue(json, JobData.class)).thenReturn(expectedObject); // Mock behavior
 
-        JobData result = jsonConverter.convertJsonToJobData(json);
+        JobData result = jobDataJsonConverter.convertJsonToJobData(json);
 
         assertNotNull(result);
         assertEquals("casper-pbs", result.getPbsServer());
@@ -72,7 +72,7 @@ class JsonConverterTest {
         when(objectMapper.readValue(invalidJson, JobData.class)).thenThrow(new JsonProcessingException("JSON parsing error") {});
 
         JsonParsingException exception = assertThrows(JsonParsingException.class, () -> {
-            jsonConverter.convertJsonToJobData(invalidJson);
+            jobDataJsonConverter.convertJsonToJobData(invalidJson);
         });
 
         // Just read the first line of the error message because the rest is too long
@@ -90,7 +90,7 @@ class JsonConverterTest {
         String emptyJson = "";
 
         JsonParsingException exception = assertThrows(JsonParsingException.class, () -> {
-            jsonConverter.convertJsonToJobData(emptyJson);
+            jobDataJsonConverter.convertJsonToJobData(emptyJson);
         });
 
         assertEquals("Input JSON is null or empty.", exception.getMessage());
@@ -103,7 +103,7 @@ class JsonConverterTest {
         String nullJson = null;
 
         JsonParsingException exception = assertThrows(JsonParsingException.class, () -> {
-            jsonConverter.convertJsonToJobData(nullJson);
+            jobDataJsonConverter.convertJsonToJobData(nullJson);
         });
 
         assertEquals("Input JSON is null or empty.", exception.getMessage());

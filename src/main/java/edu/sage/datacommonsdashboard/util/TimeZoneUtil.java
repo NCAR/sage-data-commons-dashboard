@@ -1,10 +1,13 @@
 package edu.sage.datacommonsdashboard.util;
 
+import org.springframework.stereotype.Component;
+
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+@Component
 public class TimeZoneUtil {
 
     public ZoneId getCurrentServerZoneId() {

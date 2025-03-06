@@ -23,11 +23,12 @@ import static edu.sage.datacommonsdashboard.util.MemParser.parseMemToBytes;
 public class DisplayJobsController {
 
     private final JobQueueRepository jobQueueRepository;
-    private final TimeZoneUtil timeZoneUtil = new TimeZoneUtil();
+    private final TimeZoneUtil timeZoneUtil;
 
-    public DisplayJobsController(JobQueueRepository jobQueueRepository) {
+    public DisplayJobsController(JobQueueRepository jobQueueRepository, TimeZoneUtil timeZoneUtil) {
 
         this.jobQueueRepository = jobQueueRepository;
+        this.timeZoneUtil = timeZoneUtil;
     }
 
     @GetMapping(value = "/hpc/dashboard/casper/jobs/table")
@@ -76,14 +77,12 @@ public class DisplayJobsController {
         jobData.getJobs().forEach((jobId, job) -> {
             ResourceList resources = job.getResourceList();
 
-            // Convert String date/times safely using a utility method
-
-            Long ctimeEpoch = null;
-            Long mtimeEpoch = null;
-            Long qtimeEpoch = null;
-            Long stimeEpoch = null;
-            Long obittimeEpoch = null;
-            Long etimeEpoch = null;
+            Long ctimeEpoch;
+            Long mtimeEpoch;
+            Long qtimeEpoch;
+            Long stimeEpoch;
+            Long obittimeEpoch;
+            Long etimeEpoch;
             try {
                 ctimeEpoch = convertDateStringToEpoch(job.getCtime());
                 mtimeEpoch = convertDateStringToEpoch(job.getMtime());
@@ -99,7 +98,6 @@ public class DisplayJobsController {
             long memoryBytes = parseMemToBytes(resources.getMem());
             String formattedMem = formatBytes(memoryBytes);
 
-            // Create a JobViewModel for each job
             JobViewModel viewModel = new JobViewModel(
                     jobId,
                     job.getJobName(),
@@ -134,7 +132,7 @@ public class DisplayJobsController {
                     job.getSubmitHost(),
                     job.getServerInstanceId(),
                     resources.getMem(),
-                    memoryBytes,
+                    memoryBytes,  //Don't need this in the view
                     formattedMem,
                     resources.getMpiprocs(),
                     resources.getMps(),
