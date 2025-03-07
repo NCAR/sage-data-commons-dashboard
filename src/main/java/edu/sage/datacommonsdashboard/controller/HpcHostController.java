@@ -37,7 +37,7 @@ public class HpcHostController {
         Integer epochSeconds = Math.toIntExact(Instant.now().getEpochSecond());
 
         model.addAttribute("timestamp", epochSeconds);
-        model.addAttribute("formattedTimestamp", timeZoneUtil.convertTimestampToDateString(epochSeconds, ZoneId.of("America/Denver")));
+        model.addAttribute("formattedTimestamp", timeZoneUtil.convertTimestampToFormattedDate(epochSeconds, ZoneId.of("America/Denver")));
 
         return "hpc-host";
     }

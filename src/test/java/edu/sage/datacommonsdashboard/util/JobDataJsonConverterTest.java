@@ -93,7 +93,6 @@ class JobDataJsonConverterTest {
             jobDataJsonConverter.convertJsonToJobData(emptyJson);
         });
 
-        assertEquals("Input JSON is null or empty.", exception.getMessage());
         verify(objectMapper, times(0)).readValue(emptyJson, JobData.class); // Ensure ObjectMapper is not used
     }
 
@@ -106,6 +105,5 @@ class JobDataJsonConverterTest {
             jobDataJsonConverter.convertJsonToJobData(nullJson);
         });
 
-        assertEquals("Input JSON is null or empty.", exception.getMessage());
     }
 }

@@ -63,7 +63,7 @@ public class DisplayJobsControllerTest {
         when(mockJobQueueRepository.getDerechoQstatJobsJson()).thenReturn(fakeJobData);
 
         // Mock TimeZoneUtil to format the timestamp
-        when(mockTimeZoneUtil.convertTimestampToDateString(fakeJobData.getTimestamp(), ZoneId.of("America/Denver")))
+        when(mockTimeZoneUtil.convertTimestampToFormattedDate(fakeJobData.getTimestamp(), ZoneId.of("America/Denver")))
                 .thenReturn("2023-01-01 12:00 PM");
 
         String viewName = controller.showDerechoJobsTable(mockModel);

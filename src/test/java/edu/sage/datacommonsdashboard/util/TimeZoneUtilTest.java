@@ -33,7 +33,7 @@ public class TimeZoneUtilTest {
         // Format the expected result
         String expected = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z").format(expectedDateTime);
 
-        String result = timeZoneUtil.convertTimestampToDateString(timestamp, ZoneId.of("America/Denver"));
+        String result = timeZoneUtil.convertTimestampToFormattedDate(timestamp, ZoneId.of("America/Denver"));
 
         assertEquals(expected, result, "The converted date should match the expected date");
     }
@@ -51,7 +51,7 @@ public class TimeZoneUtilTest {
         // Format the expected result
         String expected = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z").format(expectedDateTime);
 
-        String result = timeZoneUtil.convertTimestampToDateString(timestamp, ZoneId.of("America/Denver"));
+        String result = timeZoneUtil.convertTimestampToFormattedDate(timestamp, ZoneId.of("America/Denver"));
 
         assertEquals(expected, result, "The converted date for zero timestamp should be the epoch date");
     }
@@ -71,7 +71,7 @@ public class TimeZoneUtilTest {
         String expected = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z").format(expectedDateTime);
 
         // This uses the current server zone, which may not be Denver (as with github actions)
-        String result = timeZoneUtil.convertTimestampToDateString(timestamp, ZoneId.of("America/Denver"));
+        String result = timeZoneUtil.convertTimestampToFormattedDate(timestamp, ZoneId.of("America/Denver"));
 
         assertEquals(expected, result, "The converted date for a negative timestamp should match the expected date");
     }
@@ -82,10 +82,10 @@ public class TimeZoneUtilTest {
         Integer timestamp = null;
 
         Exception exception = assertThrows(NullPointerException.class, () -> {
-            timeZoneUtil.convertTimestampToDateString(timestamp, ZoneId.of("America/Denver"));
+            timeZoneUtil.convertTimestampToFormattedDate(timestamp, ZoneId.of("America/Denver"));
         });
 
-        assertEquals("Cannot invoke \"java.lang.Integer.intValue()\" because \"timestamp\" is null", exception.getMessage(), "Expected NullPointerException with the correct message");
+        assertEquals("Cannot invoke \"java.lang.Integer.intValue()\" because \"timestampSeconds\" is null", exception.getMessage(), "Expected NullPointerException with the correct message");
     }
 
 }
