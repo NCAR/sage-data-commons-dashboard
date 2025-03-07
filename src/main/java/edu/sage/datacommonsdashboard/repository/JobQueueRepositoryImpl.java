@@ -32,7 +32,7 @@ public class JobQueueRepositoryImpl implements JobQueueRepository {
     private JobDataJsonConverter jobDataJsonConverter;
 
     // Expect trailing /
-    protected String filePath;
+    private String filePath;
 
     private static final Logger logger = LoggerFactory.getLogger(JobQueueRepositoryImpl.class);
 

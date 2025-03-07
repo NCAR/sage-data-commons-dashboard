@@ -49,8 +49,6 @@ class JobQueueRepositoryImplTest {
     void setUp() {
         PATH_WITH_TRAILING_SLASH = tempDir.toString() + "/";
         jobQueueRepositoryImplTest = new JobQueueRepositoryImpl(mockResourceLoader, mockJobDataJsonConverter, PATH_WITH_TRAILING_SLASH);
-
-        jobQueueRepositoryImplTest.filePath = PATH_WITH_TRAILING_SLASH;
     }
 
     @Test
@@ -116,7 +114,6 @@ class JobQueueRepositoryImplTest {
         }
     }
 
-
     @Test
     public void given_text_file_resource_in_file_path__when_get_string_contents__then_correct_string_contents_returned() throws IOException {
 
@@ -158,22 +155,20 @@ class JobQueueRepositoryImplTest {
     @Test
     void given_text_file_in_file_path__when_file_path_is_null__then_file_path_not_set_error() {
 
-        jobQueueRepositoryImplTest.filePath = null;
-
         FileNotReadableException exception = assertThrows(FileNotReadableException.class, () -> {
             jobQueueRepositoryImplTest.getDerechoQstatJobsText();
         });
 
-        assertEquals("File path is not set.", exception.getMessage());
+        assertEquals("File cannot be located: " + PATH_WITH_TRAILING_SLASH + DERECHO_FILE_NAME, exception.getMessage());
     }
 
     @Test
     void given_text_file_resource__when_file_path_is_null__then_resource_null_error() {
 
-        jobQueueRepositoryImplTest.filePath = null;
+        JobQueueRepositoryImpl jobQueueRepository = new JobQueueRepositoryImpl(mockResourceLoader, mockJobDataJsonConverter, null);
 
         FileNotReadableException exception = assertThrows(FileNotReadableException.class, () -> {
-            jobQueueRepositoryImplTest.readFileFromResources(CASPER_FILE_NAME_TEXT);
+            jobQueueRepository.readFileFromResources(CASPER_FILE_NAME_TEXT);
         });
 
         assertEquals("Resource is null for file: casper_qstat_jobs.txt", exception.getMessage());
@@ -182,10 +177,10 @@ class JobQueueRepositoryImplTest {
     @Test
     void given_text_file_in_path__when_file_path_is_invalid__then_file_path_error() {
 
-        jobQueueRepositoryImplTest.filePath = "invalidPath";
+        JobQueueRepositoryImpl jobQueueRepository = new JobQueueRepositoryImpl(mockResourceLoader, mockJobDataJsonConverter, "invalidPath");
 
         FileNotReadableException exception = assertThrows(FileNotReadableException.class, () -> {
-            jobQueueRepositoryImplTest.readFileWithPath(CASPER_FILE_NAME_TEXT);
+            jobQueueRepository.readFileWithPath(CASPER_FILE_NAME_TEXT);
         });
 
         assertEquals("File cannot be located: invalidPathcasper_qstat_jobs.txt", exception.getMessage());
@@ -226,13 +221,13 @@ class JobQueueRepositoryImplTest {
     @Test
     void when_read_file_with_path__if_file_does_not_exist__then_file_path_error() {
 
-        jobQueueRepositoryImplTest.filePath = tempDir.toString();
+        JobQueueRepositoryImpl jobQueueRepository = new JobQueueRepositoryImpl(mockResourceLoader, mockJobDataJsonConverter, PATH_WITH_TRAILING_SLASH);
 
         FileNotReadableException exception = assertThrows(FileNotReadableException.class, () -> {
-            jobQueueRepositoryImplTest.readFileWithPath("nonexistent_file.txt");
+            jobQueueRepository.readFileWithPath("nonexistent_file.txt");
         });
 
-        assertEquals("File cannot be located: " + tempDir.toString() + "nonexistent_file.txt", exception.getMessage());
+        assertEquals("File cannot be located: " + tempDir.toString() + "/nonexistent_file.txt", exception.getMessage());
     }
 
     @Test
@@ -261,8 +256,6 @@ class JobQueueRepositoryImplTest {
 
         // Spy on the real object to mock specific methods
         jobQueueRepositoryImplTest = Mockito.spy(new JobQueueRepositoryImpl(mockResourceLoader, mockJobDataJsonConverter, PATH_WITH_TRAILING_SLASH));
-
-        jobQueueRepositoryImplTest.filePath = tempDir.toString() + "/";
 
         // Mock the behavior of the methods being called
         // when(jobQueueRepositoryImplTest.readFileWithPath(CASPER_FILE_NAME_JSON)).thenReturn(validJsonContent);
@@ -312,8 +305,6 @@ class JobQueueRepositoryImplTest {
 
         // Spy on the real object to mock specific methods
         jobQueueRepositoryImplTest = Mockito.spy(new JobQueueRepositoryImpl(mockResourceLoader, mockJobDataJsonConverter, PATH_WITH_TRAILING_SLASH));
-
-        jobQueueRepositoryImplTest.filePath = tempDir.toString() + "/";
 
         // Mock the behavior of the methods being called
         // when(jobQueueRepositoryImplTest.readFileWithPath(CASPER_FILE_NAME_JSON)).thenReturn(validJsonContent);

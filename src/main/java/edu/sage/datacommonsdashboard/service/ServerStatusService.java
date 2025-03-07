@@ -29,7 +29,7 @@ public class ServerStatusService {
         return new ServerStatusResponse(timestamp, getFilteredHosts(hosts));
     }
 
-    // Filter the list of HPC hosts
+    // Filter the list of HPC hosts to get desired fields
     public List<FilteredHpcHost> getFilteredHosts(List<HpcHost> hosts) {
         return hosts.stream()
                 .map(host -> new FilteredHpcHost(

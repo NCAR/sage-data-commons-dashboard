@@ -89,14 +89,18 @@ class ServerStatusServiceTest {
 
     @Test
     void testBuildJson_WhenJsonProcessingExceptionOccurs() {
-        // Arrange
+
         ServerStatusService customService = new ServerStatusService(repository) {
+
             @Override
             public String buildJson(ServerStatusResponse serverStatusResponse) {
                 try {
                     ObjectMapper failingObjectMapper = mock(ObjectMapper.class);
+
                     when(failingObjectMapper.writeValueAsString(any())).thenThrow(JsonProcessingException.class);
+
                     return failingObjectMapper.writeValueAsString(serverStatusResponse);
+
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);
                 }
@@ -107,7 +111,6 @@ class ServerStatusServiceTest {
                 new FilteredHpcHost("host1", "fqdn1", "user1", HpcHost.Status.ONLINE)
         ));
 
-        // Act & Assert
         RuntimeException exception = assertThrows(RuntimeException.class, () -> customService.buildJson(response));
         assertNotNull(exception);
     }
