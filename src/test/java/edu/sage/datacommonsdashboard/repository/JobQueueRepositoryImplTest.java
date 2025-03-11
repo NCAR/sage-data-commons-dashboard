@@ -11,6 +11,7 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -49,6 +50,13 @@ class JobQueueRepositoryImplTest {
     void setUp() {
         PATH_WITH_TRAILING_SLASH = tempDir.toString() + "/";
         jobQueueRepositoryImplTest = new JobQueueRepositoryImpl(mockResourceLoader, mockJobDataJsonConverter, PATH_WITH_TRAILING_SLASH);
+
+        ReflectionTestUtils.setField(jobQueueRepositoryImplTest, "casperQstatJobsJson", CASPER_FILE_NAME_JSON);
+        ReflectionTestUtils.setField(jobQueueRepositoryImplTest, "casperQstatJobsTxt", CASPER_FILE_NAME_TEXT);
+
+        ReflectionTestUtils.setField(jobQueueRepositoryImplTest, "derechoQstatJobsJson", DERECHO_FILE_NAME_JSON);
+        ReflectionTestUtils.setField(jobQueueRepositoryImplTest, "derechoQstatJobsTxt", DERECHO_FILE_NAME);
+
     }
 
     @Test
@@ -218,26 +226,19 @@ class JobQueueRepositoryImplTest {
         "Jobs": {}
     }
     """;
+
         JobData expectedJobData = new JobData(); // Mock output from JobDataJsonConverter
         expectedJobData.setTimestamp(123456789);
         expectedJobData.setPbsVersion("1.2");
         expectedJobData.setPbsServer("testServer");
 
-        // Create a temporary file with the required content
-        Path tempFile = Files.createTempFile(tempDir, "casper_qstat_jobs", ".json");
-        Files.writeString(tempFile, validJsonContent);
-
-        // Initialize repo
-        //jobQueueRepositoryImplTest = new JobQueueRepositoryImpl(mockResourceLoader, mockJobDataJsonConverter);
-
         // Spy on the real object to mock specific methods
         jobQueueRepositoryImplTest = Mockito.spy(new JobQueueRepositoryImpl(mockResourceLoader, mockJobDataJsonConverter, PATH_WITH_TRAILING_SLASH));
 
-        // Mock the behavior of the methods being called
-        // when(jobQueueRepositoryImplTest.readFileWithPath(CASPER_FILE_NAME_JSON)).thenReturn(validJsonContent);
-
         // Mock 'readFileWithPath' to avoid actual file system access
         doReturn(validJsonContent).when(jobQueueRepositoryImplTest).readFileWithPath(CASPER_FILE_NAME_JSON);
+
+        ReflectionTestUtils.setField(jobQueueRepositoryImplTest, "casperQstatJobsJson", CASPER_FILE_NAME_JSON);
 
         when(mockJobDataJsonConverter.convertJsonToJobData(validJsonContent)).thenReturn(expectedJobData);
 
@@ -250,9 +251,6 @@ class JobQueueRepositoryImplTest {
         // Verify interactions
         verify(jobQueueRepositoryImplTest, times(1)).readFileWithPath(CASPER_FILE_NAME_JSON);
         verify(mockJobDataJsonConverter, times(1)).convertJsonToJobData(validJsonContent);
-
-        // Clean up the file if needed
-        tempFile.toFile().deleteOnExit();
     }
 
     @Test
@@ -267,41 +265,29 @@ class JobQueueRepositoryImplTest {
         "Jobs": {}
     }
     """;
+
         JobData expectedJobData = new JobData(); // Mock output from JobDataJsonConverter
         expectedJobData.setTimestamp(123456789);
         expectedJobData.setPbsVersion("1.2");
         expectedJobData.setPbsServer("testServer");
 
-        // Create a temporary file with the required content
-        Path tempFile = Files.createTempFile(tempDir, "derecho_qstat_jobs", ".json");
-        Files.writeString(tempFile, validJsonContent);
+        // Initialize repository and mock 'readFileWithPath'
+        jobQueueRepositoryImplTest = Mockito.spy(new JobQueueRepositoryImpl(mockResourceLoader, mockJobDataJsonConverter, "/test/path/"));
 
-        // Initialize repo
-        //jobQueueRepositoryImplTest = new JobQueueRepositoryImpl(mockResourceLoader, mockJobDataJsonConverter);
-
-        // Spy on the real object to mock specific methods
-        jobQueueRepositoryImplTest = Mockito.spy(new JobQueueRepositoryImpl(mockResourceLoader, mockJobDataJsonConverter, PATH_WITH_TRAILING_SLASH));
+        doReturn(validJsonContent).when(jobQueueRepositoryImplTest).readFileWithPath(DERECHO_FILE_NAME_JSON);
+        ReflectionTestUtils.setField(jobQueueRepositoryImplTest, "derechoQstatJobsJson", DERECHO_FILE_NAME_JSON);
 
         // Mock the behavior of the methods being called
-        // when(jobQueueRepositoryImplTest.readFileWithPath(CASPER_FILE_NAME_JSON)).thenReturn(validJsonContent);
-
-        // Mock 'readFileWithPath' to avoid actual file system access
-        doReturn(validJsonContent).when(jobQueueRepositoryImplTest).readFileWithPath(DERECHO_FILE_NAME_JSON);
-
         when(mockJobDataJsonConverter.convertJsonToJobData(validJsonContent)).thenReturn(expectedJobData);
 
         // The test
         JobData actualJobData = jobQueueRepositoryImplTest.getDerechoQstatJobsJson();
 
-        // Assert
         assertEquals(expectedJobData, actualJobData, "The returned JobData should match the expected data.");
 
         // Verify interactions
         verify(jobQueueRepositoryImplTest, times(1)).readFileWithPath(DERECHO_FILE_NAME_JSON);
         verify(mockJobDataJsonConverter, times(1)).convertJsonToJobData(validJsonContent);
-
-        // Clean up the file if needed
-        tempFile.toFile().deleteOnExit();
     }
 
 
