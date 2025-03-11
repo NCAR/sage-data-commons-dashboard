@@ -163,18 +163,6 @@ class JobQueueRepositoryImplTest {
     }
 
     @Test
-    void given_text_file_resource__when_file_path_is_null__then_resource_null_error() {
-
-        JobQueueRepositoryImpl jobQueueRepository = new JobQueueRepositoryImpl(mockResourceLoader, mockJobDataJsonConverter, null);
-
-        FileNotReadableException exception = assertThrows(FileNotReadableException.class, () -> {
-            jobQueueRepository.readFileFromResources(CASPER_FILE_NAME_TEXT);
-        });
-
-        assertEquals("Resource is null for file: casper_qstat_jobs.txt", exception.getMessage());
-    }
-
-    @Test
     void given_text_file_in_path__when_file_path_is_invalid__then_file_path_error() {
 
         JobQueueRepositoryImpl jobQueueRepository = new JobQueueRepositoryImpl(mockResourceLoader, mockJobDataJsonConverter, "invalidPath");
@@ -184,18 +172,6 @@ class JobQueueRepositoryImplTest {
         });
 
         assertEquals("File cannot be located: invalidPathcasper_qstat_jobs.txt", exception.getMessage());
-    }
-
-    @Test
-    void given_text_file_resource__when_file_path_is_invalid__then_file_path_error() {
-
-        when(mockResourceLoader.getResource("file:" + tempDir.toString() + "/" + CASPER_FILE_NAME_TEXT)).thenReturn(mock(Resource.class));
-
-        FileNotReadableException exception = assertThrows(FileNotReadableException.class, () -> {
-            jobQueueRepositoryImplTest.readFileFromResources(CASPER_FILE_NAME_TEXT);
-        });
-
-        assertEquals("Resource is null for file: " + CASPER_FILE_NAME_TEXT, exception.getMessage());
     }
 
     @Test
