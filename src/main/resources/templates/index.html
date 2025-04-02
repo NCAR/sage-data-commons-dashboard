@@ -5,16 +5,19 @@
 </head>
 
 <body>
+<div class="m-4">
 <header>Future Site Branding and Logo</header>
 
 <h1>Sage Data Commons Dashboard</h1>
 
-<h3><a th:href="@{/socket-status.html}">Websocket Status</a></h3>
-<h3><a th:href="@{/hpc/dashboard/host}">HPC Hosts</a></h3>
-<h3><a th:href="@{/hpc/dashboard/host-ws}">HPC Hosts Websocket</a></h3>
+<h3>Hosts</h3>
+<!--    <a th:href="@{/socket-status.html}">Websocket Status</a>-->
+<ul>
+    <li><a th:href="@{/hpc/dashboard/host}">HPC Hosts</a></li>
+    <li><a th:href="@{/hpc/dashboard/host-ws}">HPC Hosts Websocket</a></li>
+</ul>
 
-<h3>Example Job Pages</h3>
-
+<h3>Jobs</h3>
 <ul>
     <li><a th:href="@{/hpc/dashboard/casper/jobs/table}">Casper Jobs Table</a></li>
 </ul>
@@ -27,6 +30,8 @@
 <ul>
     <li><a th:href="@{/hpc/dashboard/casper/jobs/tablefull}">Derecho Jobs Table Full Width</a></li>
 </ul>
+
+<h3>To Be Removed</h3>
 <ul>
     <li><a th:href="@{/hpc/dashboard/casper/jobs/json}">Casper Jobs Json</a></li>
 </ul>
@@ -56,6 +61,6 @@
 <footer>
     <p>Copyright 2025 UCAR</p>
 </footer>
-
+</div>
 </body>
 </html>
