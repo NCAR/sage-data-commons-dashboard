@@ -1,0 +1,17 @@
+version: "3.9"  # Use the latest Docker Compose version
+
+services:
+  sage-data-commons-dashboard:
+    image: sage-data-commons-dashboard:latest  # image name
+    container_name: sage-data-commons-dashboard
+    ports:
+      - "9090:8080"  # Map port 9090 on host to 8080 in the container
+      - "5005:5005"  # Debugging
+    volumes:
+        # Path to queueapp.properties
+        - ${CONFIG_PATH_CONF}:/usr/local/dashboard/conf  # Dynamic volume for the properties file
+        # Mount the local directory containing JSON files to the container
+        - ${CONFIG_PATH_DATA}:/usr/local/dashboard/data
+    environment:
+      SPRING_CONFIG_LOCATION: "file:/usr/local/dashboard/conf/queueapp.properties"  # Environment variable for Spring
+    restart: unless-stopped
