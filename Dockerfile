@@ -1,5 +1,5 @@
 # Use the official OpenJDK image from the Docker Hub
-FROM eclipse-temurin:21
+FROM eclipse-temurin:17
 
 # The application's jar file
 ARG JAR_FILE=target/sage-data-commons-dashboard-0.0.1-SNAPSHOT.jar
