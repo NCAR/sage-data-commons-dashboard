@@ -80,8 +80,7 @@ See src/main/resources/application.properties for the default settings.
 
 #### Step 2: Configure IntelliJ SDK
 1. Go to **File > Project Structure > Project**.
-2. Set the SDK to **JDK 21** (or higher).
-3. Set the language level to match **JDK 21** or the project requirement.
+2. Set the Build and Run SDK to **JDK temurin 17** (or higher).
 
 #### Step 3: Build the Project
 1. Open **View > Tool Windows > Maven**.
