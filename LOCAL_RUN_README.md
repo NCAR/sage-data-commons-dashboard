@@ -186,9 +186,114 @@ ENTRYPOINT ["java", "-Dspring.config.location=${SPRING_CONFIG_LOCATION}", "-jar"
 
 ## **Using Docker Compose**
 
+## **Using Docker Compose**
+
+### **Preferred Method**
+
+### **Prerequisites**
+
+- Ensure **Docker** is installed:
+    - [Download Docker](https://www.docker.com/products/docker-desktop/).
+
+---
+
 ### **Setup**
 
-1. Create a `docker-compose.yml` file in the project root:
+1. **Create `docker-compose.yml`:**
+   Place the `docker-compose.yml` file in the same directory as the `Dockerfile` (e.g., `/path/to/IdeaProjects/sage-data-commons-dashboard`).
+
+   Example `docker-compose.yml`:
+
+   ```yaml
+   version: "3.9"  # Use the latest Docker Compose version
+
+   services:
+     sage-data-commons-dashboard:
+       image: sage-data-commons-dashboard:latest  # Replace with your image name
+       container_name: sage-data-commons-dashboard
+       ports:
+         - "9090:8080"  # Map port 9090 on the host to 8080 in the container
+       volumes:
+         - ${QUEUEAPP_PROPERTIES_FILE}:/usr/local/dashboard/queueapp.properties  # Dynamic volume for the properties file
+       environment:
+         SPRING_CONFIG_LOCATION: "file:/usr/local/dashboard/queueapp.properties"  # Environment variable for Spring
+       restart: unless-stopped
+   ```
+
+---
+
+### **Configure Docker in IntelliJ IDEA**
+
+To integrate Docker (and Docker Compose) with IntelliJ:
+
+1. Open IntelliJ Settings:
+    - Navigate to **Build, Execution, Deployment > Docker**.
+2. Add a new Docker configuration:
+    - Choose **Docker for [environment]** (e.g., Docker Desktop).
+    - Specify the Docker connection type:
+        - For local install: `Unix Socket` (e.g., `unix:///var/run/docker.sock`).
+        - For remote: Enter the Docker daemon host URL.
+3. After configuration, IntelliJ can manage Docker and Docker Compose projects.
+
+---
+
+### **Create a Docker-Compose Run Configuration in IntelliJ**
+
+1. Go to **Run > Edit Configurations...**.
+2. Click the `+` button in the top-left corner and select **Docker-Compose**.
+3. Set up the following:
+    - **Name:** For example, `Docker Compose: Sage Dashboard`.
+    - **File(s):** Specify your `docker-compose.yml` path.
+    - **Services:** Select `sage-data-commons-dashboard`.
+4. Add the `CONFIG_PATH` environment variable:
+    - Go to the **Environment Variables** field:
+        - Add a key-value pair:
+          ```plaintext
+          Key: CONFIG_PATH
+          Value: /Users/your-user/dashboard/conf
+          ```
+5. Save the configuration.
+
+---
+
+### **Run Docker Compose from IntelliJ**
+
+1. From the **Run Configurations** dropdown in the top-right corner of IntelliJ, select your new Docker Compose configuration (e.g., `Docker Compose: Sage Dashboard`).
+2. Click the **Run** button (green arrow).
+3. IntelliJ will run the `docker-compose up` command, displaying output similar to:
+   ```plaintext
+   ✔ Container sage-data-commons-dashboard  Started
+   ```
+
+4. Validate the application:
+    - Open your browser and visit:
+      ```
+      http://localhost:9090
+      ```
+
+---
+
+### **Optional: Debugging with Docker Compose**
+
+To enable debugging for your Docker Compose setup:
+
+#### **Step 1: Update the `Dockerfile`**
+
+Modify the `Dockerfile` to expose a debug port and add JVM debugging options.
+
+```dockerfile
+# Expose the debug port inside the container
+EXPOSE 5005
+
+# Enable remote debugging for the JVM
+ENTRYPOINT ["java", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "-Dspring.config.location=${SPRING_CONFIG_LOCATION}", "-jar", "/app.jar"]
+```
+
+---
+
+#### **Step 2: Update `docker-compose.yml`**
+
+Add the debug port (`5005:5005`) mapping to your `docker-compose.yml`, along with volume mounts.
 
 ```yaml
 version: "3.9"
@@ -198,45 +303,44 @@ services:
     image: sage-data-commons-dashboard:latest
     container_name: sage-data-commons-dashboard
     ports:
-      - "9090:8080"
+      - "9090:8080"  # Map port 9090 on host to 8080 in the container
+      - "5005:5005"  # Debugging
     volumes:
+      # Mount the configuration file
       - ${CONFIG_PATH}:/usr/local/dashboard/conf
+      # Mount a directory for JSON test files (optional)
+      - ${CONFIG_PATH}:/usr/local/dashboard/data
     environment:
       SPRING_CONFIG_LOCATION: "file:/usr/local/dashboard/conf/queueapp.properties"
     restart: unless-stopped
 ```
 
-2. Run Docker Compose:
+---
+
+#### **Step 3: Set Up Remote Debugging in IntelliJ**
+
+1. Open IntelliJ IDEA and create a **Remote JVM Debug** configuration:
+    - Navigate to **Run > Edit Configurations...**.
+    - Click the `+` button and select **Remote JVM Debug**.
+    - Set the following parameters:
+        - **Host:** `localhost`.
+        - **Port:** `5005` (as specified in `docker-compose.yml`).
+    - Save the configuration (e.g., name it `Docker Debug`).
+
+2. Add breakpoints in your code where needed.
+
+3. Select the **Docker Debug** configuration and click the **Debug** button.
+
+4. IntelliJ will attach to the running JVM in the Docker container, allowing you to debug your application live.
+
+---
+
+### **Stopping the Application**
+
+To stop the Docker Compose services:
+
+1. In IntelliJ, click the red **Stop** button in the Console view.
+2. Alternatively, stop the services manually by running:
    ```bash
-   docker-compose up
+   docker compose -f /path/to/docker-compose.yml -p sage-data-commons-dashboard stop
    ```
-
-3. Access the app at:
-   ```
-   http://localhost:9090
-   ```
-
----
-
-## **Optional Debugging with Docker Compose**
-
-- Update the Dockerfile to expose a debug port (5005).
-- Update `docker-compose.yml` to map port `5005:5005`.
-- Setup IntelliJ remote debug with the debug port (`localhost:5005`).
-
----
-
-## **Troubleshooting**
-
-- If Maven fails:
-  ```bash
-  mvn clean install
-  ```
-- Verify external configuration file paths.
-- Ensure Docker is installed and running: `docker --version`.
-
----
-
-## **License**
-
-Distributed under MIT License. See `LICENSE` for more details.
