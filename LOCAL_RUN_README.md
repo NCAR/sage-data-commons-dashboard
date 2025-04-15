@@ -101,8 +101,8 @@ git clone https://github.com/NCAR/sage-data-commons-dashboard.git
 
 #### Step 2: Configure IntelliJ SDK
 1. Go to **File > Project Structure > Project**.
-2. Set the SDK to **JDK 17** (or an appropriate supported version).
-3. Set the language level to match **JDK 17** or the project requirement.
+2. Set the SDK to **JDK 21** (or higher).
+3. Set the language level to match **JDK 21** or the project requirement.
 
 #### Step 3: Build the Project
 1. Open **View > Tool Windows > Maven**.
@@ -183,8 +183,6 @@ ENTRYPOINT ["java", "-Dspring.config.location=${SPRING_CONFIG_LOCATION}", "-jar"
    ```
 
 ---
-
-## **Using Docker Compose**
 
 ## **Using Docker Compose**
 
