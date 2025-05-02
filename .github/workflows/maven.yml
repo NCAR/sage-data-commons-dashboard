@@ -51,5 +51,5 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           file: Dockerfile-cloud
-          tags: ${{ github.repository }}:latest
+          tags: ghcr.io/NCAR/${{ github.repository }}:latest
           push: true
