@@ -67,8 +67,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           file: Dockerfile-cloud
-          build-args: |
-            APP_JAR=${{ env.APP_BUILD_ARTIFACT }}
+          build-args: APP_JAR=${{ env.APP_BUILD_ARTIFACT }}
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
           push: true
