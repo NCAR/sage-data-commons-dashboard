@@ -1,2 +1,12 @@
 # Use the official OpenJDK image from the Docker Hub
 FROM eclipse-temurin:17
+
+ARG APP_JAR="target/app.jar"
+
+COPY $APP_JAR /opt/app/lib/app.jar
+
+RUN mkdir /opt/app/conf
+
+EXPOSE 8080
+
+CMD ["java", "-jar", "/opt/app/lib/app.jar", "--spring.config.additional-location=file:/opt/app/conf/"]
