@@ -40,9 +40,6 @@ jobs:
       - name: Set APP_BUILD_ARTIFACT
         run: echo "APP_BUILD_ARTIFACT=$(ls target/sage-*.jar)" >> "$GITHUB_ENV"
 
-      - name: Show APP_BUILD_ARTIFACT
-        run: echo $APP_BUILD_ARTIFACT
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -60,18 +57,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.PACKAGE_TOKEN }}
 
-      - name: Find target
-        run: find target
-
-      - name: pwd
-        run: pwd
-
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
+          context: .
           file: Dockerfile-cloud
           build-args: APP_JAR=${{ env.APP_BUILD_ARTIFACT }}
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
-          no-cache: true
           push: true
