@@ -37,6 +37,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PACKAGE_TOKEN }}
 
+      - name: show target
+        run: ls target
+
+      - name: Set APP_BUILD_ARTIFACT
+        run: APP_BUILD_ARTIFACT=$(ls target/sage-*.jar)
+
+      - name: show APP_BUILD_ARTIFACT
+        run: echo $APP_BUILD_ARTIFACT
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
