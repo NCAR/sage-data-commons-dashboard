@@ -38,7 +38,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PACKAGE_TOKEN }}
 
       - name: Set APP_BUILD_ARTIFACT
-        run: echo "APP_BUILD_ARTIFACT=$(ls target/sage-*.jar)" >> $GITHUB_ENV
+        run: echo "APP_BUILD_ARTIFACT=$(ls target/sage-*.jar)" >> "$GITHUB_ENV"
 
       - name: Show APP_BUILD_ARTIFACT
         run: echo $APP_BUILD_ARTIFACT
