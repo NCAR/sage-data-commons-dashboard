@@ -60,6 +60,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.PACKAGE_TOKEN }}
 
+      - name: Find target
+        run: find target
+
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
