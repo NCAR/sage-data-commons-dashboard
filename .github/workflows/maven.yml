@@ -57,6 +57,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.PACKAGE_TOKEN }}
 
+      - name: Show tags
+        run: echo "${{ steps.metadata.outputs.tags }}"
+
+      - name: Show labels
+        run: echo "${{ steps.metadata.outputs.labels }}"
+
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
