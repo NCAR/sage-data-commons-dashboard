@@ -51,6 +51,8 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           tags: |
+            type=sha
+            type=schedule,pattern={{date 'YYYYMMDD-hhmmss' tz='America/Denver'}}
             type=raw,value=${{ env.APP_POM_VERSION }}
           images: |
             ghcr.io/${{ github.repository }}
@@ -61,12 +63,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.PACKAGE_TOKEN }}
-
-      - name: Show tags
-        run: echo "${{ steps.metadata.outputs.tags }}"
-
-      - name: Show labels
-        run: echo "${{ steps.metadata.outputs.labels }}"
 
       - name: Build and push
         uses: docker/build-push-action@v6
