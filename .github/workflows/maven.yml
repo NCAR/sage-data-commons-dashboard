@@ -74,6 +74,9 @@ jobs:
           context: .
           file: Dockerfile-cloud
           build-args: APP_JAR=${{ env.APP_BUILD_ARTIFACT }}
+          platforms:
+            - linux/amd64
+            - linux/arm64
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
           push: true
