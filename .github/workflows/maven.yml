@@ -51,9 +51,10 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           tags: |
-            type=raw,value=${{ env.APP_POM_VERSION }}
-            type=schedule,pattern={{date 'YYYYMMDD-hhmmss'}}
-            type=sha
+            type=raw,value=${{ env.APP_POM_VERSION }},priority=200
+            type=raw,value={{date 'YYYYMMDD-hhmmss' tz='America/Denver'}},priority=190
+            type=raw,value=latest,priority=180
+            type=sha,priority=100
           images: |
             ghcr.io/${{ github.repository }}
 
