@@ -40,6 +40,9 @@ jobs:
       - name: Set APP_BUILD_ARTIFACT
         run: echo "APP_BUILD_ARTIFACT=$(ls target/sage-*.jar)" >> "$GITHUB_ENV"
 
+      - name: Set APP_POM_VERSION
+        run: echo "APP_POM_VERSION=$(mvn help:evaluate -Dexpression=project.version  -q -DforceStdout)" >> "$GITHUB_ENV"
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -47,6 +50,8 @@ jobs:
         id: metadata
         uses: docker/metadata-action@v5
         with:
+          tags: |
+            type=raw,value=${{ env.APP_POM_VERSION }}
           images: |
             ghcr.io/${{ github.repository }}
 
