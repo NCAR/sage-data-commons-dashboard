@@ -1,8 +1,7 @@
-# Use the official OpenJDK image from the Docker Hub
 FROM eclipse-temurin:17
 
 LABEL org.opencontainers.image.description="Sage Data Commons Dashboard"
-LABEL org.opencontainers.image.source https://github.com/NCAR/sage-data-commons-dashboard
+LABEL org.opencontainers.image.source="https://github.com/NCAR/sage-data-commons-dashboard"
 
 ARG APP_JAR="target/app.jar"
 
