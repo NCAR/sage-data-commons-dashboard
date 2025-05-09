@@ -50,6 +50,21 @@
         <java.version>17</java.version>
     </properties>
 
+    <profiles>
+        <profile>
+            <id>development-docker</id>
+            <activation>
+                <property>
+                    <name>target</name>
+                    <value>development-docker</value>
+                </property>
+            </activation>
+            <build>
+                <finalName>ROOT</finalName>
+            </build>
+        </profile>
+    </profiles>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>

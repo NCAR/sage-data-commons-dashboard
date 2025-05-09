@@ -50,9 +50,16 @@ Before setting up the project, ensure you have these tools installed:
 - **Docker** (for containerized deployment):
     - Installation: [Docker for Mac Setup](https://docs.docker.com/desktop/setup/install/mac-install/).
 
-#### Ensure you have the following configuration files ready:
-1. `queueapp.properties`:
-   Located at `/path/to/dashboard/conf/queueapp.properties`.
+### **Clone the Project**
+Run the following command to clone the GitHub repository locally:
+
+```bash
+git clone https://github.com/NCAR/sage-data-commons-dashboard.git
+```
+
+### Ensure you have the following configuration files ready:
+1. `application.properties`:
+   Located at `/path/to/dashboard/conf/application.properties`.
 
 2. `hpc.yml`:
    Located at `/path/to/dashboard/conf/hpc.yml`.
@@ -60,35 +67,7 @@ Before setting up the project, ensure you have these tools installed:
 3. Test data files:
    Located at `/path/to/dashboard/data` (e.g., JSON files such as `casper_qstat_jobs.json`).
 
-Sample contents for `queueapp.properties`:
-
-```properties
-# Path to json data files (local or container-based paths)
-dashboard.queue.file.path=/path/to/dashboard/data
-
-# Scheduler tasks (in milliseconds, e.g., 60000 = 60 seconds)
-scheduler.fixedDelay=60000
-
-# HTML status page refresh interval (in seconds)
-hpc.page.refresh.interval=60
-
-casper.qstat.jobs.json=casper_qstat_jobs.json
-casper.qstat.jobs.txt=casper_qstat_jobs.txt
-derecho.qstat.jobs.json=derecho_qstat_jobs.json
-derecho.qstat.queue.txt=derecho_qstat_queue.txt
-
-allowed.origins="http://localhost:8080,https://localhost:8080"
-```
-
----
-
-### **Clone the Project**
-
-Run the following command to clone the GitHub repository locally:
-
-```bash
-git clone https://github.com/NCAR/sage-data-commons-dashboard.git
-```
+See src/main/resources/application.properties for the default settings.
 
 ---
 
@@ -136,27 +115,8 @@ docker --version
 
 #### External Configuration Files:
 Ensure the following files are accessible:
-- `queueapp.properties` (path: `/path/to/dashboard/conf/queueapp.properties`)
+- `application.properties` (path: `/path/to/dashboard/conf/application.properties`)
 - `hpc.yml` (path: `/path/to/dashboard/conf/hpc.yml`)
-
-### **Create a Dockerfile**
-
-Add the following file to the root directory of the project:
-
-```dockerfile
-# Use the official OpenJDK image from Docker Hub
-FROM eclipse-temurin:21
-
-# Add application JAR to the container
-ARG JAR_FILE=target/sage-data-commons-dashboard-0.0.1-SNAPSHOT.jar
-COPY ${JAR_FILE} /app.jar
-
-# Set Spring configuration location
-ENV SPRING_CONFIG_LOCATION=file:/usr/local/dashboard/conf/queueapp.properties
-
-# Run the application
-ENTRYPOINT ["java", "-Dspring.config.location=${SPRING_CONFIG_LOCATION}", "-jar", "/app.jar"]
-```
 
 ### **Build and Run the Application with Docker**
 
@@ -167,14 +127,15 @@ ENTRYPOINT ["java", "-Dspring.config.location=${SPRING_CONFIG_LOCATION}", "-jar"
 
 2. Build the Docker image:
    ```bash
-   docker build -t sage-data-commons-dashboard .
+   docker build -t sage-data-commons-dashboard:latest --build-arg APP_JAR=target/<<sage-data-commons-dashboard jar file>> .
    ```
 
 3. Run the Docker container:
    ```bash
    docker run --detach --name sage-data-commons-dashboard -p 9090:8080 \
-     -v /path/to/queueapp.properties:/usr/local/dashboard/conf/queueapp.properties \
-     sage-data-commons-dashboard
+     -v /path/to/dashboard/conf:/opt/app/conf \
+     -v /path/to/dashboard/data:/opt/app/data \
+     sage-data-commons-dashboard:latest
    ```
 
 4. Access the app at:
@@ -197,25 +158,13 @@ ENTRYPOINT ["java", "-Dspring.config.location=${SPRING_CONFIG_LOCATION}", "-jar"
 
 ### **Setup**
 
-1. **Create `docker-compose.yml`:**
-   Place the `docker-compose.yml` file in the same directory as the `Dockerfile` (e.g., `/path/to/IdeaProjects/sage-data-commons-dashboard`).
+1. **Create docker compose env file:**
 
-   Example `docker-compose.yml`:
+   Sample env file:
 
-   ```yaml
-   version: "3.9"  # Use the latest Docker Compose version
-
-   services:
-     sage-data-commons-dashboard:
-       image: sage-data-commons-dashboard:latest  # Replace with your image name
-       container_name: sage-data-commons-dashboard
-       ports:
-         - "9090:8080"  # Map port 9090 on the host to 8080 in the container
-       volumes:
-         - ${QUEUEAPP_PROPERTIES_FILE}:/usr/local/dashboard/queueapp.properties  # Dynamic volume for the properties file
-       environment:
-         SPRING_CONFIG_LOCATION: "file:/usr/local/dashboard/queueapp.properties"  # Environment variable for Spring
-       restart: unless-stopped
+   ```
+       HOST_DASHBOARD_CONF_DIR=/path/to/dashboard/conf
+       HOST_DASHBOARD_DATA_DIR=/path/to/dashboard/data
    ```
 
 ---
@@ -239,18 +188,18 @@ To integrate Docker (and Docker Compose) with IntelliJ:
 
 1. Go to **Run > Edit Configurations...**.
 2. Click the `+` button in the top-left corner and select **Docker-Compose**.
-3. Set up the following:
-    - **Name:** For example, `Docker Compose: Sage Dashboard`.
-    - **File(s):** Specify your `docker-compose.yml` path.
-    - **Services:** Select `sage-data-commons-dashboard`.
-4. Add the `CONFIG_PATH` environment variable:
-    - Go to the **Environment Variables** field:
-        - Add a key-value pair:
-          ```plaintext
-          Key: CONFIG_PATH
-          Value: /Users/your-user/dashboard/conf
-          ```
-5. Save the configuration.
+3. See the name, for example, `Docker Compose: Sage Dashboard`.
+3. Under **Run**, set the following options (see Modify options if not visible):
+    - **Compose files:** Specify `./docker-compose.yml`.
+    - **Environment variables file:** Specify path to your env file.
+4. Under **docker compose up**, add the following options (see Modify options):
+    - **Remove Orphans**
+    - **Attach to: None**
+    - **Build: Always**
+    - **Recreate containers: All**
+5. Under **Before launch**, add the following Run Maven Goal:
+    - **package -DskipTests -P development-docker**
+6. Save the configuration.
 
 ---
 
@@ -273,56 +222,17 @@ To integrate Docker (and Docker Compose) with IntelliJ:
 
 ### **Optional: Debugging with Docker Compose**
 
+#### **Set Up Remote Debugging in IntelliJ**
+
 To enable debugging for your Docker Compose setup:
-
-#### **Step 1: Update the `Dockerfile`**
-
-Modify the `Dockerfile` to expose a debug port and add JVM debugging options.
-
-```dockerfile
-# Expose the debug port inside the container
-EXPOSE 5005
-
-# Enable remote debugging for the JVM
-ENTRYPOINT ["java", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "-Dspring.config.location=${SPRING_CONFIG_LOCATION}", "-jar", "/app.jar"]
-```
-
----
-
-#### **Step 2: Update `docker-compose.yml`**
-
-Add the debug port (`5005:5005`) mapping to your `docker-compose.yml`, along with volume mounts.
-
-```yaml
-version: "3.9"
-
-services:
-  sage-data-commons-dashboard:
-    image: sage-data-commons-dashboard:latest
-    container_name: sage-data-commons-dashboard
-    ports:
-      - "9090:8080"  # Map port 9090 on host to 8080 in the container
-      - "5005:5005"  # Debugging
-    volumes:
-      # Mount the configuration file
-      - ${CONFIG_PATH}:/usr/local/dashboard/conf
-      # Mount a directory for JSON test files (optional)
-      - ${CONFIG_PATH}:/usr/local/dashboard/data
-    environment:
-      SPRING_CONFIG_LOCATION: "file:/usr/local/dashboard/conf/queueapp.properties"
-    restart: unless-stopped
-```
-
----
-
-#### **Step 3: Set Up Remote Debugging in IntelliJ**
 
 1. Open IntelliJ IDEA and create a **Remote JVM Debug** configuration:
     - Navigate to **Run > Edit Configurations...**.
     - Click the `+` button and select **Remote JVM Debug**.
     - Set the following parameters:
+        - **Debugger mode:** `Attach to remote JVM`.
         - **Host:** `localhost`.
-        - **Port:** `5005` (as specified in `docker-compose.yml`).
+        - **Port:** `10005` (as specified in `docker-compose.yml`).
     - Save the configuration (e.g., name it `Docker Debug`).
 
 2. Add breakpoints in your code where needed.
@@ -335,10 +245,10 @@ services:
 
 ### **Stopping the Application**
 
-To stop the Docker Compose services:
+To bring down the Docker Compose services:
 
-1. In IntelliJ, click the red **Stop** button in the Console view.
-2. Alternatively, stop the services manually by running:
+1. In IntelliJ, click the red **Down** button in the Console view.
+2. On the command line, run the following in the repository toplevel directory:
    ```bash
-   docker compose -f /path/to/docker-compose.yml -p sage-data-commons-dashboard stop
+   docker compose down
    ```

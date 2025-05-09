@@ -1,17 +1,26 @@
-version: "3.9"  # Use the latest Docker Compose version
-
 services:
-  sage-data-commons-dashboard:
-    image: sage-data-commons-dashboard:latest  # image name
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: "sage-data-commons-dashboard:latest"
+    pull_policy: never
     container_name: sage-data-commons-dashboard
-    ports:
-      - "9090:8080"  # Map port 9090 on host to 8080 in the container
-      - "5005:5005"  # Debugging
-    volumes:
-        # Path to queueapp.properties
-        - ${CONFIG_PATH_CONF}:/usr/local/dashboard/conf  # Dynamic volume for the properties file
-        # Mount the local directory containing JSON files to the container
-        - ${CONFIG_PATH_DATA}:/usr/local/dashboard/data
     environment:
-      SPRING_CONFIG_LOCATION: "file:/usr/local/dashboard/conf/queueapp.properties"  # Environment variable for Spring
-    restart: unless-stopped
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:10005 -Dcom.sun.management.jmxremote.port=64255 -Dcom.sun.management.jmxremote.rmi.port=64255 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=127.0.0.1
+    volumes:
+      - ${HOST_DASHBOARD_CONF_DIR}:/opt/app/conf:ro
+      - ${HOST_DASHBOARD_DATA_DIR}:/opt/app/data:ro
+    ports:
+     - mode: host
+       protocol: tcp
+       published: 9090
+       target: 8080
+     - mode: host
+       protocol: tcp
+       published: 10005
+       target: 10005
+     - mode: host
+       protocol: tcp
+       published: 64255
+       target: 64255
