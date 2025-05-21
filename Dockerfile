@@ -11,4 +11,4 @@ RUN mkdir /opt/app/conf /opt/app/data
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "/opt/app/lib/app.jar", "--spring.config.additional-location=file:/opt/app/conf/"]
+CMD ["java", "-jar", "/opt/app/lib/app.jar", "--spring.config.additional-location=file:/opt/app/conf/,file:/opt/app/conf/hpc.yml"]
