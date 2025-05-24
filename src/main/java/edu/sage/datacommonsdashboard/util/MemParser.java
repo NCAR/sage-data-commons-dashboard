@@ -12,7 +12,7 @@ public class MemParser {
         }
 
         // Regular expression to match numeric value and unit
-        Pattern pattern = Pattern.compile("(\\d+(?:\\.\\d+)?)\\s*(kb|mb|gb|tb)", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("(\\d+(?:\\.\\d+)?)\\s*(b|kb|mb|gb|tb)", Pattern.CASE_INSENSITIVE);
 
         Matcher matcher = pattern.matcher(mem);
 
@@ -47,6 +47,9 @@ public class MemParser {
                     break;
                 case "kb": // 1 KB = 1024 Bytes
                     bytes = value * 1024L;
+                    break;
+                case "b":
+                    bytes = value;
                     break;
                 default:
                     throw new IllegalArgumentException("Unexpected memory unit: " + unit);

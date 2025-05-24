@@ -40,4 +40,20 @@ public class MemParserTest {
         assertThrows(IllegalArgumentException.class, () -> MemParser.parseMemToBytes(null), "Null input should throw exception");
     }
 
+    @Test
+    @DisplayName("Test byte values")
+    void testByteValues() {
+        // Test explicit byte values
+        assertEquals(120L, MemParser.parseMemToBytes("120b"), "120b should equal 120 bytes");
+        assertEquals(120L, MemParser.parseMemToBytes("120B"), "120B should equal 120 bytes (case insensitive)");
+        assertEquals(1000L, MemParser.parseMemToBytes("1000b"), "1000b should equal 1000 bytes");
+
+        // Test with spaces
+        assertEquals(500L, MemParser.parseMemToBytes("500 b"), "500 b should equal 500 bytes");
+        assertEquals(250L, MemParser.parseMemToBytes("250 B"), "250 B should equal 250 bytes");
+
+        // Test decimal values
+        assertEquals(125L, MemParser.parseMemToBytes("124.6b"), "124.6b should round to 125 bytes");
+    }
+
 }
