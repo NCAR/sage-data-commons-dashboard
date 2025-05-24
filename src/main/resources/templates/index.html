@@ -1,67 +1,50 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/headContent.html}">
-    <title th:text="${pageTitle ?: 'Default Title'}">Dashboard Home Page</title>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+
+<head>
+    <title>Data Commons Dashboard</title>
 </head>
 
 <body>
-<div class="m-4">
-<header>Future Site Branding and Logo</header>
+<div layout:fragment="content">
+    <div class="content-wrapper">
+        <h1>Data Commons Dashboard</h1>
 
-<h1>Sage Data Commons Dashboard</h1>
+        <section class="dashboard-section">
+            <h2>Hosts</h2>
+            <div class="link-group">
+                <a th:href="@{/hpc/dashboard/host}" class="dashboard-link">HPC Hosts</a>
+                <a th:href="@{/hpc/dashboard/host-ws}" class="dashboard-link">HPC Hosts Websocket</a>
+            </div>
+        </section>
 
-<h3>Hosts</h3>
-<ul>
-    <li><a th:href="@{/hpc/dashboard/host}">HPC Hosts</a></li>
-</ul>
-<ul>
-    <li><a th:href="@{/hpc/dashboard/host-ws}">HPC Hosts Websocket</a></li>
-</ul>
+        <section class="dashboard-section">
+            <h2>Jobs</h2>
+            <div class="link-group">
+                <a th:href="@{/hpc/dashboard/casper/jobs/table}" class="dashboard-link">Casper Jobs Table</a>
+                <a th:href="@{/hpc/dashboard/derecho/jobs/table}" class="dashboard-link">Derecho Jobs Table</a>
+                <a th:href="@{/hpc/dashboard/casper/jobs/tablefull}" class="dashboard-link">Casper Jobs Table Full Width</a>
+                <a th:href="@{/hpc/dashboard/derecho/jobs/tablefull}" class="dashboard-link">Derecho Jobs Table Full Width</a>
+            </div>
+        </section>
 
-<h3>Jobs</h3>
-<ul>
-    <li><a th:href="@{/hpc/dashboard/casper/jobs/table}">Casper Jobs Table</a></li>
-</ul>
-<ul>
-    <li><a th:href="@{/hpc/dashboard/derecho/jobs/table}">Derecho Jobs Table</a></li>
-</ul>
-<ul>
-    <li><a th:href="@{/hpc/dashboard/casper/jobs/tablefull}">Casper Jobs Table Full Width</a></li>
-</ul>
-<ul>
-    <li><a th:href="@{/hpc/dashboard/casper/jobs/tablefull}">Derecho Jobs Table Full Width</a></li>
-</ul>
+        <section class="dashboard-section">
+            <h2>Development Testing</h2>
+            <div class="link-group development">
+                <a th:href="@{/hpc/dashboard/casper/jobs/json}" class="dashboard-link dev-link">Casper Jobs Json</a>
+                <a th:href="@{/hpc/dashboard/derecho/jobs/json}" class="dashboard-link dev-link">Derecho Jobs Json</a>
+                <a th:href="@{/hpc/dashboard/casper/queue/json}" class="dashboard-link dev-link">Casper Queue Json</a>
+                <a th:href="@{/hpc/dashboard/derecho/queue/json}" class="dashboard-link dev-link">Derecho Queue Json</a>
+                <a th:href="@{/hpc/dashboard/casper/jobs/text}" class="dashboard-link dev-link">Casper Jobs Text</a>
+                <a th:href="@{/hpc/dashboard/derecho/jobs/text}" class="dashboard-link dev-link">Derecho Jobs Text</a>
+                <a th:href="@{/hpc/dashboard/casper/queue/text}" class="dashboard-link dev-link">Casper Queue Text</a>
+                <a th:href="@{/hpc/dashboard/derecho/queue/text}" class="dashboard-link dev-link">Derecho Queue Text</a>
+            </div>
+        </section>
+    </div>
 
-<h3>To Be Removed</h3>
-<ul>
-    <li><a th:href="@{/hpc/dashboard/casper/jobs/json}">Casper Jobs Json</a></li>
-</ul>
-<ul>
-    <li><a th:href="@{/hpc/dashboard/derecho/jobs/json}">Derecho Jobs Json</a></li>
-</ul>
-<ul>
-    <li><a th:href="@{/hpc/dashboard/casper/queue/json}">Casper Queue Json</a></li>
-</ul>
-<ul>
-    <li><a th:href="@{/hpc/dashboard/derecho/queue/json}">Derecho Queue Json</a></li>
-</ul>
-<ul>
-    <li><a th:href="@{/hpc/dashboard/casper/jobs/text}">Casper Jobs Text</a></li>
-</ul>
-<ul>
-    <li><a th:href="@{/hpc/dashboard/derecho/jobs/text}">Derecho Jobs Text</a></li>
-</ul>
-<ul>
-    <li><a th:href="@{/hpc/dashboard/casper/queue/text}">Casper Queue Text</a></li>
-</ul>
-<ul>
-    <li><a th:href="@{/hpc/dashboard/derecho/queue/text}">Derecho Queue Text</a></li>
-</ul>
-
-
-<footer>
-    <p>Copyright 2025 UCAR</p>
-</footer>
 </div>
 </body>
 </html>

@@ -42,6 +42,8 @@ public class DisplayJobsController {
         model.addAttribute("pbsServer", jobData.getPbsServer());
         model.addAttribute("timestamp", jobData.getTimestamp());
 
+        model.addAttribute("currentPage", "jobs");  // for navigation highlighting
+
         // Add the list to the model
         model.addAttribute("jobs", getJobViewModels(jobData));
 

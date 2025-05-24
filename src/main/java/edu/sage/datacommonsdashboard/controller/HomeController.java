@@ -10,6 +10,8 @@ public class HomeController {
     @GetMapping("/")
     public String showHomePage(Model model) {
         model.addAttribute("pageTitle", "Data Commons Dashboard");
+        model.addAttribute("currentPage", "home");  // for navigation highlighting
+
         return "index";
     }
 }

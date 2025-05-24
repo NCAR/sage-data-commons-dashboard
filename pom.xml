@@ -143,6 +143,12 @@
             <version>1.5.1</version>
         </dependency>
 
+        <!--   Use Thymeleaf layout dialect -->
+        <dependency>
+            <groupId>nz.net.ultraq.thymeleaf</groupId>
+            <artifactId>thymeleaf-layout-dialect</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -158,7 +164,6 @@
                 <groupId>nu.validator</groupId>
                 <artifactId>vnu-maven-plugin</artifactId>
                 <version>1.0.0</version>
-
                 <!-- The plugin should hook into the validate goal -->
                 <executions>
                     <execution>
@@ -171,7 +176,7 @@
                     <filesets>
                         <fileset>
                             <directory>src/main/resources/templates</directory>
-                            <glob>**.html</glob>
+                            <glob>**/[!htmlReport]*.html</glob>
                         </fileset>
                     </filesets>
                     <validator>
@@ -179,39 +184,42 @@
                         <filters>
                             <!-- Example filters:
                                  https://github.com/validator/maven-plugin?tab=readme-ov-file#filtering -->
-                            <filter>
-                                <regex>xmlns:th</regex>
-                            </filter>
-                            <filter>
-                                <regex>th:text</regex>
-                            </filter>
-                            <filter>
-                                <regex>th:each</regex>
-                            </filter>
-                            <filter>
-                                <regex>th:with</regex>
-                            </filter>
-                            <filter>
-                                <regex>th:if</regex>
-                            </filter>
-                            <filter>
-                                <regex>th:include</regex>
-                            </filter>
-                            <filter>
-                                <regex>th:insert</regex>
-                            </filter>
-                            <filter>
-                                <regex>th:replace</regex>
-                            </filter>
-                            <filter>
-                                <regex>th:href</regex>
-                            </filter>
-                            <filter>
-                                <regex>th:src</regex>
-                            </filter>
-                            <filter>
-                                <regex>th:attr</regex>
-                            </filter>
+                            <!-- Thymeleaf Specific Attributes -->
+                            <filter><regex>xmlns:th</regex></filter>
+                            <filter><regex>th:text</regex></filter>
+                            <filter><regex>th:each</regex></filter>
+                            <filter><regex>th:with</regex></filter>
+                            <filter><regex>th:if</regex></filter>
+                            <filter><regex>th:include</regex></filter>
+                            <filter><regex>th:insert</regex></filter>
+                            <filter><regex>th:replace</regex></filter>
+                            <filter><regex>th:href</regex></filter>
+                            <filter><regex>th:src</regex></filter>
+                            <filter><regex>th:attr</regex></filter>
+                            <filter><regex>th:fragment</regex></filter>
+                            <filter><regex>th:classappend</regex></filter>
+                            <filter><regex>th:block</regex></filter>
+                            <!-- Additional Thymeleaf Attributes -->
+                            <filter><regex>th:class</regex></filter>
+                            <filter><regex>th:style</regex></filter>
+                            <filter><regex>th:action</regex></filter>
+                            <filter><regex>th:value</regex></filter>
+                            <filter><regex>th:onclick</regex></filter>
+                            <filter><regex>th:selected</regex></filter>
+                            <filter><regex>th:checked</regex></filter>
+                            <filter><regex>th:unless</regex></filter>
+                            <filter><regex>th:switch</regex></filter>
+                            <filter><regex>th:case</regex></filter>
+                            <filter><regex>th:method</regex></filter>
+                            <filter><regex>th:name</regex></filter>
+                            <filter><regex>th:id</regex></filter>
+                            <filter><regex>th:content</regex></filter>
+                            <filter><regex>th:inline</regex></filter>
+                            <filter><regex>th:remove</regex></filter>
+                            <filter><regex>xmlns:layout</regex></filter>
+                            <filter><regex>layout:decorate</regex></filter>
+                            <filter><regex>layout:fragment</regex></filter>
+
                         </filters>
                     </validator>
                 </configuration>
