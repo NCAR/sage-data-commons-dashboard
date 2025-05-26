@@ -112,10 +112,16 @@ body {
     background-color: white;
 }
 
-/* Footer styling */
+/*
+** Footer styling
+*/
 footer {
     color: #fff;
     margin-top: 3rem;
+}
+
+.text-gray-light {
+    color: #cbd3d9;
 }
 
 /* line up the footer sections */
@@ -127,6 +133,7 @@ footer {
     padding: 1rem;  /* Match this with main-content padding */
 }
 
+/* Org footer */
 
 .org-footer {
     background-color: rgb(50, 49, 51);
@@ -140,35 +147,32 @@ footer {
 }
 
 .org-footer .nav-link {
-    color: #fff;
+    color: #c3d7ee;
     padding: 0.25rem 0;
     font-size: 0.9rem;
 }
 
 .org-footer .nav-link:hover {
-    color: rgba(255,255,255,0.8);
-    text-decoration: underline;
+    color: #1a658f;
+    text-decoration: none;
 }
+
+/* Legal Footer */
 
 .legal-footer {
-    background-color: rgb(37, 37, 37);
-    color: #fff;
-    font-size: 0.85rem;
+     background-color: rgb(37, 37, 37);
 }
 
-.legal-footer .nav-link {
-    color: #fff;
-    padding: 0.25rem 1rem 0.25rem 0;
+.legal-footer a {
+    text-decoration: none;
 }
 
-.legal-footer .nav-link:hover {
-    color: rgba(255,255,255,0.8);
-    text-decoration: underline;
+.legal-footer a:hover {
+    color: #1a658f;
+    text-decoration: none;
 }
 
-.text-gray-light {
-    color: #cbd3d9;
-}
+/* NSF footer */
 
 .nsf-footer {
     background-color: #fff;
@@ -195,10 +199,6 @@ footer {
     padding: 0.25rem 1rem 0.25rem 0;
 }
 
-.nsf-footer .nav-link:hover {
-    color: #0077C8;
-    text-decoration: underline;
-}
 
 /*End of layout styles */
 
