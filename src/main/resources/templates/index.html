@@ -1,28 +1,27 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{base}">
+      layout:decorate="~{base-layout}">
 
 <head>
     <title>Data Commons Dashboard</title>
 </head>
 
-<body>
+<body class="ncar">
 <div layout:fragment="content">
     <div class="content-wrapper">
-        <h1>Data Commons Dashboard</h1>
 
-        <section class="dashboard-section">
+        <section class="dashboard-sectionv mt-3">
             <h2>Hosts</h2>
-            <div class="link-group">
+            <div class="nav flex-column gap-2">
                 <a th:href="@{/hpc/dashboard/host}" class="dashboard-link">HPC Hosts</a>
                 <a th:href="@{/hpc/dashboard/host-ws}" class="dashboard-link">HPC Hosts Websocket</a>
             </div>
         </section>
 
-        <section class="dashboard-section">
+        <section class="dashboard-section mt-3">
             <h2>Jobs</h2>
-            <div class="link-group">
+            <div class="nav flex-column gap-2">
                 <a th:href="@{/hpc/dashboard/casper/jobs/table}" class="dashboard-link">Casper Jobs Table</a>
                 <a th:href="@{/hpc/dashboard/derecho/jobs/table}" class="dashboard-link">Derecho Jobs Table</a>
                 <a th:href="@{/hpc/dashboard/casper/jobs/tablefull}" class="dashboard-link">Casper Jobs Table Full Width</a>
@@ -30,9 +29,9 @@
             </div>
         </section>
 
-        <section class="dashboard-section">
+        <section class="dashboard-section mt-3">
             <h2>Development Testing</h2>
-            <div class="link-group development">
+            <div class="nav flex-column gap-2">
                 <a th:href="@{/hpc/dashboard/casper/jobs/json}" class="dashboard-link dev-link">Casper Jobs Json</a>
                 <a th:href="@{/hpc/dashboard/derecho/jobs/json}" class="dashboard-link dev-link">Derecho Jobs Json</a>
                 <a th:href="@{/hpc/dashboard/casper/queue/json}" class="dashboard-link dev-link">Casper Queue Json</a>
