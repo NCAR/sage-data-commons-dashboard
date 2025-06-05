@@ -1,37 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base-layout}">
+
 <head>
-    <meta charset="UTF-8">
+    <title>HPC Host Status</title>
 
-    <meta http-equiv="refresh" content="0" th:attr="content=${refreshInterval}">
-
-    <title>HPC Hosts</title>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Include Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-
-    <!-- Include Bootstrap icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Include DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-
-    <!-- jQuery must come before Datatables -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" ></script>
-
-    <!-- Include DataTables JS -->
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <th:block layout:fragment="head-extras">
+        <meta http-equiv="refresh" content="0" th:attr="content=${refreshInterval}">
+    </th:block>
 </head>
+
 <body>
+<div layout:fragment="content">
 
-<header>Future Site Branding and Logo</header>
-
-<a th:href="@{/}" >Return to Home</a>
-
-<main>
     <h1 th:text="${pageTitle}"></h1>
 
     <p><strong>Report Time:</strong> <span th:text="${formattedTimestamp}"></span></p>
@@ -68,22 +50,20 @@
         </tbody>
     </table>
 
-</main>
+</div>
 
-<footer>
-    <p>Copyright 2025 UCAR</p>
-</footer>
+<th:block layout:fragment="scripts">
 
-<script>
-
+    <script>
     $(document).ready(function () {
 
         $('#hpcHosts').DataTable({
             paging: false
         });
     });
+    </script>
 
-</script>
+</th:block>
 
 </body>
 </html>
