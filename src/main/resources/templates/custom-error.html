@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base-layout}">
+<head>
+  <title th:text="${errorTitle}">Error</title>
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="container text-center mt-5">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <h1 class="display-1" th:text="${statusCode}">404</h1>
+        <h2 class="mb-4" th:text="${errorTitle}">Error</h2>
+        <p class="lead mb-5" th:text="${errorMessage}">An error has occurred.</p>
+        <a href="/" th:href="@{/}" class="btn btn-primary">
+          Return to Home
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
