@@ -1,15 +1,17 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/headContent.html}">
-    <title th:text="${pageTitle ?: 'Default Title'}">Job Details Full</title>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base-layout}">
+
+<head>
+    <title th:text="${pageTitle}">Job Data Table</title>
 </head>
+
 <body>
 
-<header>Future Site Branding and Logo</header>
+<!-- Main content -->
+<div layout:fragment="content">
+    <div class="container-wrapper">
 
-<a th:href="@{/}">Return to Home</a>
-
-<main>
     <h1 th:text="${pageTitle}"></h1>
 
     <p><strong>Report Time:</strong> <span th:text="${formattedTimestamp}"></span></p>
@@ -174,11 +176,11 @@
         </tbody>
     </table>
 
-</main>
+    </div>
+</div>
 
-<footer>
-    <p>Copyright 2025 UCAR</p>
-</footer>
+<!-- Page-specific scripts -->
+<th:block layout:fragment="scripts">
 
 <script th:src="@{/js/dateTimeUtils.js}"></script>
 
@@ -199,6 +201,7 @@
     updateTableWithTimeZone();
 
 </script>
+</th:block>
 
 </body>
 </html>

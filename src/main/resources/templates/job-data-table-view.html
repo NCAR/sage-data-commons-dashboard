@@ -1,132 +1,105 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/headContent.html}">
-    <title th:text="${pageTitle ?: 'Default Title'}">Job Details</title>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
+<head>
+    <title th:text="${pageTitle}">Job Data Table</title>
+
+    <!-- Any additional page-specific resources -->
+    <th:block layout:fragment="head-extras">
+    </th:block>
 </head>
+
 <body>
 
-<div class="m-4">
+<!-- Main content -->
+<div layout:fragment="content">
+    <div class="container-wrapper">
+        <h1 th:text="${pageTitle}"></h1>
 
-<header>Future Site Branding and Logo</header>
+        <p><strong>Report Time:</strong> <span th:text="${formattedTimestamp}"></span></p>
+        <p><strong>Timestamp:</strong> <span th:text="${timestamp}"></span></p>
+        <p><strong>Pbs Version:</strong> <span th:text="${pbsVersion}"></span></p>
+        <p><strong>Pbs Server:</strong> <span th:text="${pbsServer}"></span></p>
 
-<a th:href="@{/}">Return to Home</a>
+        <table id="jobTable" class="table table-bordered table-striped">
+            <thead class="table-header">
+            <tr>
+                <th>Job Key</th>
+                <th>Job Name</th>
+                <th>Job Owner</th>
+                <th>Job State</th>
+                <th>Queue</th>
+                <th>Server</th>
+                <th>Account Name</th>
+                <th>Checkpoint</th>
+                <th class="formatEpoch">Creation Time</th>
+                <th class="formatEpoch">Modification Time</th>
+                <th>Priority</th>
+                <th class="formatEpoch">Queue Time</th>
+                <th class="formatEpoch">Start Time</th>
+                <th class="formatEpoch">Obit Time</th>
+                <th>Job Directory</th>
+                <th class="formatEpoch">Elapsed Time</th>
+                <th>Umask</th>
+                <th>Run Count</th>
+                <th>Eligible Time</th>
+                <th>Exit Status</th>
+                <th>Project</th>
+                <th>Submit Host</th>
+                <th>Server Instance ID</th>
+                <!--Resource Columns -->
+                <th class="formattedMemory">Memory</th>
+                <th>mpiprocs</th>
+                <th>ncpus</th>
+                <th>ngpus</th>
+                <th>nodect</th>
+                <th>place</th>
+                <th>walltime</th>
+                <th>Comment</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="job : ${jobs}">
+                <td><span th:text="${job.jobId}"></span></td>
+                <td><span th:text="${job.jobName}"></span></td>
+                <td><span th:text="${job.jobOwner}"></span></td>
+                <td><span th:text="${job.jobState}"></span></td>
+                <td><span th:text="${job.queue}"></span></td>
+                <td><span th:text="${job.server}"></span></td>
+                <td><span th:text="${job.accountName}"></span></td>
+                <td><span th:text="${job.checkpoint}"></span></td>
+                <td th:text="${job.ctime != null ? job.ctime : ''}"></td>
+                <td th:text="${job.mtime != null ? job.mtime : ''}"></td>
+                <td><span th:text="${job.priority}"></span></td>
+                <td th:text="${job.qtime != null ? job.qtime : ''}"></td>
+                <td th:text="${job.stime != null ? job.stime : ''}"></td>
+                <td th:text="${job.obittime != null ? job.obittime : ''}"></td>
+                <td><span th:text="${job.jobdir}"></span></td>
+                <td th:text="${job.etime != null ? job.etime : ''}"></td>
+                <td><span th:text="${job.umask}"></span></td>
+                <td><span th:text="${job.runCount}"></span></td>
+                <td><span th:text="${job.eligibleTime}"></span></td>
+                <td><span th:text="${job.exitStatus}"></span></td>
+                <td><span th:text="${job.project}"></span></td>
+                <td><span th:text="${job.submitHost}"></span></td>
+                <td><span th:text="${job.serverInstanceId}"></span></td>
+                <td th:text="${job.formattedMemory}"></td>
+                <td th:text="${job.mpiprocs}"></td>
+                <td th:text="${job.ncpus}"></td>
+                <td th:text="${job.ngpus}"></td>
+                <td th:text="${job.nodect}"></td>
+                <td th:text="${job.place}"></td>
+                <td th:text="${job.walltime}"></td>
+                <td><span th:text="${job.comment}"></span></td>
+            </tr>
+            </tbody>
+        </table>
 
-<main>
-    <h1 th:text="${pageTitle}"></h1>
+    </div>
+</div>
 
-    <p><strong>Report Time:</strong> <span th:text="${formattedTimestamp}"></span></p>
-    <p><strong>Timestamp:</strong> <span th:text="${timestamp}"></span></p>
-    <p><strong>Pbs Version:</strong> <span th:text="${pbsVersion}"></span></p>
-    <p><strong>Pbs Server:</strong> <span th:text="${pbsServer}"></span></p>
-
-    <table id="jobTable" class="table table-bordered table-striped">
-        <thead class="table-header">
-        <tr>
-            <th>Job Key</th>
-            <th>Job Name</th>
-            <th>Job Owner</th>
-            <th>Job State</th>
-            <th>Queue</th>
-            <th>Server</th>
-            <th>Account Name</th>
-            <th>Checkpoint</th>
-            <th class="formatEpoch">Creation Time</th>
-<!--            <th>Hold Types</th>-->
-<!--            <th>Join Path</th>-->
-<!--            <th>Keep Files</th>-->
-<!--            <th>Mail Points</th>-->
-            <th class="formatEpoch">Modification Time</th>
-            <th>Priority</th>
-            <th class="formatEpoch">Queue Time</th>
-<!--            <th>Rerunable</th>-->
-            <th class="formatEpoch">Start Time</th>
-            <th class="formatEpoch">Obit Time</th>
-<!--            <th>Shell Path List</th>-->
-            <th>Job Directory</th>
-<!--            <th>Substate</th>-->
-
-            <th class="formatEpoch">Elapsed Time</th>
-            <th>Umask</th>
-            <th>Run Count</th>
-            <th>Eligible Time</th>
-            <th>Exit Status</th>
-<!--            <th>Submit Arguments</th>-->
-            <th>Project</th>
-            <th>Submit Host</th>
-            <th>Server Instance ID</th>
-            <!--Resource Columns -->
-            <th class="formattedMemory">Memory</th>
-            <th>mpiprocs</th>
-<!--            <th>mps</th>-->
-            <th>ncpus</th>
-            <th>ngpus</th>
-            <th>nodect</th>
-            <th>place</th>
-<!--            <th>select</th>-->
-            <th>walltime</th>
-            <th>Comment</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="job : ${jobs}">
-            <td><span th:text="${job.jobId}"></span></td>
-            <td><span th:text="${job.jobName}"></span></td>
-            <td><span th:text="${job.jobOwner}"></span></td>
-            <td><span th:text="${job.jobState}"></span></td>
-            <td><span th:text="${job.queue}"></span></td>
-            <td><span th:text="${job.server}"></span></td>
-            <td><span th:text="${job.accountName}"></span></td>
-            <td><span th:text="${job.checkpoint}"></span></td>
-            <td th:text="${job.ctime != null ? job.ctime : ''}"></td>
-<!--            <td><span th:text="${job.holdTypes}"></span></td>-->
-<!--            <td><span th:text="${job.joinPath}"></span></td>-->
-<!--            <td><span th:text="${job.keepFiles}"></span></td>-->
-<!--            <td><span th:text="${job.mailPoints}"></span></td>-->
-            <td th:text="${job.mtime != null ? job.mtime : ''}"></td>
-            <td><span th:text="${job.priority}"></span></td>
-            <td th:text="${job.qtime != null ? job.qtime : ''}"></td>
-<!--            <td><span th:text="${job.rerunable}"></span></td>-->
-            <td th:text="${job.stime != null ? job.stime : ''}"></td>
-            <td th:text="${job.obittime != null ? job.obittime : ''}"></td>
-<!--            <td><span th:text="${job.shellPathList}"></span></td>-->
-            <td><span th:text="${job.jobdir}"></span></td>
-<!--            <td><span th:text="${job.substate}"></span></td>-->
-
-            <td th:text="${job.etime != null ? job.etime : ''}"></td>
-            <td><span th:text="${job.umask}"></span></td>
-            <td><span th:text="${job.runCount}"></span></td>
-            <td><span th:text="${job.eligibleTime}"></span></td>
-            <td><span th:text="${job.exitStatus}"></span></td>
-<!--            <td><span th:text="${job.submitArguments}"></span></td>-->
-            <td><span th:text="${job.project}"></span></td>
-            <td><span th:text="${job.submitHost}"></span></td>
-            <td><span th:text="${job.serverInstanceId}"></span></td>
-            <td th:text="${job.formattedMemory}"></td>
-            <td th:text="${job.mpiprocs}"></td>
-<!--            <td th:text="${job.mps}"></td>-->
-            <td th:text="${job.ncpus}"></td>
-            <td th:text="${job.ngpus}"></td>
-            <td th:text="${job.nodect}"></td>
-            <td th:text="${job.place}"></td>
-<!--            <td th:text="${job.select}"></td>-->
-            <td th:text="${job.walltime}"></td>
-            <td><span th:text="${job.comment}"></span></td>
-        </tr>
-        </tbody>
-    </table>
-
-</main>
-
-<footer>
-    <p>Copyright 2025 UCAR</p>
-</footer>
-
-<!--<script th:src="@{/js/dateTimeUtils.js}"></script>-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.43/moment-timezone-with-data.min.js"></script>
-<script src="https://cdn.datatables.net/plug-ins/1.13.5/sorting/datetime-moment.js"></script>
-<script src="https://cdn.datatables.net/plug-ins/2.2.2/sorting/file-size.js"></script>
+<!-- Page-specific scripts -->
+<th:block layout:fragment="scripts">
 
 <script>
 
@@ -134,50 +107,50 @@
 
         // Put # rows displayed/total at top of table also.
         $('#jobTable').DataTable({
-            paging: false,
-            dom: '<"top"if>rt<"bottom"i><"clear">', // f for search/filter box
-            language: {
-                info: "Showing _START_ to _END_ of _TOTAL_ entries",
-                infoFiltered: "(filtered from _MAX_ total entries)"
-            },
-            columnDefs: [
-                {
-                    // Format memory from raw bytes to size with units
-                    targets: 'formattedMemory',
-                    type: 'file-size' // Use file-size plugin for visible column
+                paging: false,
+                dom: '<"top"if>rt<"bottom"i><"clear">', // f for search/filter box
+                language: {
+                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                    infoFiltered: "(filtered from _MAX_ total entries)"
                 },
-                {
-                    // Format epoch data to a human-readable date
-                    targets: 'formatEpoch',  // Target using class name for 'ctime', etc <th class="formatEpoch">
-                    render: function (data, type, row) {
-                        //console.log("Incoming data to render:", data); // Debug incoming row data for this column
-                        //  return DataTable.render.datetime('x', 'YYYY-MM-DDTHH:mm:ssZ')(data);
-                        if (!data) { // Check if the data is null, undefined
-                            return ''; // Return an empty string for display
-                        }
+                columnDefs: [
+                    {
+                        // Format memory from raw bytes to size with units
+                        targets: 'formattedMemory',
+                        type: 'file-size' // Use file-size plugin for visible column
+                    },
+                    {
+                        // Format epoch data to a human-readable date
+                        targets: 'formatEpoch',  // Target using class name for 'ctime', etc <th class="formatEpoch">
+                        render: function (data, type, row) {
+                            //console.log("Incoming data to render:", data); // Debug incoming row data for this column
+                            //  return DataTable.render.datetime('x', 'YYYY-MM-DDTHH:mm:ssZ')(data);
+                            if (!data) { // Check if the data is null, undefined
+                                return ''; // Return an empty string for display
+                            }
 
-                        var epochMillis = parseInt(data);
-                        // Get the browser's local time zone
-                        var timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                            var epochMillis = parseInt(data);
+                            // Get the browser's local time zone
+                            var timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-                        // Make the data look user-friendly/readable and for search/filter, not sort, which needs raw data
-                        if (type === 'display' || type === 'filter') {
-                            return moment(epochMillis)
-                                .tz(timezone) //  use browser's time zone
-                                .format('YYYY-MM-DD HH:mm:ss z'); // 'z' for abbreviation like MST or PST
-                        }
+                            // Make the data look user-friendly/readable and for search/filter, not sort, which needs raw data
+                            if (type === 'display' || type === 'filter') {
+                                return moment(epochMillis)
+                                    .tz(timezone) //  use browser's time zone
+                                    .format('YYYY-MM-DD HH:mm:ss z'); // 'z' for abbreviation like MST or PST
+                            }
 
-                        return data; // Raw data for sorting
+                            return data; // Raw data for sorting
                         }
                     }
                 ]
 
             }
-
         ); // End DataTable
 
     });
 </script>
-</div>
+</th:block>
+
 </body>
 </html>
