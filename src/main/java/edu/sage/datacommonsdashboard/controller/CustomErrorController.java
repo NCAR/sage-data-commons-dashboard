@@ -2,12 +2,14 @@ package edu.sage.datacommonsdashboard.controller;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@ConditionalOnProperty(name = "server.error.whitelabel.enabled", havingValue = "false", matchIfMissing = true)
 public class CustomErrorController implements ErrorController {
 
     /* Catch-all for unhandled errors and HTTP status errors */
