@@ -9,7 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@ConditionalOnProperty(name = "server.error.whitelabel.enabled", havingValue = "false", matchIfMissing = true)
+//@ConditionalOnProperty(name = "server.error.whitelabel.enabled", havingValue = "false", matchIfMissing = true)
+@ConditionalOnProperty(name = "server.error.whitelabel.enabled", havingValue = "false")
 public class CustomErrorController implements ErrorController {
 
     /* Catch-all for unhandled errors and HTTP status errors */
