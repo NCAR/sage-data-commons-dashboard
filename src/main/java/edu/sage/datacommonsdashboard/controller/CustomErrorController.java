@@ -16,9 +16,17 @@ public class CustomErrorController implements ErrorController {
     /* Catch-all for unhandled errors and HTTP status errors */
     @RequestMapping("/error")
     public String handleError(HttpServletRequest request, Model model) {
+
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+        Object exception = request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
+
         String errorMessage = "An unexpected error has occurred";
         String errorTitle = "Error";
+        String exceptionMessage = null;
+
+        if (exception != null && exception instanceof Exception) {
+            exceptionMessage = ((Exception) exception).getMessage();
+        }
 
         if (status != null) {
             Integer statusCode = Integer.valueOf(status.toString());
@@ -42,6 +50,7 @@ public class CustomErrorController implements ErrorController {
         model.addAttribute("errorTitle", errorTitle);
         model.addAttribute("errorMessage", errorMessage);
         model.addAttribute("statusCode", status);
+        model.addAttribute("exceptionMessage", exceptionMessage);
 
         return "custom-error";  // Changed from "error" to "custom-error"
     }
