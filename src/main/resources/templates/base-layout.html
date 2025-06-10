@@ -39,7 +39,7 @@
     <!-- Moment.js and timezone support -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.43/moment-timezone-with-data.min.js"></script>
-    
+
     <!-- Common CSS from https://github.com/NCAR/unity/pkgs/npm/unity-->
     <link rel="stylesheet" href="/css/main.css" th:href="@{/css/main.css}">
 
@@ -103,7 +103,7 @@
 <!-- Main Content -->
 <main class="unity-main">
     <div class="bg-white py-2"> <!-- Added full-width white background wrapper -->
-        <div class="container-fluid px-2">  <!-- bg-white bec unity css has gray body but some white content areas and we just want white -->
+        <div class="container">  <!-- bg-white bec unity css has gray body but some white content areas and we just want white -->
             <div layout:fragment="content">
                 <!-- Content from child templates will go here -->
             </div>
