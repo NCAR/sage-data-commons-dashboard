@@ -1,0 +1,22 @@
+/*Override or supplement main.css*/
+
+/* Override Bootstrap's variable at the root level */
+:root {
+    --bs-body-bg: #ffffff !important;
+}
+
+/* Direct override on body and any other elements that might use the background */
+html, body,
+.unity-main,
+.ncar {
+    background-color: #ffffff !important;
+}
+
+/* Remove any background images */
+html, body,
+.unity-main,
+.ncar {
+    background-image: none !important;
+}
+
+
