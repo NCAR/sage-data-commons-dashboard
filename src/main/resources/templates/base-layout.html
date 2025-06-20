@@ -42,7 +42,6 @@
 
     <!-- Common CSS from https://github.com/NCAR/unity/pkgs/npm/unity-->
     <link rel="stylesheet" href="/css/main.css" th:href="@{/css/main.css}">
-    <link rel="stylesheet" href="/css/custom.css" th:href="@{/css/custom.css}">
 
     <!-- Allow pages to add their own resources -->
     <th:block layout:fragment="head-extras">
@@ -93,10 +92,21 @@
 <!-- Navigation -->
 <nav class="unity-nav navbar navbar-expand-md bg-secondary-subtle">
     <div class="col-12 navbar-wrapper border-top bg-secondary-subtle">
-        <div class="container-lg" id="navbarSupportedContent1">
+        <div class="container-lg collapse navbar-collapse" id="navbarSupportedContent1">
             <div class="site-name mx-3 mx-md-0 my-2">
                 <a th:href="@{/}" class="small-site-name">Data Commons Dashboard</a>
             </div>
+            <ul class="menu navbar-nav me-auto mb-2 mb-md-0 align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/hpc/dashboard/host}">HPC Hosts</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/hpc/dashboard/casper/jobs/table}">Casper Jobs Table</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/hpc/dashboard/derecho/jobs/table}">Derecho Jobs Table</a>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>
