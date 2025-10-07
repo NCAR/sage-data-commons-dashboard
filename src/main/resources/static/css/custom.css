@@ -19,4 +19,13 @@ html, body,
     background-image: none !important;
 }
 
+/* Sticky footer layout */
+body.ncar {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
 
+.unity-main {
+    flex-grow: 1;
+}

@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17.0.15_6-jre-noble
+FROM eclipse-temurin:17-jre
 
 LABEL org.opencontainers.image.description="Sage Data Commons Dashboard"
 LABEL org.opencontainers.image.source="https://github.com/NCAR/sage-data-commons-dashboard"
