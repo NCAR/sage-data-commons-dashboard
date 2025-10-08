@@ -27,7 +27,7 @@ After a successful build, locate the latest image tag — for example:
 ### 2. Update the Helm Chart
 Copy the desired image tag and update the `values.yaml` file in the Helm chart repository:
 
-```yaml
+yaml
 container:
   tag: 0.0.1-SNAPSHOT-20251007-141304
 
