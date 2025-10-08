@@ -9,11 +9,11 @@ A web application for viewing the status of HPC resources in a browser-based das
 This application is deployed in a **Kubernetes environment** on the **CIRRUS cloud**.  
 Deployment is managed using a **Helm chart**, which resides in a separate repository:
 
-👉 [NCAR/sage-data-commons-dashboard-k8s-dev](https://github.com/NCAR/sage-data-commons-dashboard-k8s-dev)
+[NCAR/sage-data-commons-dashboard-k8s-dev](https://github.com/NCAR/sage-data-commons-dashboard-k8s-dev)
 
 ---
 
-## 🧩 Deployment Steps
+## Deployment Steps
 
 When code changes are pushed to this repository, **GitHub Actions** automatically build and publish a Docker image to the repository’s container registry:
 
@@ -31,7 +31,7 @@ yaml
 container:
   tag: 0.0.1-SNAPSHOT-20251007-141304
 
-## 🚀 Trigger ArgoCD Deployment
+## Trigger ArgoCD Deployment
 
 Once the `values.yaml` file is updated and committed:
 
@@ -44,7 +44,7 @@ Once the `values.yaml` file is updated and committed:
 
 ---
 
-## 🌐 Accessing the Application
+## Accessing the Application
 
 After deployment completes, the latest version of the dashboard is available at:
 
@@ -52,10 +52,10 @@ After deployment completes, the latest version of the dashboard is available at:
 
 ---
 
-## 🛠️ Technologies
+## Technologies
 
 - **Java Spring Boot** – Web application framework
-- **Github Actions - CI/CD
+- **Github Actions** - CI/CD
 - **Docker / GitHub Packages** – Containerization & artifact hosting  
 - **Helm / Kubernetes** – Deployment configuration and orchestration  
 - **ArgoCD** – Continuous delivery automation  
