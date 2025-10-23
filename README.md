@@ -20,7 +20,7 @@ When code changes are pushed to this repository, **GitHub Actions** automaticall
 [GitHub Packages – sage-data-commons-dashboard](https://github.com/NCAR/sage-data-commons-dashboard/pkgs/container/sage-data-commons-dashboard)
 
 ### 1. Identify the New Artifact Tag
-After a successful build, locate the latest image tag — for example:
+After a successful build, locate the latest image tag, for example:
 
 0.0.1-SNAPSHOT-20251007-141304
 
