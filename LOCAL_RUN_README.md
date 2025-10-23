@@ -7,7 +7,7 @@ The **Data Commons Dashboard** application is a Spring Boot web application deve
 - HPC server availability/status (up/down).
 
 ### **How It Works**
-- Behind the scenes, **HPC qstat command** outputs data in JSON or text format. This data is stored as files within a file system.
+- Behind the scenes, **HPC qstat command** outputs data in JSON or text format. This data is stored as files on a file system.
 - File names and locations are specified via an external configuration file.
 - The content is refreshed frequently (in seconds) and is parsed by the app to display data in a browser.
 
