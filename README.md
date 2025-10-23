@@ -1,6 +1,6 @@
 # sage-data-commons-dashboard
 
-A web application for viewing the status of HPC resources in a browser-based dashboard.
+A web application for viewing the status of HPC resources in a browser based dashboard.
 
 ---
 
