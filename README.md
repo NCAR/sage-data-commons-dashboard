@@ -6,7 +6,7 @@ A web application for viewing the status of HPC resources in a browser based das
 
 ## Deployment Overview
 
-This application is deployed in a **Kubernetes environment** on the **CIRRUS cloud**.  
+This application is deployed in a **Kubernetes environment** called the **CIRRUS cloud**.  
 Deployment is managed using a **Helm chart**, which resides in a separate repository:
 
 [NCAR/sage-data-commons-dashboard-k8s-dev](https://github.com/NCAR/sage-data-commons-dashboard-k8s-dev)
