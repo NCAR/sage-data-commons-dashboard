@@ -247,7 +247,7 @@ To enable debugging for your Docker Compose setup:
 To bring down the Docker Compose services:
 
 1. In IntelliJ, click the red **Down** button in the Console view.
-2. On the command line, run the following in the repository toplevel directory:
+2. On the command line, run the following in the repository's toplevel directory:
    ```bash
    docker compose down
    ```
