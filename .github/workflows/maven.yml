@@ -81,3 +81,24 @@ jobs:
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
           push: true
+
+      - name: Failing Run
+        if: ${{ failure() }}
+        run: echo "BUILD_MESSAGE='Build of ${{github.repository}} failed!'" >> $GITHUB_ENV
+
+      - name: Successful Run
+        if: ${{ success() }}
+        run: echo "BUILD_MESSAGE='Build of ${{github.repository}} succeeded!'" >> $GITHUB_ENV
+
+      - name: Send Email
+        uses: dawidd6/action-send-mail@v6
+        with:
+          # Specify connection via URL (replaces server_address, server_port, secure, username and password)
+          # Format:
+          #  * smtp://user:password@server:port
+          #  * smtp+starttls://user:password@server:port
+          connection_url: ${{secrets.SMTP_CONNECTION}}
+          subject: Github Actions job result
+          to: ${{secrets.TO_EMAIL_ADDRESSES}}
+          from: SAGE GitHub <sage-github@ucar.edu>
+          body: ${{ env.BUILD_MESSAGE }}
