@@ -84,11 +84,11 @@ jobs:
 
       - name: Failing Run
         if: ${{ failure() }}
-        run: echo "BUILD_MESSAGE='Build of ${{ github.repository }} failed!'" >> $GITHUB_ENV
+        run: echo "BUILD_MESSAGE=Build of ${{ github.repository }} failed!" >> $GITHUB_ENV
 
       - name: Successful Run
         if: ${{ success() }}
-        run: echo "BUILD_MESSAGE='Build of ${{ github.repository }} succeeded!'" >> $GITHUB_ENV
+        run: echo "BUILD_MESSAGE=Build of ${{ github.repository }} succeeded!" >> $GITHUB_ENV
 
       - name: Send Slack Message
         uses: slackapi/slack-github-action@v2.1.1
