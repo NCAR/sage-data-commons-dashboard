@@ -84,11 +84,19 @@ jobs:
 
       - name: Failing Run
         if: ${{ failure() }}
-        run: echo "BUILD_MESSAGE='Build of ${{github.repository}} failed!'" >> $GITHUB_ENV
+        run: echo "BUILD_MESSAGE='Build of ${{ github.repository }} failed!'" >> $GITHUB_ENV
 
       - name: Successful Run
         if: ${{ success() }}
-        run: echo "BUILD_MESSAGE='Build of ${{github.repository}} succeeded!'" >> $GITHUB_ENV
+        run: echo "BUILD_MESSAGE='Build of ${{ github.repository }} succeeded!'" >> $GITHUB_ENV
+
+      - name: Send Slack Message
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            text: ${{ env.BUILD_MESSAGE }}
 
       - name: Send Email
         uses: dawidd6/action-send-mail@v6
@@ -96,9 +104,9 @@ jobs:
           server_address: email-smtp.us-east-2.amazonaws.com
           server_port: 465
           secure: true
-          username: ${{secrets.AWS_SES_LOGIN}}
-          password: ${{secrets.AWS_SES_PASSWORD}}
+          username: ${{ secrets.AWS_SES_LOGIN }}
+          password: ${{ secrets.AWS_SES_PASSWORD }}
           subject: Github Actions job result
-          to: ${{secrets.TO_EMAIL_ADDRESSES}}
+          to: ${{ secrets.TO_EMAIL_ADDRESSES }}
           from: SAGE GitHub <sage-github@ucar.edu>
-          body: ${{env.BUILD_MESSAGE}}
+          body: ${{ env.BUILD_MESSAGE }}
