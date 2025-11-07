@@ -82,19 +82,19 @@ jobs:
           labels: ${{ steps.metadata.outputs.labels }}
           push: true
 
-      - name: Message for Successful Build
-        if: ${{ always() && success() }}
+      - name: Messaging for Build
+        if: ${{ always() }}
         run: |
-          BUILD_RESULT='Build of ${{ github.repository }} succeeded!'
           BUILD_JOB_URL='https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
-          echo "BUILD_MESSAGE=$BUILD_RESULT See: $BUILD_JOB_URL" >> $GITHUB_ENV
+          echo "BUILD_JOB_URL=$BUILD_JOB_URL" >> $GITHUB_ENV
 
-      - name: Message for Failing Build
+      - name: Messaging for Build Success
+        if: ${{ always() && success() }}
+        run: echo "BUILD_RESULT=Build of ${{ github.repository }} succeeded!" >> $GITHUB_ENV
+
+      - name: Messaging for Build Failure
         if: ${{ always() && failure() }}
-        run: |
-          BUILD_RESULT='Build of ${{ github.repository }} failed!'
-          BUILD_JOB_URL='https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
-          echo "BUILD_MESSAGE=$BUILD_RESULT See: $BUILD_JOB_URL" >> $GITHUB_ENV
+        run: echo "BUILD_RESULT=Build of ${{ github.repository }} failed!" >> $GITHUB_ENV
 
       - name: Send Slack Message
         if: ${{ always() && !cancelled() }}
@@ -104,7 +104,7 @@ jobs:
           webhook-type: incoming-webhook
           payload: |
             {
-              text: "${{ env.BUILD_MESSAGE }}"
+              text: "${{ env.BUILD_RESULT }}\n\nSee: ${{ env.BUILD_JOB_URL }}"
             }
 
       - name: Send Email
@@ -116,7 +116,7 @@ jobs:
           secure: true
           username: ${{ secrets.AWS_SES_LOGIN }}
           password: ${{ secrets.AWS_SES_PASSWORD }}
-          subject: Github Actions job result
+          subject: "${{ env.BUILD_RESULT }}"
           to: ${{ secrets.TO_EMAIL_ADDRESSES }}
           from: SAGE GitHub <sage-github@ucar.edu>
-          body: "${{ env.BUILD_MESSAGE }}"
+          body: "See: ${{ env.BUILD_JOB_URL }}"

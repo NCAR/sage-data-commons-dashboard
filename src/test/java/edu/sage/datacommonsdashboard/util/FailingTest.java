@@ -11,6 +11,6 @@ public class FailingTest {
     @Test
     @DisplayName("Test that this test fails")
     void testThatThisTestFails() {
-        assertEquals(true, false, "true should be equal to true");
+        assertEquals(true, false, "true should be equal to false");
     }
 }
