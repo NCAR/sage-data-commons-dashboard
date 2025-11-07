@@ -82,15 +82,22 @@ jobs:
           labels: ${{ steps.metadata.outputs.labels }}
           push: true
 
-      - name: Failing Run
-        if: ${{ failure() }}
-        run: echo "BUILD_MESSAGE=Build of ${{ github.repository }} failed!" >> $GITHUB_ENV
-
       - name: Successful Run
-        if: ${{ success() }}
-        run: echo "BUILD_MESSAGE=Build of ${{ github.repository }} succeeded!" >> $GITHUB_ENV
+        if: ${{ always() && success() }}
+        run: |
+          BUILD_RESULT="Build of ${{ github.repository }} succeeded!"
+          BUILD_JOB_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          echo "BUILD_MESSAGE=$BUILD_RESULT See: $BUILD_JOB_URL" >> $GITHUB_OUTPUT
+
+      - name: Failing Run
+        if: ${{ always() && failure() }}
+        run: |
+          BUILD_RESULT="Build of ${{ github.repository }} failed!"
+          BUILD_JOB_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          echo "BUILD_MESSAGE=$BUILD_RESULT See: $BUILD_JOB_URL" >> $GITHUB_OUTPUT
 
       - name: Send Slack Message
+        if: ${{ always() && !cancelled() }}
         uses: slackapi/slack-github-action@v2.1.1
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -99,6 +106,7 @@ jobs:
             text: ${{ env.BUILD_MESSAGE }}
 
       - name: Send Email
+        if: ${{ always() && !cancelled() }}
         uses: dawidd6/action-send-mail@v6
         with:
           server_address: email-smtp.us-east-2.amazonaws.com
