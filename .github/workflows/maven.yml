@@ -85,16 +85,16 @@ jobs:
       - name: Message for Successful Build
         if: ${{ always() && success() }}
         run: |
-          BUILD_RESULT='Build of ${{ github.repository }} succeeded.'
+          BUILD_RESULT='Build of ${{ github.repository }} succeeded!'
           BUILD_JOB_URL='https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
-          echo "BUILD_MESSAGE=$BUILD_RESULT $BUILD_JOB_URL" >> $GITHUB_OUTPUT
+          echo "BUILD_MESSAGE=$BUILD_RESULT See: $BUILD_JOB_URL" >> $GITHUB_ENV
 
       - name: Message for Failing Build
         if: ${{ always() && failure() }}
         run: |
-          BUILD_RESULT='Build of ${{ github.repository }} failed.'
+          BUILD_RESULT='Build of ${{ github.repository }} failed!'
           BUILD_JOB_URL='https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
-          echo "BUILD_MESSAGE=$BUILD_RESULT $BUILD_JOB_URL" >> $GITHUB_OUTPUT
+          echo "BUILD_MESSAGE=$BUILD_RESULT See: $BUILD_JOB_URL" >> $GITHUB_ENV
 
       - name: Send Slack Message
         if: ${{ always() && !cancelled() }}
