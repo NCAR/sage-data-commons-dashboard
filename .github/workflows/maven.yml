@@ -103,7 +103,9 @@ jobs:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
-            text: ${{ env.BUILD_MESSAGE }}
+            {
+              text: "${{ env.BUILD_MESSAGE }}"
+            }
 
       - name: Send Email
         if: ${{ always() && !cancelled() }}
@@ -117,4 +119,4 @@ jobs:
           subject: Github Actions job result
           to: ${{ secrets.TO_EMAIL_ADDRESSES }}
           from: SAGE GitHub <sage-github@ucar.edu>
-          body: ${{ env.BUILD_MESSAGE }}
+          body: "${{ env.BUILD_MESSAGE }}"
