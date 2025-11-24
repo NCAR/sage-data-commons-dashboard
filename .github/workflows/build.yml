@@ -84,10 +84,10 @@ jobs:
           push: true
 
       # --- TEMPORARY: Force failure to test email/Slack notifications ---
-      # - name: Force Failure (test only)
-      #   run: |
-      #     echo "Intentionally failing this workflow for notification testing"
-      #     exit 1
+      - name: Force Failure (test only)
+        run: |
+          echo "Intentionally failing this workflow for notification testing"
+          exit 1
       # -------------------------------------------------------------------
 
 
