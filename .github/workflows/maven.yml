@@ -120,7 +120,7 @@ jobs:
           subject: "${{ env.BUILD_RESULT }}"
           to: ${{ secrets.TO_EMAIL_ADDRESSES }}
           from: SAGE GitHub <sage-github@ucar.edu>
-          body_html: |
+          html_body: |
             <html>
               <body>
                 <p><strong>${{ env.BUILD_RESULT }}</strong></p>
