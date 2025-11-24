@@ -119,4 +119,15 @@ jobs:
           subject: "${{ env.BUILD_RESULT }}"
           to: ${{ secrets.TO_EMAIL_ADDRESSES }}
           from: SAGE GitHub <sage-github@ucar.edu>
-          body: "See: ${{ env.BUILD_JOB_URL }}"
+          body_html: |
+            <html>
+              <body>
+                <p><strong>${{ env.BUILD_RESULT }}</strong></p>
+                <p>
+                  You can view the full build details here:<br/>
+                  <a href="${{ env.BUILD_JOB_URL }}" target="_blank">
+                    View Build Job in GitHub Actions
+                  </a>
+                </p>
+              </body>
+            </html>
