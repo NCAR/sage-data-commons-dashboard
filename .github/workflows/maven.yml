@@ -113,7 +113,7 @@ jobs:
           webhook-type: incoming-webhook
           payload: |
             {
-              text: "${{ env.BUILD_RESULT }}\n\nSee: ${{ env.BUILD_JOB_URL }}"
+              "text": "${{ env.BUILD_RESULT }}\n\n<${{ env.BUILD_JOB_URL }}|View Build Job in GitHub Actions>"
             }
 
       - name: Send Email
